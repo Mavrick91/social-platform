@@ -39,12 +39,12 @@ After installation, create the `social_platform` database:
 psql -h localhost -U postgres -c "CREATE DATABASE social_platform;"
 ```
 
-### 4. Initialize Prisma
+### 4. Run database migrations
 
-Set up Prisma within the server directory:
+Apply the database migrations by running:
 
 ```bash
-npx prisma init
+npx prisma migrate dev
 ```
 
 ### 5. Set up the .env File
