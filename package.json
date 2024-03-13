@@ -1,0 +1,21 @@
+
+{
+  "name": "social-platform-monorepo",
+  "version": "1.0.0",
+  "description": "A monorepo for a social media platform with a React frontend and NestJS backend.",
+  "private": true,
+  "scripts": {
+    "install:client": "cd client && bun install",
+    "install:server": "cd server && npm install",
+    "install:all": "npm run install:client && npm run install:server",
+    "start:client": "cd client && bun dev",
+    "start:server": "cd server && npm run start:dev",
+    "start": "npm run start:client & npm run start:server",
+    "build:client": "cd client && bun run build",
+    "build:server": "cd server && npm run build",
+    "build:all": "npm run build:client && npm run build:server",
+    "clean": "rm -rf client/dist server/dist"
+  },
+  "author": "",
+  "license": "MIT"
+}
