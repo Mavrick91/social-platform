@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store/hooks';
 import Header from '@/components/Header';
@@ -12,12 +12,19 @@ type Props = {
 const AuthenticatedLayout = ({ children }: Props) => {
   const navigate = useNavigate();
   const accessToken = useAppSelector((state) => state.user.accessToken);
+  const [isValidatingToken, setIsValidatingToken] = useState(true);
 
   useEffect(() => {
     if (!accessToken || isTokenExpired(accessToken)) {
       navigate('/login');
+    } else {
+      setIsValidatingToken(false);
     }
   }, [accessToken, navigate]);
+
+  if (isValidatingToken) {
+    return null;
+  }
 
   return (
     <div className="border border-blue-700">

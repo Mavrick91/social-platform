@@ -4,10 +4,8 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Global()
 @Module({
-  imports: [
-    JwtModule.register({}), // Potentially re-export JwtModule if needed elsewhere
-  ],
+  imports: [JwtModule.register({})],
   providers: [PrismaService],
-  exports: [PrismaService, JwtModule], // Re-export JwtModule
+  exports: [PrismaService, JwtModule],
 })
 export class SharedModule {}

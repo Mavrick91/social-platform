@@ -36,7 +36,7 @@ export default function Register() {
           createUserInput: data,
         },
       });
-      navigate('/login'); // Redirects to the login page
+      navigate('/login');
     } catch (error) {
       console.error(error);
     }

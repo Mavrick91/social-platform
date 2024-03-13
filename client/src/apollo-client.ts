@@ -17,7 +17,6 @@ const httpLink = createHttpLink({
 async function refreshAccessToken() {
   try {
     const refreshToken = localStorage.getItem('refreshToken');
-    // Send a request to your refresh token endpoint
     const response = await fetch('http://localhost:3000/auth/refresh_token', {
       method: 'POST',
       headers: {
@@ -44,18 +43,15 @@ const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
     graphQLErrors &&
     graphQLErrors.some((err) => err.message === 'UNAUTHENTICATED')
   ) {
-    // Detected an authentication error, attempt to refresh the token
     return new Observable((observer) => {
       refreshAccessToken()
         .then((accessToken) => {
-          // Modify the operation context with the new token
           operation.setContext(({ headers = {} }) => ({
             headers: {
               ...headers,
               authorization: `Bearer ${accessToken}`,
             },
           }));
-          // Retry the request with the new token
           const subscriber = {
             next: observer.next.bind(observer),
             error: observer.error.bind(observer),
@@ -64,7 +60,6 @@ const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
           forward(operation).subscribe(subscriber);
         })
         .catch((error) => {
-          // Handle token refresh errors (e.g., redirect to login)
           observer.error(error);
         });
     });

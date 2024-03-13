@@ -8,7 +8,7 @@ export class AuthService {
   async refreshAccessToken(
     refreshToken: string,
   ): Promise<{ accessToken: string }> {
-    const userId = this.extractUserIdFromRefreshToken(refreshToken); // Implement this method
+    const userId = this.extractUserIdFromRefreshToken(refreshToken);
 
     if (!userId) {
       throw new Error('Invalid refresh token');

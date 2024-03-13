@@ -6,8 +6,9 @@ import { z } from 'zod';
 import { useLoginMutation } from '@/generated/graphql.tsx';
 import { Link } from 'react-router-dom';
 import { Alert } from '@/components/ui/alert.tsx';
-import { loginAction } from '@/features/users/userSlice.ts';
+import { loginAction, setUserInfo } from '@/features/users/userSlice.ts';
 import { useAppDispatch } from '@/store/hooks.ts';
+import { jwtDecode } from 'jwt-decode';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -34,6 +35,7 @@ export default function Login() {
 
       if (response.data?.login) {
         dispatch(loginAction(response.data.login));
+        dispatch(setUserInfo(jwtDecode(response.data.login.accessToken)));
       }
     } catch (error) {
       console.error(error);

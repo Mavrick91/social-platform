@@ -37,7 +37,7 @@ export class UserService {
     };
     return {
       accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }), // Example refresh token logic
+      refreshToken: this.jwtService.sign(payload, { expiresIn: '60m' }),
     };
   }
 

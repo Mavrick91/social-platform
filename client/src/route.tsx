@@ -21,7 +21,6 @@ const routes = [
     element: <Dashboard />,
     layout: AuthenticatedLayout,
   },
-  // Add more route configurations as needed
 ];
 
 export const AppRoutes = () => (
