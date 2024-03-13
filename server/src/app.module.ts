@@ -8,6 +8,7 @@ import { PrismaService } from './modules/prisma/prisma.service';
 import { UserService } from './modules/user/user.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { RefreshTokenModule } from './modules/refresh-token/refresh-token.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     UserModule,
     AuthModule,
+    RefreshTokenModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, UserService],

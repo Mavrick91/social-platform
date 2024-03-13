@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
+import Dashboard from '@/pages/Dashboard';
+import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
 
 const routes = [
   {
@@ -13,6 +15,11 @@ const routes = [
     path: '/register',
     element: <Register />,
     layout: UnauthenticatedLayout,
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+    layout: AuthenticatedLayout,
   },
   // Add more route configurations as needed
 ];

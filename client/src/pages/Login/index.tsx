@@ -5,9 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useLoginMutation } from '@/generated/graphql.tsx';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Alert } from '@/components/ui/alert.tsx';
 import { loginAction } from '@/features/users/userSlice.ts';
+import { useAppDispatch } from '@/store/hooks.ts';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -17,7 +17,8 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
   const [login, { loading, error }] = useLoginMutation();
   const {
     register,
@@ -31,7 +32,9 @@ export default function Login() {
     try {
       const response = await login({ variables: data });
 
-      if (response.data?.login) dispatch(loginAction(response.data.login));
+      if (response.data?.login) {
+        dispatch(loginAction(response.data.login));
+      }
     } catch (error) {
       console.error(error);
     }

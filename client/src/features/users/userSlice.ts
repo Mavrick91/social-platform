@@ -28,15 +28,27 @@ export const userSlice = createSlice({
       state.userInfo = jwtDecode<DecodedToken>(action.payload.accessToken);
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('refreshToken', action.payload.refreshToken);
+    },
+    updateTokens: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('refreshToken', action.payload.newRefreshToken);
     },
     logout: (state) => {
       state.userInfo = null;
       state.accessToken = null;
       state.refreshToken = null;
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessToken');
     },
   },
 });
 
-export const { login: loginAction, logout } = userSlice.actions;
+export const { login: loginAction, updateTokens, logout } = userSlice.actions;
 
 export default userSlice.reducer;
