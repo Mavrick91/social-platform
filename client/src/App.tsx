@@ -1,5 +1,16 @@
+import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AppRoutes } from "./route";
+import { store } from "./store";
+
 function App() {
-	return <div className="border border-red-300"></div>;
+	return (
+		<Provider store={store}>
+			<Router>
+				<AppRoutes />
+			</Router>
+		</Provider>
+	);
 }
 
 export default App;
