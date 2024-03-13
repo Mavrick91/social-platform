@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { Alert } from '@/components/ui/alert';
+import { useRegisterUserMutation } from '@/generated/graphql.tsx';
 
 const registerSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -23,9 +25,20 @@ export default function Register() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
-    console.log(data);
-    // Perform registration logic here
+  const [registerUser, { loading, error }] = useRegisterUserMutation();
+
+  const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+    console.log('😀😀', { data });
+    try {
+      const { data: registerData } = await registerUser({
+        variables: {
+          createUserInput: data,
+        },
+      });
+      console.log(registerData);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -35,6 +48,11 @@ export default function Register() {
           <div />
           <h1 className="text-3xl font-bold">Register</h1>
         </div>
+        {error && (
+          <Alert variant="destructive">
+            <p>Registration failed. Please try again.</p>
+          </Alert>
+        )}
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -75,7 +93,7 @@ export default function Register() {
               error={errors.password?.message}
             />
           </div>
-          <Button className="w-full" type="submit">
+          <Button loading={loading} className="w-full" type="submit">
             Register
           </Button>
         </form>
