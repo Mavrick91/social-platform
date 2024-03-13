@@ -15,7 +15,6 @@ export class UserResolver {
 
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserDto) {
-    console.log('😀😀', { createUserInput });
     return this.userService.create(createUserInput);
   }
 

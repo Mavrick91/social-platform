@@ -29,7 +29,12 @@ export class UserService {
     const user = await this.validateUser(email, password);
     if (!user) throw new Error('Invalid credentials');
 
-    const payload = { email: user.email, sub: user.id };
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
     return {
       accessToken: this.jwtService.sign(payload),
       refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }), // Example refresh token logic

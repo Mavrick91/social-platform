@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -17,6 +17,8 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -28,14 +30,13 @@ export default function Register() {
   const [registerUser, { loading, error }] = useRegisterUserMutation();
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    console.log('😀😀', { data });
     try {
-      const { data: registerData } = await registerUser({
+      await registerUser({
         variables: {
           createUserInput: data,
         },
       });
-      console.log(registerData);
+      navigate('/login'); // Redirects to the login page
     } catch (error) {
       console.error(error);
     }

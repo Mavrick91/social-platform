@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useLoginMutation } from '@/generated/graphql.tsx';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Alert } from '@/components/ui/alert.tsx';
+import { loginAction } from '@/features/users/userSlice.ts';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -14,7 +17,8 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const [login, { data, loading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const [login, { loading, error }] = useLoginMutation();
   const {
     register,
     handleSubmit,
@@ -26,8 +30,8 @@ export default function Login() {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
       const response = await login({ variables: data });
-      // Handle response, e.g., storing the tokens
-      console.log(response.data?.login);
+
+      if (response.data?.login) dispatch(loginAction(response.data.login));
     } catch (error) {
       console.error(error);
     }
@@ -40,6 +44,11 @@ export default function Login() {
           <div />
           <h1 className="text-3xl font-bold">Login</h1>
         </div>
+        {error && (
+          <Alert variant="destructive">
+            <p>Login failed. Please try again.</p>
+          </Alert>
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Input
