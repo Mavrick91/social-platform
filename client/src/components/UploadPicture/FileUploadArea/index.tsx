@@ -1,12 +1,23 @@
 import { useId, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import {
+  UseFormClearErrors,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
 import { ACCEPTED_IMAGE_TYPES } from '@/constant/image.ts';
+import { cn } from '@/lib/utils.ts';
+import {
+  FormDataWithFile,
+  FormDataWithoutFile,
+} from '@/components/UploadPicture';
 
 type FileUploadAreaProps = {
-  register: ReturnType<typeof useForm>['register'];
-  setValue: ReturnType<typeof useForm>['setValue'];
-  clearErrors: ReturnType<typeof useForm>['clearErrors'];
+  register: UseFormRegister<FormDataWithFile | FormDataWithoutFile>;
+  setValue: UseFormSetValue<FormDataWithFile | FormDataWithoutFile>;
+  clearErrors: UseFormClearErrors<FormDataWithFile | FormDataWithoutFile>;
   error: string | undefined;
+  defaultPreview?: string | null;
+  editable: boolean;
 };
 
 const FileUploadArea = ({
@@ -14,9 +25,13 @@ const FileUploadArea = ({
   error,
   setValue,
   clearErrors,
+  defaultPreview,
+  editable,
 }: FileUploadAreaProps) => {
   const id = useId();
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null | undefined>(
+    defaultPreview
+  );
 
   const isImageFile = (file: File) => {
     return ACCEPTED_IMAGE_TYPES.includes(file.type);
@@ -26,10 +41,14 @@ const FileUploadArea = ({
     const file = event.target.files?.[0];
     if (file && isImageFile(file)) {
       setPreviewUrl(URL.createObjectURL(file));
-      setValue('file', file);
+      setValue('file', file, {
+        shouldValidate: true,
+      });
     } else {
       setPreviewUrl(null);
-      setValue('file', null);
+      setValue('file', null, {
+        shouldValidate: true,
+      });
     }
   };
 
@@ -43,18 +62,25 @@ const FileUploadArea = ({
     <div>
       <label
         htmlFor={id}
-        className="flex group justify-center w-96 h-[400px] items-center border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+        className={cn(
+          'flex group justify-center w-96 h-[400px] items-center border-2 border-gray-300 border-dashed rounded-md',
+          {
+            'hover:cursor-pointer': editable,
+          }
+        )}
       >
         {previewUrl ? (
           <div className="relative h-full w-full flex justify-center items-center">
-            <div className="hidden z-20 absolute inset-0 bg-black bg-opacity-50 group-hover:block items-center justify-center">
-              <button
-                className="bg-red-500 relative top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                onClick={handleDeletePreview}
-              >
-                Delete
-              </button>
-            </div>
+            {editable && (
+              <div className="hidden z-20 absolute inset-0 bg-black bg-opacity-50 group-hover:block items-center justify-center">
+                <button
+                  className="bg-red-500 relative top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={handleDeletePreview}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
             <img
               src={previewUrl}
               alt="Preview"

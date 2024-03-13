@@ -90,6 +90,7 @@ export type Query = {
   __typename?: 'Query';
   picture: Picture;
   pictures: Array<Picture>;
+  picturesByAuthor: Array<Picture>;
   users: Array<User>;
 };
 
@@ -98,11 +99,15 @@ export type QueryPictureArgs = {
   id: Scalars['Float']['input'];
 };
 
+
+export type QueryPicturesByAuthorArgs = {
+  authorId: Scalars['Float']['input'];
+};
+
 export type UpdatePictureInput = {
   authorId?: InputMaybe<Scalars['Float']['input']>;
   data?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  published?: InputMaybe<Scalars['Boolean']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 

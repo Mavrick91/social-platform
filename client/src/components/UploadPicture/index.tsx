@@ -4,10 +4,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input.tsx';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,19 +15,22 @@ import { ACCEPTED_IMAGE_TYPES } from '@/constant/image.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { convertToBase64 } from '@/lib/utils.ts';
 import { useMutation } from '@apollo/client';
-import { UPLOAD_PICTURE_MUTATION } from '@/graphql/mutation/picture.ts';
+import {
+  UPDATE_PICTURE_MUTATION,
+  UPLOAD_PICTURE_MUTATION,
+} from '@/graphql/mutation/picture.ts';
 import { useAppSelector } from '@/store/hooks.ts';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert.tsx';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 const MAX_FILE_SIZE = 500000;
 
-const schema = z.object({
+const schemaWithFile = z.object({
   title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
+  description: z.string(),
   file: z
-    .instanceof(File)
+    .any()
     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
@@ -37,13 +38,22 @@ const schema = z.object({
     ),
 });
 
-type FormData = z.infer<typeof schema>;
+const schemaWithoutFile = schemaWithFile.omit({ file: true });
+
+export type FormDataWithFile = z.infer<typeof schemaWithFile>;
+export type FormDataWithoutFile = z.infer<typeof schemaWithoutFile>;
 
 type Props = {
   refetch: () => void;
+  trigger: ReactNode;
+  defaultValues?: FormDataWithoutFile & {
+    id: number;
+    data: string;
+  };
 };
 
-function UploadPictureDialog({ refetch }: Props) {
+function UploadPictureDialog({ refetch, trigger, defaultValues }: Props) {
+  const schema = defaultValues?.data ? schemaWithoutFile : schemaWithFile;
   const userInfo = useAppSelector(selectAuthenticatedUser);
   const [open, setOpen] = useState(false);
   const {
@@ -52,50 +62,69 @@ function UploadPictureDialog({ refetch }: Props) {
     formState: { errors },
     setValue,
     clearErrors,
-  } = useForm<FormData>({
+    reset,
+  } = useForm<FormDataWithFile | FormDataWithoutFile>({
+    defaultValues,
     resolver: zodResolver(schema),
   });
 
-  const [uploadPicture, { loading, error }] = useMutation(
-    UPLOAD_PICTURE_MUTATION
-  );
+  const [uploadPicture, { loading: uploadLoading, error: errorUploading }] =
+    useMutation(UPLOAD_PICTURE_MUTATION);
+  const [updatePicture, { loading: updateLoading, error: errorUpdating }] =
+    useMutation(UPDATE_PICTURE_MUTATION);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: FormDataWithFile | FormDataWithoutFile) => {
     try {
-      const { title, description, file } = data;
-      const base64Data = await convertToBase64(file);
-      const variables = {
-        input: { title, description, data: base64Data, authorId: userInfo.sub },
-      };
+      if (defaultValues) {
+        const { title, description } = data as FormDataWithoutFile;
 
-      await uploadPicture({ variables });
+        const variables = {
+          id: defaultValues.id,
+          input: {
+            title,
+            description,
+          },
+        };
+        await updatePicture({ variables });
+      } else if ('file' in data) {
+        const { title, description, file } = data as FormDataWithFile;
+
+        const base64Data = await convertToBase64(file);
+        const variables = {
+          input: {
+            title,
+            description,
+            data: base64Data,
+            authorId: userInfo.sub,
+          },
+        };
+        await uploadPicture({ variables });
+      }
       refetch();
       setOpen(false);
     } catch (error) {
-      // Handle the error
       console.error(error);
     }
   };
 
+  const errorFile: string | undefined =
+    'file' in errors ? errors.file?.message?.toString() : undefined;
+
+  const handleOpen = (value: boolean) => {
+    if (!value) reset({});
+    setOpen(value);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        className="flex items-center w-full justify-between"
-        asChild
-      >
-        <div>
-          <span>Photos</span>
-          <Button className="gap-2">
-            <Plus />
-            Upload
-          </Button>
-        </div>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={handleOpen}>
+      {trigger}
       <DialogContent className="max-w-3xl">
-        {error && (
+        {(errorUploading || errorUpdating) && (
           <Alert className="mb-4">
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription>
+              {errorUploading?.message || errorUpdating?.message}
+            </AlertDescription>
           </Alert>
         )}
         <DialogHeader>
@@ -107,8 +136,10 @@ function UploadPictureDialog({ refetch }: Props) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex gap-3">
             <FileUploadArea
+              editable={!defaultValues}
+              defaultPreview={defaultValues?.data}
               register={register}
-              error={errors.file?.message}
+              error={errorFile}
               setValue={setValue}
               clearErrors={clearErrors}
             />
@@ -137,7 +168,11 @@ function UploadPictureDialog({ refetch }: Props) {
               </div>
             </div>
           </div>
-          <Button type="submit" className="mt-4" loading={loading}>
+          <Button
+            type="submit"
+            className="mt-4"
+            loading={uploadLoading || updateLoading}
+          >
             Upload
           </Button>
         </form>

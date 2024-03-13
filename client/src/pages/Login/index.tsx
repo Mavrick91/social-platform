@@ -3,12 +3,13 @@ import { Input } from '@/components/ui/input';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useLoginMutation } from '@/generated/graphql.tsx';
 import { Link } from 'react-router-dom';
 import { Alert } from '@/components/ui/alert.tsx';
 import { loginAction, setUserInfo } from '@/features/users/userSlice.ts';
 import { useAppDispatch } from '@/store/hooks.ts';
 import { jwtDecode } from 'jwt-decode';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '@/graphql/mutation/user.ts';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -20,7 +21,7 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 export default function Login() {
   const dispatch = useAppDispatch();
 
-  const [login, { loading, error }] = useLoginMutation();
+  const [login, { loading, error }] = useMutation(LOGIN);
   const {
     register,
     handleSubmit,

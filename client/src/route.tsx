@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
 import Dashboard from '@/pages/Dashboard';
 import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
+import Profile from '@/pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,14 @@ const router = createBrowserRouter([
     element: (
       <AuthenticatedLayout>
         <Dashboard />
+      </AuthenticatedLayout>
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <AuthenticatedLayout>
+        <Profile />
       </AuthenticatedLayout>
     ),
   },

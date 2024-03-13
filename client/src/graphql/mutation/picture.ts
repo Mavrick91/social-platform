@@ -7,3 +7,19 @@ export const UPLOAD_PICTURE_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_PICTURE_MUTATION = gql`
+  mutation UpdatePicture($id: Float!, $input: UpdatePictureInput!) {
+    updatePicture(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_PICTURE_MUTATION = gql`
+  mutation DeletePicture($id: Float!) {
+    deletePicture(id: $id) {
+      id
+    }
+  }
+`;

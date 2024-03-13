@@ -9,9 +9,14 @@ import PictureList from '@/pages/Dashboard/PictureList';
 import PictureEmpty from '@/pages/Dashboard/PictureEmpty';
 import UploadPicture from '@/components/UploadPicture';
 import { useQuery } from '@apollo/client';
+import { Button } from '@/components/ui/button.tsx';
+import { Plus } from 'lucide-react';
+import { DialogTrigger } from '@/components/ui/dialog.tsx';
 
 function Dashboard() {
-  const { data, refetch, loading } = useQuery(GET_PICTURES);
+  const { data, refetch, loading } = useQuery(GET_PICTURES, {
+    fetchPolicy: 'network-only',
+  });
 
   if (loading) {
     return null;
@@ -22,7 +27,23 @@ function Dashboard() {
       <Card>
         <CardHeader>
           <CardTitle>
-            <UploadPicture refetch={refetch} />
+            <UploadPicture
+              refetch={refetch}
+              trigger={
+                <DialogTrigger
+                  className="flex items-center w-full justify-between"
+                  asChild
+                >
+                  <div>
+                    <span>Photos</span>
+                    <Button className="gap-2">
+                      <Plus />
+                      Upload
+                    </Button>
+                  </div>
+                </DialogTrigger>
+              }
+            />
           </CardTitle>
           {data.pictures && data.pictures.length !== 0 && (
             <CardDescription>Click on an image to view details</CardDescription>

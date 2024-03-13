@@ -38,6 +38,7 @@ type Query {
   users: [User!]!
   pictures: [Picture!]!
   picture(id: Float!): Picture!
+  picturesByAuthor(authorId: Float!): [Picture!]!
 }
 
 type Mutation {
@@ -67,5 +68,4 @@ input UpdatePictureInput {
   description: String
   authorId: Float
   data: String
-  published: Boolean
 }

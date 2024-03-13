@@ -9,7 +9,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { logout } from '@/features/users/userSlice.ts';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 
 export default function Header() {
@@ -18,19 +18,19 @@ export default function Header() {
   const navigate = useNavigate();
 
   return (
-    <header>
+    <header className="shadow-md z-50">
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="https://flowbite.com" className="flex items-center">
+          <Link to="/dashboard" className="flex items-center">
             <img
               src="https://flowbite.com/docs/images/logo.svg"
               className="mr-3 h-6 sm:h-9"
               alt="Flowbite Logo"
             />
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Flowbite
+              Social Platform
             </span>
-          </a>
+          </Link>
           <div className="flex items-center gap-4">
             <button
               data-tooltip-target="tooltip-dark"
@@ -64,7 +64,9 @@ export default function Header() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{`${userInfo.firstName} ${userInfo.lastName}`}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                  Profile
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
