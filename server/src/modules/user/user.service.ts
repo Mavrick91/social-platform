@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { User } from './entities/user.entity';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -13,7 +13,7 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return (await this.prisma.user.findMany()) as User[];
   }
 
   async validateUser(email: string, pass: string): Promise<any> {
@@ -43,11 +43,13 @@ export class UserService {
 
   async create(data: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         ...data,
         password: hashedPassword,
       },
     });
+
+    return user as User;
   }
 }

@@ -1,5 +1,4 @@
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { AppRoutes } from './route';
 import { persistor, store } from './store';
 import client from '@/apollo-client.ts';
@@ -11,9 +10,7 @@ function App() {
     <ApolloProvider client={client}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Router>
-            <AppRoutes />
-          </Router>
+          <AppRoutes />
         </PersistGate>
       </Provider>
     </ApolloProvider>

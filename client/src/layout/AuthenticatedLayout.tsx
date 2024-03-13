@@ -29,7 +29,7 @@ const AuthenticatedLayout = ({ children }: Props) => {
   return (
     <div className="border border-blue-700">
       <Header />
-      {children}
+      <div className="max-w-screen-xl mt-10 mx-auto">{children}</div>
       <Footer />
     </div>
   );

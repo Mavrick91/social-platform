@@ -1,32 +1,34 @@
-import { Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
 import Dashboard from '@/pages/Dashboard';
 import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
 
-const routes = [
+const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login />,
-    layout: UnauthenticatedLayout,
+    element: (
+      <UnauthenticatedLayout>
+        <Login />
+      </UnauthenticatedLayout>
+    ),
   },
   {
     path: '/register',
-    element: <Register />,
-    layout: UnauthenticatedLayout,
+    element: (
+      <UnauthenticatedLayout>
+        <Register />
+      </UnauthenticatedLayout>
+    ),
   },
   {
     path: '/dashboard',
-    element: <Dashboard />,
-    layout: AuthenticatedLayout,
+    element: (
+      <AuthenticatedLayout>
+        <Dashboard />
+      </AuthenticatedLayout>
+    ),
   },
-];
-
-export const AppRoutes = () => (
-  <Routes>
-    {routes.map(({ path, element, layout: Layout }) => (
-      <Route key={path} path={path} element={<Layout>{element}</Layout>} />
-    ))}
-  </Routes>
-);
+]);
+export const AppRoutes = () => <RouterProvider router={router} />;

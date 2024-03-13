@@ -18,6 +18,13 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CreatePictureInput = {
+  authorId: Scalars['Float']['input'];
+  data: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+};
+
 export type CreateUserDto = {
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
@@ -33,8 +40,16 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createPicture: Picture;
   createUser: User;
+  deletePicture: Picture;
   login: LoginResponse;
+  updatePicture: Picture;
+};
+
+
+export type MutationCreatePictureArgs = {
+  input: CreatePictureInput;
 };
 
 
@@ -43,14 +58,52 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationDeletePictureArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
+
+export type MutationUpdatePictureArgs = {
+  id: Scalars['Float']['input'];
+  input: UpdatePictureInput;
+};
+
+export type Picture = {
+  __typename?: 'Picture';
+  author: User;
+  authorId: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  data: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  picture: Picture;
+  pictures: Array<Picture>;
   users: Array<User>;
+};
+
+
+export type QueryPictureArgs = {
+  id: Scalars['Float']['input'];
+};
+
+export type UpdatePictureInput = {
+  authorId?: InputMaybe<Scalars['Float']['input']>;
+  data?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  published?: InputMaybe<Scalars['Boolean']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -61,6 +114,7 @@ export type User = {
   id: Scalars['Int']['output'];
   lastName: Scalars['String']['output'];
   password: Scalars['String']['output'];
+  pictures: Array<Picture>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
