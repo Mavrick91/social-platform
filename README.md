@@ -52,10 +52,23 @@ npx prisma init
 Prisma uses the `.env` file for environment variables. Create a `.env` file in the `server/prisma` directory and add your database connection string:
 
 ```plaintext
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/social_platform"
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/social-platform?schema=public"
+```
+Replace `YOUR_PASSWORD` with the password for your PostgreSQL user.
+
+Generate the JWT secrets using OpenSSL. Run the following commands in your terminal:
+
+```
+openssl rand -base64 64
 ```
 
-Replace `YOUR_PASSWORD` with the password for your PostgreSQL user.
+Run this command twice to generate two different secrets. Copy the generated secrets and add them to your .env file:
+```plaintext
+JWT_SECRET="YOUR_GENERATED_JWT_SECRET"
+JWT_REFRESH_SECRET="YOUR_GENERATED_JWT_REFRESH_SECRET"
+```
+
+Replace YOUR_GENERATED_JWT_SECRET and YOUR_GENERATED_JWT_REFRESH_SECRET with the secrets you generated using OpenSSL.
 
 ### 6. Running the Application
 
