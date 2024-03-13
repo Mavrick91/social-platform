@@ -33,10 +33,10 @@ npm run install:all
 
 If you have not already installed PostgreSQL, follow the instructions on the [official website](https://www.postgresql.org/download/).
 
-After installation, create the `social-platform` database:
+After installation, create the `social_platform` database:
 
 ```bash
-psql -h localhost -U postgres -c "CREATE DATABASE social-platform;"
+psql -h localhost -U postgres -c "CREATE DATABASE social_platform;"
 ```
 
 ### 4. Initialize Prisma
@@ -52,7 +52,7 @@ npx prisma init
 Prisma uses the `.env` file for environment variables. Create a `.env` file in the `server/prisma` directory and add your database connection string:
 
 ```plaintext
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/social-platform?schema=public"
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/social_platform?schema=public"
 ```
 Replace `YOUR_PASSWORD` with the password for your PostgreSQL user.
 
