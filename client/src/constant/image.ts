@@ -4,5 +4,3 @@ export const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/webp',
 ];
-
-export const MAX_FILE_SIZE = 500000;

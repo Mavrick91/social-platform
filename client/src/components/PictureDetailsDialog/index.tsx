@@ -39,7 +39,7 @@ function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
                 alt="Photo"
                 className="aspect-video overflow-hidden rounded-lg object-contain"
                 height="500"
-                src={selectedPicture?.data}
+                src={selectedPicture?.fileUrl}
                 width="600"
               />
             </div>

@@ -12,5 +12,8 @@ export class CreatePictureInput {
   authorId: number;
 
   @Field()
-  data: string;
+  fileUrl: string;
+
+  @Field()
+  fileName: string;
 }

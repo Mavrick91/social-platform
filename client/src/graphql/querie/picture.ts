@@ -8,7 +8,7 @@ export const GET_PICTURES = gql`
       description
       createdAt
       updatedAt
-      data
+      fileUrl
       author {
         id
         firstName
@@ -26,7 +26,7 @@ export const GET_PICTURE_BY_AUTHOR = gql`
       description
       createdAt
       updatedAt
-      data
+      fileUrl
     }
   }
 `;

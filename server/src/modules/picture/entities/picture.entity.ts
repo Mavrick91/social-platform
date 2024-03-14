@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/entities/user.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @ObjectType()
 export class Picture {
@@ -10,7 +11,10 @@ export class Picture {
   title: string;
 
   @Field()
-  data: string;
+  fileUrl: string;
+
+  @Field()
+  fileName: string;
 
   @Field({ nullable: true })
   description?: string;
@@ -20,6 +24,12 @@ export class Picture {
 
   @Field(() => Int)
   authorId: number;
+
+  @Field(() => Comment)
+  comment: Comment;
+
+  @Field(() => Int)
+  commentId: number;
 
   @Field(() => Date)
   createdAt: Date;

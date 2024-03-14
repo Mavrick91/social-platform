@@ -30,7 +30,7 @@ function PictureProfileItem({ picture, refetch }: Props) {
       <Card className="rounded-md overflow-hidden bg-slate-50 flex justify-between items-center px-4 py-2">
         <div className="grid gap-2 items-center grid-cols-12 w-full">
           <img
-            src={picture.data}
+            src={picture.fileUrl}
             className="size-16 rounded-full shadow-lg col-span-1 shrink-0 aspect-square"
             alt={picture.title}
           />
@@ -46,7 +46,7 @@ function PictureProfileItem({ picture, refetch }: Props) {
               id: picture.id,
               title: picture.title,
               description: picture.description || '',
-              data: picture.data,
+              data: picture.fileUrl,
             }}
             trigger={
               <DialogTrigger asChild>

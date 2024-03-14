@@ -2,9 +2,8 @@ import FileUploadArea from '@/components/UploadPicture/FileUploadArea';
 import { Input } from '@/components/ui/input.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { convertToBase64 } from '@/lib/utils.ts';
 import * as z from 'zod';
-import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from '@/constant/image.ts';
+import { ACCEPTED_IMAGE_TYPES } from '@/constant/image.ts';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client';
@@ -14,14 +13,14 @@ import {
 } from '@/graphql/mutation/picture.ts';
 import { useAppSelector } from '@/store/hooks.ts';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import uploadImage from '@/lib/uploadImage.ts';
 
 const schemaWithFile = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string(),
   file: z
     .any()
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
       '.jpg, .jpeg, .png and .webp files are accepted.'
@@ -51,6 +50,7 @@ function UploadPictureForm({
 }: Props) {
   const schema = defaultValues?.data ? schemaWithoutFile : schemaWithFile;
   const userInfo = useAppSelector(selectAuthenticatedUser);
+  const [uploadStatus, setUploadStatus] = useState(false);
 
   const {
     register,
@@ -95,24 +95,30 @@ function UploadPictureForm({
         };
         await updatePicture({ variables });
       } else if ('file' in data) {
-        const { title, description, file } = data as FormDataWithFile;
+        setUploadStatus(true);
 
-        const base64Data = await convertToBase64(file);
+        const { title, description, file } = data as FormDataWithFile;
+        const { fileUrl, fileKey } = await uploadImage(file);
+
         const variables = {
           input: {
             title,
             description,
-            data: base64Data,
+            fileUrl,
+            fileName: fileKey,
             authorId: userInfo.sub,
           },
         };
         await uploadPicture({ variables });
       }
+
       refetch();
       setOpen(false);
-      reset({});
+      reset();
     } catch (error) {
       console.error(error);
+    } finally {
+      setUploadStatus(false);
     }
   };
 
@@ -158,7 +164,7 @@ function UploadPictureForm({
       <Button
         type="submit"
         className="mt-4"
-        loading={uploadLoading || updateLoading}
+        loading={uploadLoading || updateLoading || uploadStatus}
       >
         Upload
       </Button>

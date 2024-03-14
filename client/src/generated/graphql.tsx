@@ -49,8 +49,9 @@ export type CreateCommentInput = {
 
 export type CreatePictureInput = {
   authorId: Scalars['Float']['input'];
-  data: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
+  fileName: Scalars['String']['input'];
+  fileUrl: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };
 
@@ -125,9 +126,12 @@ export type Picture = {
   __typename?: 'Picture';
   author: User;
   authorId: Scalars['Int']['output'];
+  comment: Comment;
+  commentId: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
-  data: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  fileName: Scalars['String']['output'];
+  fileUrl: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -176,8 +180,9 @@ export type UpdateCommentInput = {
 
 export type UpdatePictureInput = {
   authorId?: InputMaybe<Scalars['Float']['input']>;
-  data?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  fileName?: InputMaybe<Scalars['String']['input']>;
+  fileUrl?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -247,14 +252,14 @@ export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictur
 export type GetPicturesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPicturesQuery = { __typename?: 'Query', pictures: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, data: string, author: { __typename?: 'User', id: number, firstName: string, lastName: string } }> };
+export type GetPicturesQuery = { __typename?: 'Query', pictures: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author: { __typename?: 'User', id: number, firstName: string, lastName: string } }> };
 
 export type GetPictureByAuthorQueryVariables = Exact<{
   authorId: Scalars['Float']['input'];
 }>;
 
 
-export type GetPictureByAuthorQuery = { __typename?: 'Query', picturesByAuthor: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, data: string }> };
+export type GetPictureByAuthorQuery = { __typename?: 'Query', picturesByAuthor: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string }> };
 
 
 export const CommentPictureDocument = gql`
@@ -517,7 +522,7 @@ export const GetPicturesDocument = gql`
     description
     createdAt
     updatedAt
-    data
+    fileUrl
     author {
       id
       firstName
@@ -566,7 +571,7 @@ export const GetPictureByAuthorDocument = gql`
     description
     createdAt
     updatedAt
-    data
+    fileUrl
   }
 }
     `;

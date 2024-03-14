@@ -10,6 +10,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PictureModule } from './modules/picture/picture.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { S3Module } from './modules/s3/s3.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { CommentModule } from './modules/comment/comment.module';
     AuthModule,
     PictureModule,
     CommentModule,
+    S3Module,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, UserService],

@@ -31,7 +31,7 @@ function PictureList({ pictures }: Props) {
                       alt="Photo"
                       className="aspect-video overflow-hidden rounded-lg object-contain"
                       height="300"
-                      src={picture.data}
+                      src={picture.fileUrl}
                       width="400"
                     />
                     <CardContent className="p-4">

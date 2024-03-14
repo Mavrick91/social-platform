@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Picture } from './entities/picture.entity';
-import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
+import { Picture } from './entities/picture.entity';
+import { Prisma } from '@prisma/client';
+import { CreatePictureInput } from './dto/create-picture.input';
 
 @Injectable()
 export class PictureService {
@@ -26,23 +27,26 @@ export class PictureService {
     return pictures as Picture[];
   }
 
-  async findOne(id: number): Promise<Picture> {
+  async findOne(id: number): Promise<Prisma.PictureUncheckedCreateInput> {
     const picture = await this.prisma.picture.findUnique({ where: { id } });
 
     if (!picture) {
       throw new NotFoundException('Picture not found');
     }
 
-    return picture as Picture;
+    return picture;
   }
 
-  async create(input: CreatePictureInput): Promise<Picture> {
-    const picture = await this.prisma.picture.create({ data: input });
-
-    return picture as Picture;
+  async create(
+    input: CreatePictureInput,
+  ): Promise<Prisma.PictureUncheckedCreateInput> {
+    return this.prisma.picture.create({ data: input });
   }
 
-  async update(id: number, input: UpdatePictureInput): Promise<Picture> {
+  async update(
+    id: number,
+    input: UpdatePictureInput,
+  ): Promise<Prisma.PictureUncheckedCreateInput> {
     const picture = await this.prisma.picture.update({
       where: { id },
       data: input,
@@ -52,10 +56,10 @@ export class PictureService {
       throw new NotFoundException('Picture not found');
     }
 
-    return picture as Picture;
+    return picture;
   }
 
-  async remove(id: number): Promise<Picture> {
+  async remove(id: number): Promise<Prisma.PictureUncheckedCreateInput> {
     const picture = await this.prisma.picture.delete({ where: { id } });
 
     if (!picture) {
