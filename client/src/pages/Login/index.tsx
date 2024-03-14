@@ -9,7 +9,7 @@ import { loginAction, setUserInfo } from '@/features/users/userSlice.ts';
 import { useAppDispatch } from '@/store/hooks.ts';
 import { jwtDecode } from 'jwt-decode';
 import { useMutation } from '@apollo/client';
-import { LOGIN } from '@/graphql/mutation/user.ts';
+import { LOGIN } from '@/graphql/mutations/user';
 
 const loginSchema = z.object({
   email: z.string().email(),

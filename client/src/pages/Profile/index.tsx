@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_PICTURE_BY_AUTHOR } from '@/graphql/querie/picture.ts';
+import { GET_PICTURE_BY_AUTHOR } from '@/graphql/queries/picture';
 import { useAppSelector } from '@/store/hooks.ts';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { DialogTrigger } from '@/components/ui/dialog.tsx';

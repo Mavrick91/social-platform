@@ -2,7 +2,7 @@ import UploadPicture from '@/components/UploadPicture';
 import { Button } from '@/components/ui/button.tsx';
 import { CardDescription } from '@/components/ui/card.tsx';
 import { DialogTrigger } from '@/components/ui/dialog.tsx';
-import { GET_PICTURES } from '@/graphql/querie/picture.ts';
+import { GET_PICTURES } from '@/graphql/queries/picture';
 import PictureEmpty from '@/pages/Dashboard/PictureEmpty';
 import PictureList from '@/pages/Dashboard/PictureList';
 import { useQuery } from '@apollo/client';

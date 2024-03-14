@@ -95,9 +95,7 @@ const FileUploadArea = ({
               fill="none"
               viewBox="0 0 48 48"
               aria-hidden="true"
-            >
-              {/* SVG icon */}
-            </svg>
+            />
             <div className="flex text-sm text-gray-600">
               <label
                 htmlFor={id}
@@ -115,7 +113,6 @@ const FileUploadArea = ({
               </label>
               <p className="pl-2">or drag and drop</p>
             </div>
-            <p className="text-xs text-gray-500">PNG, JPG, WEBP up to 5MB</p>
           </div>
         )}
       </label>

@@ -16,7 +16,7 @@ type Props = {
   trigger: ReactNode;
   defaultValues?: FormDataWithoutFile & {
     id: number;
-    data: string;
+    fileUrl: string;
   };
 };
 

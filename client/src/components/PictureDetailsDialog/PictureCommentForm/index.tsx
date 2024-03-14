@@ -1,6 +1,6 @@
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { COMMENT_PICTURE_MUTATION } from '@/graphql/mutation/comment.ts';
+import { COMMENT_PICTURE_MUTATION } from '@/graphql/mutations/comment';
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

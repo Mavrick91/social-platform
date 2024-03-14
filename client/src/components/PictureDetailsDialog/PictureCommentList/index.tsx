@@ -1,4 +1,4 @@
-import { GET_COMMENTS_BY_PICTURE } from '@/graphql/querie/comment.ts';
+import { GET_COMMENTS_BY_PICTURE } from '@/graphql/queries/comment';
 import { useQuery } from '@apollo/client';
 import { Comment } from '@/generated/graphql.tsx';
 import moment from 'moment';

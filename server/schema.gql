@@ -10,7 +10,7 @@ type Comment {
   content: String!
 
   """The user who created the comment"""
-  author: User
+  author: User!
 
   """The ID of the user who created the comment"""
   authorId: Int!
@@ -35,7 +35,6 @@ scalar DateTime
 
 type Picture {
   id: Int!
-  title: String!
   fileUrl: String!
   fileName: String!
   description: String
@@ -53,6 +52,7 @@ type User {
   firstName: String!
   lastName: String!
   pictures: [Picture!]
+  comments: [Comment!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

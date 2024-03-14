@@ -44,9 +44,6 @@ function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
               />
             </div>
             <div className="px-4 mt-4 py-2 bg-gray-100 rounded-md">
-              <h3 className="text-lg font-semibold">
-                {selectedPicture?.title}
-              </h3>
               <p className="text-sm text-gray-600">
                 {selectedPicture?.description || 'No description provided.'}
               </p>

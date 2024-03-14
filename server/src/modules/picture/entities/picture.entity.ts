@@ -8,9 +8,6 @@ export class Picture {
   id: number;
 
   @Field()
-  title: string;
-
-  @Field()
   fileUrl: string;
 
   @Field()

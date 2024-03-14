@@ -11,10 +11,9 @@ export class Comment {
   content: string;
 
   @Field(() => User, {
-    nullable: true,
     description: 'The user who created the comment',
   })
-  author?: User;
+  author: User;
 
   @Field(() => Int, {
     description: 'The ID of the user who created the comment',

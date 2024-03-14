@@ -1,11 +1,10 @@
-import { Label } from '@/components/ui/label.tsx';
+import UploadPicture from '@/components/UploadPicture';
 import { Button } from '@/components/ui/button.tsx';
 import { Card } from '@/components/ui/card.tsx';
-import { Picture } from '@/generated/graphql.tsx';
-import { useMutation } from '@apollo/client';
-import { DELETE_PICTURE_MUTATION } from '@/graphql/mutation/picture.ts';
-import UploadPicture from '@/components/UploadPicture';
 import { DialogTrigger } from '@/components/ui/dialog.tsx';
+import { Picture } from '@/generated/graphql.tsx';
+import { DELETE_PICTURE_MUTATION } from '@/graphql/mutations/picture';
+import { useMutation } from '@apollo/client';
 
 type Props = {
   picture: Picture;
@@ -32,9 +31,9 @@ function PictureProfileItem({ picture, refetch }: Props) {
           <img
             src={picture.fileUrl}
             className="size-16 rounded-full shadow-lg col-span-1 shrink-0 aspect-square"
-            alt={picture.title}
+            alt="Picture"
           />
-          <Label className="ml-8 text-lg col-span-3">{picture.title}</Label>
+
           <p className="text-gray-600 col-span-6">
             {picture?.description || 'No description provided.'}
           </p>
@@ -44,9 +43,8 @@ function PictureProfileItem({ picture, refetch }: Props) {
             refetch={refetch}
             defaultValues={{
               id: picture.id,
-              title: picture.title,
               description: picture.description || '',
-              data: picture.fileUrl,
+              fileUrl: picture.fileUrl,
             }}
             trigger={
               <DialogTrigger asChild>

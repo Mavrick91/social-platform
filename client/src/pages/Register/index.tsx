@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Alert } from '@/components/ui/alert';
 import { useMutation } from '@apollo/client';
-import { REGISTER_USER } from '@/graphql/mutation/user.ts';
+import { REGISTER_USER } from '@/graphql/mutations/user';
 
 const registerSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),

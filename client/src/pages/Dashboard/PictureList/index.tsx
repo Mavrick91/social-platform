@@ -1,5 +1,4 @@
 import PictureDetailsDialog from '@/components/PictureDetailsDialog';
-import { CardContent } from '@/components/ui/card.tsx';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog.tsx';
 import { Picture } from '@/generated/graphql.tsx';
 import { MessageCircle } from 'lucide-react';
@@ -9,7 +8,6 @@ type Props = {
   pictures: Picture[];
 };
 function PictureList({ pictures }: Props) {
-  // console.log('🚀 ~ pictures:', pictures);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
   const handleClickPicture = (picture: Picture) => {
