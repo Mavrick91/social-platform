@@ -18,6 +18,35 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  /** The user who created the comment */
+  author: User;
+  /** The ID of the user who created the comment */
+  authorId: Scalars['Int']['output'];
+  /** The content of the comment */
+  content: Scalars['String']['output'];
+  /** The creation date of the comment */
+  createdAt: Scalars['DateTime']['output'];
+  /** The unique identifier of the comment */
+  id: Scalars['Int']['output'];
+  /** The picture the comment belongs to */
+  picture: Picture;
+  /** The ID of the picture the comment belongs to */
+  pictureId: Scalars['Int']['output'];
+  /** The update date of the comment */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CreateCommentInput = {
+  /** The ID of the user who created the comment */
+  authorId: Scalars['Int']['input'];
+  /** The content of the comment */
+  content: Scalars['String']['input'];
+  /** The ID of the picture the comment belongs to */
+  pictureId: Scalars['Int']['input'];
+};
+
 export type CreatePictureInput = {
   authorId: Scalars['Float']['input'];
   data: Scalars['String']['input'];
@@ -40,11 +69,19 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createComment: Comment;
   createPicture: Picture;
   createUser: User;
   deletePicture: Picture;
   login: LoginResponse;
+  removeComment: Comment;
+  updateComment: Comment;
   updatePicture: Picture;
+};
+
+
+export type MutationCreateCommentArgs = {
+  createCommentInput: CreateCommentInput;
 };
 
 
@@ -69,6 +106,16 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRemoveCommentArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationUpdateCommentArgs = {
+  updateCommentInput: UpdateCommentInput;
+};
+
+
 export type MutationUpdatePictureArgs = {
   id: Scalars['Float']['input'];
   input: UpdatePictureInput;
@@ -88,10 +135,23 @@ export type Picture = {
 
 export type Query = {
   __typename?: 'Query';
+  comment: Comment;
+  comments: Array<Comment>;
+  commentsByPictureId: Array<Comment>;
   picture: Picture;
   pictures: Array<Picture>;
   picturesByAuthor: Array<Picture>;
   users: Array<User>;
+};
+
+
+export type QueryCommentArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryCommentsByPictureIdArgs = {
+  pictureId: Scalars['Int']['input'];
 };
 
 
@@ -102,6 +162,16 @@ export type QueryPictureArgs = {
 
 export type QueryPicturesByAuthorArgs = {
   authorId: Scalars['Float']['input'];
+};
+
+export type UpdateCommentInput = {
+  /** The ID of the user who created the comment */
+  authorId?: InputMaybe<Scalars['Int']['input']>;
+  /** The content of the comment */
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  /** The ID of the picture the comment belongs to */
+  pictureId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdatePictureInput = {
@@ -123,6 +193,35 @@ export type User = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type CommentPictureMutationVariables = Exact<{
+  createCommentInput: CreateCommentInput;
+}>;
+
+
+export type CommentPictureMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: number } };
+
+export type UploadPictureMutationVariables = Exact<{
+  input: CreatePictureInput;
+}>;
+
+
+export type UploadPictureMutation = { __typename?: 'Mutation', createPicture: { __typename?: 'Picture', id: number } };
+
+export type UpdatePictureMutationVariables = Exact<{
+  id: Scalars['Float']['input'];
+  input: UpdatePictureInput;
+}>;
+
+
+export type UpdatePictureMutation = { __typename?: 'Mutation', updatePicture: { __typename?: 'Picture', id: number } };
+
+export type DeletePictureMutationVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+
+export type DeletePictureMutation = { __typename?: 'Mutation', deletePicture: { __typename?: 'Picture', id: number } };
+
 export type RegisterUserMutationVariables = Exact<{
   createUserInput: CreateUserDto;
 }>;
@@ -138,7 +237,159 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', accessToken: string, refreshToken: string } };
 
+export type GetCommentsByPictureQueryVariables = Exact<{
+  pictureId: Scalars['Int']['input'];
+}>;
 
+
+export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: number, firstName: string, lastName: string } }> };
+
+export type GetPicturesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPicturesQuery = { __typename?: 'Query', pictures: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, data: string, author: { __typename?: 'User', id: number, firstName: string, lastName: string } }> };
+
+export type GetPictureByAuthorQueryVariables = Exact<{
+  authorId: Scalars['Float']['input'];
+}>;
+
+
+export type GetPictureByAuthorQuery = { __typename?: 'Query', picturesByAuthor: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, data: string }> };
+
+
+export const CommentPictureDocument = gql`
+    mutation CommentPicture($createCommentInput: CreateCommentInput!) {
+  createComment(createCommentInput: $createCommentInput) {
+    id
+  }
+}
+    `;
+export type CommentPictureMutationFn = Apollo.MutationFunction<CommentPictureMutation, CommentPictureMutationVariables>;
+
+/**
+ * __useCommentPictureMutation__
+ *
+ * To run a mutation, you first call `useCommentPictureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCommentPictureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [commentPictureMutation, { data, loading, error }] = useCommentPictureMutation({
+ *   variables: {
+ *      createCommentInput: // value for 'createCommentInput'
+ *   },
+ * });
+ */
+export function useCommentPictureMutation(baseOptions?: Apollo.MutationHookOptions<CommentPictureMutation, CommentPictureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CommentPictureMutation, CommentPictureMutationVariables>(CommentPictureDocument, options);
+      }
+export type CommentPictureMutationHookResult = ReturnType<typeof useCommentPictureMutation>;
+export type CommentPictureMutationResult = Apollo.MutationResult<CommentPictureMutation>;
+export type CommentPictureMutationOptions = Apollo.BaseMutationOptions<CommentPictureMutation, CommentPictureMutationVariables>;
+export const UploadPictureDocument = gql`
+    mutation UploadPicture($input: CreatePictureInput!) {
+  createPicture(input: $input) {
+    id
+  }
+}
+    `;
+export type UploadPictureMutationFn = Apollo.MutationFunction<UploadPictureMutation, UploadPictureMutationVariables>;
+
+/**
+ * __useUploadPictureMutation__
+ *
+ * To run a mutation, you first call `useUploadPictureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadPictureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadPictureMutation, { data, loading, error }] = useUploadPictureMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUploadPictureMutation(baseOptions?: Apollo.MutationHookOptions<UploadPictureMutation, UploadPictureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadPictureMutation, UploadPictureMutationVariables>(UploadPictureDocument, options);
+      }
+export type UploadPictureMutationHookResult = ReturnType<typeof useUploadPictureMutation>;
+export type UploadPictureMutationResult = Apollo.MutationResult<UploadPictureMutation>;
+export type UploadPictureMutationOptions = Apollo.BaseMutationOptions<UploadPictureMutation, UploadPictureMutationVariables>;
+export const UpdatePictureDocument = gql`
+    mutation UpdatePicture($id: Float!, $input: UpdatePictureInput!) {
+  updatePicture(id: $id, input: $input) {
+    id
+  }
+}
+    `;
+export type UpdatePictureMutationFn = Apollo.MutationFunction<UpdatePictureMutation, UpdatePictureMutationVariables>;
+
+/**
+ * __useUpdatePictureMutation__
+ *
+ * To run a mutation, you first call `useUpdatePictureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePictureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePictureMutation, { data, loading, error }] = useUpdatePictureMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdatePictureMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePictureMutation, UpdatePictureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePictureMutation, UpdatePictureMutationVariables>(UpdatePictureDocument, options);
+      }
+export type UpdatePictureMutationHookResult = ReturnType<typeof useUpdatePictureMutation>;
+export type UpdatePictureMutationResult = Apollo.MutationResult<UpdatePictureMutation>;
+export type UpdatePictureMutationOptions = Apollo.BaseMutationOptions<UpdatePictureMutation, UpdatePictureMutationVariables>;
+export const DeletePictureDocument = gql`
+    mutation DeletePicture($id: Float!) {
+  deletePicture(id: $id) {
+    id
+  }
+}
+    `;
+export type DeletePictureMutationFn = Apollo.MutationFunction<DeletePictureMutation, DeletePictureMutationVariables>;
+
+/**
+ * __useDeletePictureMutation__
+ *
+ * To run a mutation, you first call `useDeletePictureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePictureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePictureMutation, { data, loading, error }] = useDeletePictureMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePictureMutation(baseOptions?: Apollo.MutationHookOptions<DeletePictureMutation, DeletePictureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePictureMutation, DeletePictureMutationVariables>(DeletePictureDocument, options);
+      }
+export type DeletePictureMutationHookResult = ReturnType<typeof useDeletePictureMutation>;
+export type DeletePictureMutationResult = Apollo.MutationResult<DeletePictureMutation>;
+export type DeletePictureMutationOptions = Apollo.BaseMutationOptions<DeletePictureMutation, DeletePictureMutationVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($createUserInput: CreateUserDto!) {
   createUser(createUserInput: $createUserInput) {
@@ -210,3 +461,145 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const GetCommentsByPictureDocument = gql`
+    query GetCommentsByPicture($pictureId: Int!) {
+  commentsByPictureId(pictureId: $pictureId) {
+    id
+    content
+    createdAt
+    updatedAt
+    author {
+      id
+      firstName
+      lastName
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCommentsByPictureQuery__
+ *
+ * To run a query within a React component, call `useGetCommentsByPictureQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentsByPictureQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentsByPictureQuery({
+ *   variables: {
+ *      pictureId: // value for 'pictureId'
+ *   },
+ * });
+ */
+export function useGetCommentsByPictureQuery(baseOptions: Apollo.QueryHookOptions<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables> & ({ variables: GetCommentsByPictureQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>(GetCommentsByPictureDocument, options);
+      }
+export function useGetCommentsByPictureLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>(GetCommentsByPictureDocument, options);
+        }
+export function useGetCommentsByPictureSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>(GetCommentsByPictureDocument, options);
+        }
+export type GetCommentsByPictureQueryHookResult = ReturnType<typeof useGetCommentsByPictureQuery>;
+export type GetCommentsByPictureLazyQueryHookResult = ReturnType<typeof useGetCommentsByPictureLazyQuery>;
+export type GetCommentsByPictureSuspenseQueryHookResult = ReturnType<typeof useGetCommentsByPictureSuspenseQuery>;
+export type GetCommentsByPictureQueryResult = Apollo.QueryResult<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>;
+export const GetPicturesDocument = gql`
+    query GetPictures {
+  pictures {
+    id
+    title
+    description
+    createdAt
+    updatedAt
+    data
+    author {
+      id
+      firstName
+      lastName
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPicturesQuery__
+ *
+ * To run a query within a React component, call `useGetPicturesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPicturesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPicturesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPicturesQuery(baseOptions?: Apollo.QueryHookOptions<GetPicturesQuery, GetPicturesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPicturesQuery, GetPicturesQueryVariables>(GetPicturesDocument, options);
+      }
+export function useGetPicturesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPicturesQuery, GetPicturesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPicturesQuery, GetPicturesQueryVariables>(GetPicturesDocument, options);
+        }
+export function useGetPicturesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPicturesQuery, GetPicturesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPicturesQuery, GetPicturesQueryVariables>(GetPicturesDocument, options);
+        }
+export type GetPicturesQueryHookResult = ReturnType<typeof useGetPicturesQuery>;
+export type GetPicturesLazyQueryHookResult = ReturnType<typeof useGetPicturesLazyQuery>;
+export type GetPicturesSuspenseQueryHookResult = ReturnType<typeof useGetPicturesSuspenseQuery>;
+export type GetPicturesQueryResult = Apollo.QueryResult<GetPicturesQuery, GetPicturesQueryVariables>;
+export const GetPictureByAuthorDocument = gql`
+    query GetPictureByAuthor($authorId: Float!) {
+  picturesByAuthor(authorId: $authorId) {
+    id
+    title
+    description
+    createdAt
+    updatedAt
+    data
+  }
+}
+    `;
+
+/**
+ * __useGetPictureByAuthorQuery__
+ *
+ * To run a query within a React component, call `useGetPictureByAuthorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPictureByAuthorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPictureByAuthorQuery({
+ *   variables: {
+ *      authorId: // value for 'authorId'
+ *   },
+ * });
+ */
+export function useGetPictureByAuthorQuery(baseOptions: Apollo.QueryHookOptions<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables> & ({ variables: GetPictureByAuthorQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables>(GetPictureByAuthorDocument, options);
+      }
+export function useGetPictureByAuthorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables>(GetPictureByAuthorDocument, options);
+        }
+export function useGetPictureByAuthorSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables>(GetPictureByAuthorDocument, options);
+        }
+export type GetPictureByAuthorQueryHookResult = ReturnType<typeof useGetPictureByAuthorQuery>;
+export type GetPictureByAuthorLazyQueryHookResult = ReturnType<typeof useGetPictureByAuthorLazyQuery>;
+export type GetPictureByAuthorSuspenseQueryHookResult = ReturnType<typeof useGetPictureByAuthorSuspenseQuery>;
+export type GetPictureByAuthorQueryResult = Apollo.QueryResult<GetPictureByAuthorQuery, GetPictureByAuthorQueryVariables>;

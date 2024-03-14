@@ -1,6 +1,6 @@
 overwrite: true
-schema: "http://localhost:3000/graphql" # Your GraphQL endpoint
-documents: "src/**/*.graphql"
+schema: "http://localhost:3000/graphql"
+documents: "src/**/*.ts"
 generates:
     src/generated/graphql.tsx:
         plugins:

@@ -9,6 +9,7 @@ import { UserService } from './modules/user/user.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PictureModule } from './modules/picture/picture.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PictureModule } from './modules/picture/picture.module';
     UserModule,
     AuthModule,
     PictureModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, UserService],

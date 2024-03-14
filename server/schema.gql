@@ -34,11 +34,40 @@ type LoginResponse {
   refreshToken: String!
 }
 
+type Comment {
+  """The unique identifier of the comment"""
+  id: Int!
+
+  """The content of the comment"""
+  content: String!
+
+  """The user who created the comment"""
+  author: User!
+
+  """The ID of the user who created the comment"""
+  authorId: Int!
+
+  """The picture the comment belongs to"""
+  picture: Picture!
+
+  """The ID of the picture the comment belongs to"""
+  pictureId: Int!
+
+  """The creation date of the comment"""
+  createdAt: DateTime!
+
+  """The update date of the comment"""
+  updatedAt: DateTime!
+}
+
 type Query {
   users: [User!]!
   pictures: [Picture!]!
   picture(id: Float!): Picture!
   picturesByAuthor(authorId: Float!): [Picture!]!
+  commentsByPictureId(pictureId: Int!): [Comment!]!
+  comments: [Comment!]!
+  comment(id: Int!): Comment!
 }
 
 type Mutation {
@@ -47,6 +76,9 @@ type Mutation {
   createPicture(input: CreatePictureInput!): Picture!
   updatePicture(id: Float!, input: UpdatePictureInput!): Picture!
   deletePicture(id: Float!): Picture!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
 }
 
 input CreateUserDto {
@@ -68,4 +100,27 @@ input UpdatePictureInput {
   description: String
   authorId: Float
   data: String
+}
+
+input CreateCommentInput {
+  """The content of the comment"""
+  content: String!
+
+  """The ID of the user who created the comment"""
+  authorId: Int!
+
+  """The ID of the picture the comment belongs to"""
+  pictureId: Int!
+}
+
+input UpdateCommentInput {
+  """The content of the comment"""
+  content: String
+
+  """The ID of the user who created the comment"""
+  authorId: Int
+
+  """The ID of the picture the comment belongs to"""
+  pictureId: Int
+  id: Int!
 }

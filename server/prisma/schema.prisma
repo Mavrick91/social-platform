@@ -16,15 +16,28 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   pictures  Picture[]
+  Comment   Comment[]
 }
 
 model Picture {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   data        String
   description String?
-  author      User     @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id])
   authorId    Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Comment     Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  picture   Picture  @relation(fields: [pictureId], references: [id])
+  pictureId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
