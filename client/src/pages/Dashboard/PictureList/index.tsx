@@ -30,6 +30,7 @@ function PictureList({ pictures }: Props) {
               <Card
                 key={picture.id}
                 onClick={() => handleClickPicture(picture)}
+                className="h-full"
               >
                 <img
                   alt="Photo"
