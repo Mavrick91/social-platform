@@ -18,6 +18,18 @@ function Dashboard() {
     fetchPolicy: 'network-only',
   });
 
+  const trigger = (
+    <DialogTrigger className="flex items-center w-full justify-between" asChild>
+      <div>
+        <span>Photos</span>
+        <Button className="gap-2">
+          <Plus />
+          Upload
+        </Button>
+      </div>
+    </DialogTrigger>
+  );
+
   if (loading) {
     return null;
   }
@@ -27,23 +39,7 @@ function Dashboard() {
       <Card>
         <CardHeader>
           <CardTitle>
-            <UploadPicture
-              refetch={refetch}
-              trigger={
-                <DialogTrigger
-                  className="flex items-center w-full justify-between"
-                  asChild
-                >
-                  <div>
-                    <span>Photos</span>
-                    <Button className="gap-2">
-                      <Plus />
-                      Upload
-                    </Button>
-                  </div>
-                </DialogTrigger>
-              }
-            />
+            <UploadPicture refetch={refetch} trigger={trigger} />
           </CardTitle>
           {data.pictures && data.pictures.length !== 0 && (
             <CardDescription>Click on an image to view details</CardDescription>
