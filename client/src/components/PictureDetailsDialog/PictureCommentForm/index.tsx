@@ -79,7 +79,7 @@ function PictureCommentForm({
         error={errors.content?.message}
       />
       <div className="flex justify-end mt-4">
-        <Button type="submit" loading={commentPictureLoading}>
+        <Button size="sm" type="submit" loading={commentPictureLoading}>
           Post Comment
         </Button>
       </div>
