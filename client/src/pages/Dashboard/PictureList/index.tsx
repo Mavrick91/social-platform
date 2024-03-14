@@ -1,13 +1,15 @@
-import { Card, CardContent } from '@/components/ui/card.tsx';
-import { Picture } from '@/generated/graphql.tsx';
-import { useState } from 'react';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog.tsx';
 import PictureDetailsDialog from '@/components/PictureDetailsDialog';
+import { CardContent } from '@/components/ui/card.tsx';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog.tsx';
+import { Picture } from '@/generated/graphql.tsx';
+import { MessageCircle } from 'lucide-react';
+import { useState } from 'react';
 
 type Props = {
   pictures: Picture[];
 };
 function PictureList({ pictures }: Props) {
+  // console.log('🚀 ~ pictures:', pictures);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
   const handleClickPicture = (picture: Picture) => {
@@ -16,42 +18,39 @@ function PictureList({ pictures }: Props) {
 
   return (
     <>
-      <CardContent className="grid w-full gap-4 md:gap-6 sm:grid-cols-2 lg:gap-8 xl:grid-cols-3">
+      <div className="grid w-full sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1">
         {pictures.map((picture) => (
           <Dialog key={picture.id}>
             <PictureDetailsDialog
               trigger={
-                <DialogTrigger>
-                  <Card
+                <DialogTrigger
+                  asChild
+                  className="col-span-1 lg:col-span-2 aspect-square"
+                >
+                  <button
                     key={picture.id}
                     onClick={() => handleClickPicture(picture)}
-                    className="h-full"
+                    className="h-full group relative"
                   >
                     <img
                       alt="Photo"
-                      className="aspect-video overflow-hidden rounded-lg object-contain"
-                      height="300"
+                      className="aspect-square overflow-hidden border border-slate-200 object-cover"
                       src={picture.fileUrl}
-                      width="400"
                     />
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-sm md:text-base">
-                        {picture.title}
-                      </h3>
-                      {picture.description && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {picture.description}
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
+                    <div className="hidden z-20 text-white gap-3 absolute inset-0 bg-black bg-opacity-50 group-hover:flex items-center justify-center">
+                      <MessageCircle color="white" size={32} />
+                      <span className="text-2xl">
+                        {picture.comments?.length}
+                      </span>
+                    </div>
+                  </button>
                 </DialogTrigger>
               }
               selectedPicture={selectedPicture!}
             />
           </Dialog>
         ))}
-      </CardContent>
+      </div>
     </>
   );
 }

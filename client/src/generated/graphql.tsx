@@ -21,7 +21,7 @@ export type Scalars = {
 export type Comment = {
   __typename?: 'Comment';
   /** The user who created the comment */
-  author: User;
+  author?: Maybe<User>;
   /** The ID of the user who created the comment */
   authorId: Scalars['Int']['output'];
   /** The content of the comment */
@@ -31,7 +31,7 @@ export type Comment = {
   /** The unique identifier of the comment */
   id: Scalars['Int']['output'];
   /** The picture the comment belongs to */
-  picture: Picture;
+  picture?: Maybe<Picture>;
   /** The ID of the picture the comment belongs to */
   pictureId: Scalars['Int']['output'];
   /** The update date of the comment */
@@ -126,8 +126,7 @@ export type Picture = {
   __typename?: 'Picture';
   author: User;
   authorId: Scalars['Int']['output'];
-  comment: Comment;
-  commentId: Scalars['Int']['output'];
+  comments?: Maybe<Array<Comment>>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   fileName: Scalars['String']['output'];
@@ -194,7 +193,7 @@ export type User = {
   id: Scalars['Int']['output'];
   lastName: Scalars['String']['output'];
   password: Scalars['String']['output'];
-  pictures: Array<Picture>;
+  pictures?: Maybe<Array<Picture>>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -247,12 +246,12 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 }>;
 
 
-export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: number, firstName: string, lastName: string } }> };
+export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt: any, updatedAt: any, author?: { __typename?: 'User', id: number, firstName: string, lastName: string } | null }> };
 
 export type GetPicturesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPicturesQuery = { __typename?: 'Query', pictures: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author: { __typename?: 'User', id: number, firstName: string, lastName: string } }> };
+export type GetPicturesQuery = { __typename?: 'Query', pictures: Array<{ __typename?: 'Picture', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author: { __typename?: 'User', id: number, firstName: string, lastName: string }, comments?: Array<{ __typename?: 'Comment', id: number }> | null }> };
 
 export type GetPictureByAuthorQueryVariables = Exact<{
   authorId: Scalars['Float']['input'];
@@ -527,6 +526,9 @@ export const GetPicturesDocument = gql`
       id
       firstName
       lastName
+    }
+    comments {
+      id
     }
   }
 }

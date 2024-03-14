@@ -63,9 +63,7 @@ export class PictureResolver {
   }
 
   @Mutation(() => Picture)
-  async deletePicture(
-    @Args('id') id: number,
-  ): Promise<Prisma.PictureUncheckedCreateInput> {
+  async deletePicture(@Args('id') id: number): Promise<Picture> {
     const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
 
     try {

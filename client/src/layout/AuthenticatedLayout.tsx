@@ -27,9 +27,9 @@ const AuthenticatedLayout = ({ children }: Props) => {
   }
 
   return (
-    <div className="border border-blue-700 flex flex-col h-full">
+    <div className="flex flex-col h-full">
       <Header />
-      <div className="pt-10 overflow-y-auto">
+      <div className="p-10 overflow-y-auto bg-[#f9f9f9] h-full">
         <div className="max-w-screen-xl mx-auto grow">{children}</div>
         <Footer />
       </div>

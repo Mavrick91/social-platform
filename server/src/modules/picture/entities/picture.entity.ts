@@ -25,11 +25,8 @@ export class Picture {
   @Field(() => Int)
   authorId: number;
 
-  @Field(() => Comment)
-  comment: Comment;
-
-  @Field(() => Int)
-  commentId: number;
+  @Field(() => [Comment], { nullable: true })
+  comments?: Comment[];
 
   @Field(() => Date)
   createdAt: Date;

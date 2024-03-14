@@ -10,16 +10,22 @@ export class Comment {
   @Field(() => String, { description: 'The content of the comment' })
   content: string;
 
-  @Field(() => User, { description: 'The user who created the comment' })
-  author: User;
+  @Field(() => User, {
+    nullable: true,
+    description: 'The user who created the comment',
+  })
+  author?: User;
 
   @Field(() => Int, {
     description: 'The ID of the user who created the comment',
   })
   authorId: number;
 
-  @Field(() => Picture, { description: 'The picture the comment belongs to' })
-  picture: Picture;
+  @Field(() => Picture, {
+    nullable: true,
+    description: 'The picture the comment belongs to',
+  })
+  picture?: Picture;
 
   @Field(() => Int, {
     description: 'The ID of the picture the comment belongs to',

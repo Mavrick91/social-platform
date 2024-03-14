@@ -32,7 +32,9 @@ function PictureCommentForm({
   const [
     commentPicture,
     { loading: commentPictureLoading, error: commentPictureError },
-  ] = useMutation(COMMENT_PICTURE_MUTATION);
+  ] = useMutation(COMMENT_PICTURE_MUTATION, {
+    refetchQueries: ['GetPictures'],
+  });
 
   const {
     register,

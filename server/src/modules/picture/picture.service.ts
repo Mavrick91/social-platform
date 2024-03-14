@@ -11,11 +11,14 @@ export class PictureService {
 
   async findAll(): Promise<Picture[]> {
     const pictures = await this.prisma.picture.findMany({
-      include: { author: true },
+      include: {
+        comments: true,
+        author: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
 
-    return pictures as Picture[];
+    return pictures;
   }
 
   async findByAuthor(authorId: number): Promise<Picture[]> {
@@ -59,13 +62,18 @@ export class PictureService {
     return picture;
   }
 
-  async remove(id: number): Promise<Prisma.PictureUncheckedCreateInput> {
-    const picture = await this.prisma.picture.delete({ where: { id } });
+  async remove(id: number): Promise<Picture> {
+    const picture = await this.prisma.picture.delete({
+      where: { id },
+      include: {
+        author: true,
+      },
+    });
 
     if (!picture) {
       throw new NotFoundException('Picture not found');
     }
 
-    return picture as Picture;
+    return picture;
   }
 }

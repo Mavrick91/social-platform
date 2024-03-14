@@ -14,6 +14,9 @@ export const GET_PICTURES = gql`
         firstName
         lastName
       }
+      comments {
+        id
+      }
     }
   }
 `;

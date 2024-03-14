@@ -10,13 +10,13 @@ type Comment {
   content: String!
 
   """The user who created the comment"""
-  author: User!
+  author: User
 
   """The ID of the user who created the comment"""
   authorId: Int!
 
   """The picture the comment belongs to"""
-  picture: Picture!
+  picture: Picture
 
   """The ID of the picture the comment belongs to"""
   pictureId: Int!
@@ -41,8 +41,7 @@ type Picture {
   description: String
   author: User!
   authorId: Int!
-  comment: Comment!
-  commentId: Int!
+  comments: [Comment!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -53,7 +52,7 @@ type User {
   password: String!
   firstName: String!
   lastName: String!
-  pictures: [Picture!]!
+  pictures: [Picture!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

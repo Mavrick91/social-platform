@@ -18,8 +18,8 @@ export class User {
   @Field()
   lastName: string;
 
-  @Field(() => [Picture])
-  pictures: Picture[];
+  @Field(() => [Picture], { nullable: true })
+  pictures?: Picture[];
 
   @Field(() => Date)
   createdAt: Date;
