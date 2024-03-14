@@ -91,7 +91,6 @@ input CreateUserDto {
 }
 
 input CreatePictureInput {
-  title: String!
   description: String
   authorId: Float!
   fileUrl: String!
@@ -99,7 +98,6 @@ input CreatePictureInput {
 }
 
 input UpdatePictureInput {
-  title: String
   description: String
   authorId: Float
   fileUrl: String

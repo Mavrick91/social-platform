@@ -24,7 +24,7 @@ model Picture {
   fileUrl     String
   fileName    String
   description String?
-  author      User      @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -34,9 +34,9 @@ model Picture {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
-  picture   Picture  @relation(fields: [pictureId], references: [id])
+  picture   Picture  @relation(fields: [pictureId], references: [id], onDelete: Cascade)
   pictureId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

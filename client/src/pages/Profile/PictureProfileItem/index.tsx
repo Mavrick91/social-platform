@@ -27,10 +27,10 @@ function PictureProfileItem({ picture, refetch }: Props) {
   return (
     <>
       <Card className="rounded-md overflow-hidden bg-slate-50 flex justify-between items-center px-4 py-2">
-        <div className="grid gap-2 items-center grid-cols-12 w-full">
+        <div className="flex gap-4 md:gap-2 items-center w-full">
           <img
             src={picture.fileUrl}
-            className="size-16 rounded-full shadow-lg col-span-1 shrink-0 aspect-square"
+            className="size-10 md:size-16 rounded-full shadow-lg aspect-square"
             alt="Picture"
           />
 

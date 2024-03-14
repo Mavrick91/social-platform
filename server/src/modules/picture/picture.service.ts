@@ -67,17 +67,21 @@ export class PictureService {
   }
 
   async remove(id: number): Promise<Picture> {
-    const picture = await this.prisma.picture.delete({
-      where: { id },
-      include: {
-        author: true,
-      },
-    });
+    try {
+      const picture = await this.prisma.picture.delete({
+        where: { id },
+        include: {
+          author: true,
+        },
+      });
 
-    if (!picture) {
-      throw new NotFoundException('Picture not found');
+      if (!picture) {
+        throw new NotFoundException('Picture not found');
+      }
+
+      return picture;
+    } catch (error) {
+      console.log('🚀 ~ error:', error.message);
     }
-
-    return picture;
   }
 }

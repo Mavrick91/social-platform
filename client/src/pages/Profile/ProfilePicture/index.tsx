@@ -1,7 +1,6 @@
-import PictureProfileItem from '@/pages/Profile/PictureProfileItem';
-import { Card } from '@/components/ui/card.tsx';
-import PictureEmpty from '@/pages/Dashboard/PictureEmpty';
 import { Picture } from '@/generated/graphql.tsx';
+import PictureEmpty from '@/pages/Dashboard/PictureEmpty';
+import PictureProfileItem from '@/pages/Profile/PictureProfileItem';
 
 type Props = {
   pictures: Picture[];
@@ -18,9 +17,7 @@ const ProfilePics = ({ pictures, refetchPictures }: Props) => {
       />
     ))
   ) : (
-    <Card>
-      <PictureEmpty />
-    </Card>
+    <PictureEmpty />
   );
 };
 

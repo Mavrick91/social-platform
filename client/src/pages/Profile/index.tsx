@@ -37,9 +37,14 @@ function Profile() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       <UploadPicture refetch={refetch} trigger={trigger} />
-      <ProfilePics pictures={data.picturesByAuthor} refetchPictures={refetch} />
+      <div className="mt-4">
+        <ProfilePics
+          pictures={data.picturesByAuthor}
+          refetchPictures={refetch}
+        />
+      </div>
     </div>
   );
 }

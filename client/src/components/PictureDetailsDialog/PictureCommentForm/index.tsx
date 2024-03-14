@@ -1,5 +1,4 @@
-import { Textarea } from '@/components/ui/textarea.tsx';
-import { Button } from '@/components/ui/button.tsx';
+import TextareaAutosize from 'react-textarea-autosize';
 import { COMMENT_PICTURE_MUTATION } from '@/graphql/mutations/comment';
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
@@ -8,6 +7,8 @@ import * as z from 'zod';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { useAppSelector } from '@/store/hooks.ts';
 import { RefObject, useEffect } from 'react';
+import { Separator } from '@/components/ui/separator';
+import { Send } from 'lucide-react';
 
 const commentSchema = z.object({
   content: z.string().min(1, 'Comment content is required'),
@@ -29,21 +30,18 @@ function PictureCommentForm({
   setErrorMutation,
 }: Props) {
   const userInfo = useAppSelector(selectAuthenticatedUser);
-  const [
-    commentPicture,
-    { loading: commentPictureLoading, error: commentPictureError },
-  ] = useMutation(COMMENT_PICTURE_MUTATION, {
-    refetchQueries: ['GetPictures'],
-  });
+  const [commentPicture, { error: commentPictureError }] = useMutation(
+    COMMENT_PICTURE_MUTATION,
+    {
+      refetchQueries: ['GetPictures'],
+    }
+  );
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<CommentFormData>({
+  const { register, handleSubmit, reset, watch } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
   });
+
+  const content = watch('content');
 
   useEffect(() => {
     if (commentPictureError) {
@@ -74,16 +72,22 @@ function PictureCommentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Textarea
-        placeholder="Write your comment here..."
-        {...register('content')}
-        error={errors.content?.message}
-      />
-      <div className="flex justify-end mt-4">
-        <Button size="sm" type="submit" loading={commentPictureLoading}>
-          Post Comment
-        </Button>
+    <form onSubmit={handleSubmit(onSubmit)} className="">
+      <Separator />
+      <div className="flex items-center">
+        <TextareaAutosize
+          className="w-full p-2 focus:outline-none resize-none"
+          placeholder="Write your comment here..."
+          {...register('content')}
+          maxRows={4}
+        />
+        <button
+          className="size-12 flex justify-center items-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          type="submit"
+          disabled={!content}
+        >
+          <Send size={16} />
+        </button>
       </div>
     </form>
   );

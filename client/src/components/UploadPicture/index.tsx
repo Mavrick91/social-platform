@@ -24,8 +24,15 @@ function UploadPictureDialog({ refetch, trigger, defaultValues }: Props) {
   const [open, setOpen] = useState(false);
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
 
+  const handleOpen = (isOpen: boolean) => {
+    if (!isOpen) {
+      setErrorMutation(null);
+    }
+    setOpen(true);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       {trigger}
 
       <DialogContent className="max-w-3xl">
