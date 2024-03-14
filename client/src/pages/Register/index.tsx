@@ -52,7 +52,7 @@ export default function Register() {
         </div>
         {error && (
           <Alert variant="destructive">
-            <p>Registration failed. Please try again.</p>
+            <p>{error.message}</p>
           </Alert>
         )}
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>

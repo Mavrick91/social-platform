@@ -35,7 +35,7 @@ export default function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="size-10 items-center justify-center flex rounded-full bg-slate-400">
-                  {userInfo?.firstName[0]}
+                  {userInfo.firstName[0]}
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

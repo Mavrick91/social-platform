@@ -52,7 +52,7 @@ export default function Login() {
         </div>
         {error && (
           <Alert variant="destructive">
-            <p>Login failed. Please try again.</p>
+            <p>{error.message}</p>
           </Alert>
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
