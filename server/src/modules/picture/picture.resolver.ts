@@ -3,6 +3,7 @@ import { PictureService } from './picture.service';
 import { Picture } from './entities/picture.entity';
 import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
 
 @Resolver(() => Picture)
 export class PictureResolver {
@@ -15,7 +16,11 @@ export class PictureResolver {
 
   @Query(() => Picture)
   async picture(@Args('id') id: number): Promise<Picture> {
-    return this.pictureService.findOne(id);
+    try {
+      return await this.pictureService.findOne(id);
+    } catch (error) {
+      throw new NotFoundException('Picture not found');
+    }
   }
 
   @Query(() => [Picture])
@@ -29,7 +34,11 @@ export class PictureResolver {
   async createPicture(
     @Args('input') input: CreatePictureInput,
   ): Promise<Picture> {
-    return this.pictureService.create(input);
+    try {
+      return await this.pictureService.create(input);
+    } catch (error) {
+      throw new BadRequestException('Failed to create picture');
+    }
   }
 
   @Mutation(() => Picture)
@@ -37,11 +46,19 @@ export class PictureResolver {
     @Args('id') id: number,
     @Args('input') input: UpdatePictureInput,
   ): Promise<Picture> {
-    return this.pictureService.update(id, input);
+    try {
+      return await this.pictureService.update(id, input);
+    } catch (error) {
+      throw new NotFoundException('Picture not found');
+    }
   }
 
   @Mutation(() => Picture)
   async deletePicture(@Args('id') id: number): Promise<Picture> {
-    return this.pictureService.remove(id);
+    try {
+      return await this.pictureService.remove(id);
+    } catch (error) {
+      throw new NotFoundException('Picture not found');
+    }
   }
 }

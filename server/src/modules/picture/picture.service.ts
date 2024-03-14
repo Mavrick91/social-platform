@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Picture } from './entities/picture.entity';
 import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
-// import { Picture as PrismaModel } from '@prisma/client';
 
 @Injectable()
 export class PictureService {
@@ -11,9 +10,7 @@ export class PictureService {
 
   async findAll(): Promise<Picture[]> {
     const pictures = await this.prisma.picture.findMany({
-      include: {
-        author: true,
-      },
+      include: { author: true },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -32,6 +29,10 @@ export class PictureService {
   async findOne(id: number): Promise<Picture> {
     const picture = await this.prisma.picture.findUnique({ where: { id } });
 
+    if (!picture) {
+      throw new NotFoundException('Picture not found');
+    }
+
     return picture as Picture;
   }
 
@@ -46,11 +47,20 @@ export class PictureService {
       where: { id },
       data: input,
     });
+
+    if (!picture) {
+      throw new NotFoundException('Picture not found');
+    }
+
     return picture as Picture;
   }
 
   async remove(id: number): Promise<Picture> {
     const picture = await this.prisma.picture.delete({ where: { id } });
+
+    if (!picture) {
+      throw new NotFoundException('Picture not found');
+    }
 
     return picture as Picture;
   }
