@@ -37,14 +37,14 @@ function PictureCommentList({ pictureId, setErrorMutation }: Props) {
               className="flex justify-center gap-1 flex-col"
             >
               <div className="flex items-center justify-between">
-                <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
+                <p className="inline-flex items-center mr-3 text-base text-gray-900 dark:text-white font-semibold">
                   {comment.author.firstName} {comment.author.lastName}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   <time>{moment(comment.createdAt).fromNow()}</time>
                 </p>
               </div>
-              <p className="text-gray-500 text-wrap break-all dark:text-gray-400">
+              <p className="text-gray-500 text-wrap break-all text-sm dark:text-gray-400">
                 {comment.content}
               </p>
             </div>
