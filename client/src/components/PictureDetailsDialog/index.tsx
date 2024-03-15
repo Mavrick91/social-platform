@@ -26,7 +26,7 @@ function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
             <div className="flex items-center justify-center h-full">
               <img
                 alt="Photo"
-                className="overflow-hidden rounded-lg object-cover"
+                className="overflow-hidden object-cover"
                 height="500"
                 src={selectedPicture?.fileUrl}
                 width="600"

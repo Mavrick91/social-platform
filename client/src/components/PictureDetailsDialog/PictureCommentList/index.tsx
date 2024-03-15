@@ -27,7 +27,7 @@ function PictureCommentList({ pictureId, setErrorMutation }: Props) {
   return (
     <div className="space-y-4 flex flex-col grow">
       <div
-        className="space-y-2 pr-6 pl-3 grow overflow-y-auto"
+        className="space-y-2 pr-6 pl-3 max-h-[500px] grow overflow-y-auto"
         ref={commentListRef}
       >
         {data.commentsByPictureId.map((comment: Comment) => {

@@ -11,7 +11,10 @@ import { Separator } from '@/components/ui/separator';
 import { Send } from 'lucide-react';
 
 const commentSchema = z.object({
-  content: z.string().min(1, 'Comment content is required'),
+  content: z
+    .string()
+    .min(1, 'Comment content is required')
+    .transform((val) => val.trim()),
 });
 
 type CommentFormData = z.infer<typeof commentSchema>;

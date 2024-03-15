@@ -12,7 +12,10 @@ import { useMutation } from '@apollo/client';
 import { LOGIN } from '@/graphql/mutations/user';
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  email: z
+    .string()
+    .email()
+    .transform((val) => val.trim().toLowerCase()),
   password: z.string().min(1, 'Password must not be empty'),
 });
 
