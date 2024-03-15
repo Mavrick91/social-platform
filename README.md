@@ -41,7 +41,7 @@ psql -h localhost -U postgres -c "CREATE DATABASE social_platform;"
 
 ### 4. Set up the .env File
 
-Prisma uses the .env file for environment variables. Create a .env file in the server directory and add your database connection string and AWS S3 credentials:
+Prisma uses the .env file for environment variables. Create a .env file in the `server` directory and add your database connection string and AWS S3 credentials:
 
 ```plaintext
 DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/social_platform?schema=public"
