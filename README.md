@@ -39,23 +39,12 @@ After installation, create the `social_platform` database:
 psql -h localhost -U postgres -c "CREATE DATABASE social_platform;"
 ```
 
-### 4. Run database migrations
+### 4. Set up the .env File
 
-Apply the database migrations by running:
-
-```bash
-npx prisma migrate dev
-```
-
-### 5. Set up the .env File
-
-Prisma uses the .env file for environment variables. Create a .env file in the server/prisma directory and add your database connection string and AWS S3 credentials:
+Prisma uses the .env file for environment variables. Create a .env file in the server directory and add your database connection string and AWS S3 credentials:
 
 ```plaintext
 DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/social_platform?schema=public"
-
-JWT_SECRET="YOUR_GENERATED_JWT_SECRET"
-JWT_REFRESH_SECRET="YOUR_GENERATED_JWT_REFRESH_SECRET"
 
 AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
 AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
@@ -67,17 +56,28 @@ Replace the placeholders with the appropriate values:
 
 - YOUR_PASSWORD: The password for your PostgreSQL user.
 
-
-- YOUR_GENERATED_JWT_SECRET and YOUR_GENERATED_JWT_REFRESH_SECRET: Generate these secrets using OpenSSL by running `openssl rand -base64 64` twice.
-
-
 - YOUR_AWS_ACCESS_KEY_ID and YOUR_AWS_SECRET_ACCESS_KEY: Your AWS access key ID and secret access key.
-
 
 - YOUR_AWS_REGION: The AWS region where your S3 bucket is located.
 
-
 - YOUR_S3_BUCKET_NAME: The name of your S3 bucket for file storage.
+
+You will also need to create env variables for the authentication process
+
+- To generate `JWT_SECRET` and `JWT_REFRESH_SECRET`, you can use the following commands in your terminal:
+
+```bash
+echo "JWT_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> .env
+echo "JWT_REFRESH_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> .env
+```
+
+### 5. Run database migrations
+
+Apply the database migrations by running:
+
+```bash
+npx prisma migrate dev
+```
 
 ### 6. Running the Application
 
