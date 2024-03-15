@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const schemaWithFile = z.object({
-  description: z.string(),
+  description: z.string().transform((val) => val.trim()),
   file: z
     .any()
     .refine(
@@ -68,15 +68,8 @@ function UploadPictureForm({
     useMutation(UPDATE_PICTURE_MUTATION);
 
   useEffect(() => {
-    if (errorUploading || errorUpdating) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const errorCode = errorUploading?.networkError?.statusCode;
-
-      if (errorCode === 413) setErrorMutation('Size of the file is too large.');
-      else if (errorUploading) setErrorMutation(errorUploading.message);
-      else if (errorUpdating) setErrorMutation(errorUpdating.message);
-    }
+    if (errorUploading) setErrorMutation(errorUploading.message);
+    if (errorUpdating) setErrorMutation(errorUpdating.message);
   }, [errorUpdating, errorUploading, setErrorMutation]);
 
   const onSubmit = async (data: FormDataWithFile | FormDataWithoutFile) => {

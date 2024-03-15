@@ -28,7 +28,7 @@ function UploadPictureDialog({ refetch, trigger, defaultValues }: Props) {
     if (!isOpen) {
       setErrorMutation(null);
     }
-    setOpen(true);
+    setOpen(isOpen);
   };
 
   return (

@@ -26,15 +26,15 @@ function PictureProfileItem({ picture, refetch }: Props) {
 
   return (
     <>
-      <Card className="rounded-md overflow-hidden bg-slate-50 flex justify-between items-center px-4 py-2">
+      <Card className="rounded-md overflow-hidden bg-slate-50 flex justify-between items-center p-4">
         <div className="flex gap-4 md:gap-2 items-center w-full">
           <img
             src={picture.fileUrl}
-            className="size-10 md:size-16 rounded-full shadow-lg aspect-square"
+            className="size-10 md:size-14 rounded-full shadow-lg aspect-square"
             alt="Picture"
           />
 
-          <p className="text-gray-600 col-span-6">
+          <p className="text-gray-600 ml-10">
             {picture?.description || 'No description provided.'}
           </p>
         </div>
