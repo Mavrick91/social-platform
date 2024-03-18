@@ -39,7 +39,6 @@ export class UploadController {
   async getUploadUrl() {
     const key = `${Date.now()}.jpg`;
     const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
-    console.log('😀😀', { bucketName });
     const signedUrl = await this.s3Service.getSignedUrl(key, bucketName);
     return { signedUrl, key };
   }

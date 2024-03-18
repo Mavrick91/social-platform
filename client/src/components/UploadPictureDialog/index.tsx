@@ -12,15 +12,16 @@ import UploadPictureForm, {
 import ErrorAlert from '@/components/AlertError';
 
 type Props = {
-  trigger: ReactNode;
+  trigger?: ReactNode;
   defaultValues?: FormDataWithoutFile & {
     id: number;
     fileUrl: string;
   };
+  open: boolean;
+  setOpen: (value: boolean) => void;
 };
 
-function UploadPictureDialog({ trigger, defaultValues }: Props) {
-  const [open, setOpen] = useState(false);
+function UploadPictureDialog({ trigger, defaultValues, open, setOpen }: Props) {
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
 
   const handleOpen = (isOpen: boolean) => {

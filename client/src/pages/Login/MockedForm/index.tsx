@@ -1,3 +1,4 @@
+import { useGetMockedUserQuery } from '@/__generated__/graphql';
 import {
   Select,
   SelectContent,
@@ -5,8 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { GET_MOCKED_USER } from '@/graphql/queries/user';
-import { useQuery } from '@apollo/client';
 import { UseFormSetValue } from 'react-hook-form';
 
 type Props = {
@@ -14,7 +13,7 @@ type Props = {
 };
 
 export default function MockedForm({ setValue }: Props) {
-  const { data, loading } = useQuery(GET_MOCKED_USER);
+  const { data, loading } = useGetMockedUserQuery();
 
   const handleOnChange = (email: string) => {
     setValue('email', email);

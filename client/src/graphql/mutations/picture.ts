@@ -12,6 +12,7 @@ export const UPDATE_PICTURE_MUTATION = gql`
   mutation UpdatePicture($id: Float!, $input: UpdatePictureInput!) {
     updatePicture(id: $id, input: $input) {
       id
+      description
     }
   }
 `;

@@ -3,8 +3,11 @@ import { Button } from '@/components/ui/button.tsx';
 import { DialogTrigger } from '@/components/ui/dialog.tsx';
 import PictureList from '@/pages/Dashboard/PictureList';
 import { Plus } from 'lucide-react';
+import { useState } from 'react';
 
 function Dashboard() {
+  const [uploadPictureDialogOpen, setUploadPictureDialogOpen] = useState(false);
+
   const trigger = (
     <DialogTrigger className="flex items-center w-full justify-between" asChild>
       <div>
@@ -19,7 +22,11 @@ function Dashboard() {
 
   return (
     <>
-      <UploadPictureDialog trigger={trigger} />
+      <UploadPictureDialog
+        trigger={trigger}
+        open={uploadPictureDialogOpen}
+        setOpen={setUploadPictureDialogOpen}
+      />
       <PictureList />
     </>
   );

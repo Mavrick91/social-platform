@@ -1,18 +1,15 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Link } from 'react-router-dom';
+import { useLoginMutation } from '@/__generated__/graphql';
 import { Alert } from '@/components/ui/alert.tsx';
+import { Button } from '@/components/ui/button';
 import { loginAction, setUserInfo } from '@/features/users/userSlice.ts';
 import { useAppDispatch } from '@/store/hooks.ts';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { jwtDecode } from 'jwt-decode';
-import { useMutation } from '@apollo/client';
-import { LOGIN } from '@/graphql/mutations/user';
-import LoginForm from './LoginForm';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { z } from 'zod';
+import LoginForm from './LoginForm';
 import LoginMode from './LoginMode';
 import MockedForm from './MockedForm';
 
@@ -29,7 +26,7 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 export default function Login() {
   const dispatch = useAppDispatch();
   const [loginChoice, setLoginChoice] = useState<'custom' | 'mocked'>('custom');
-  const [login, { loading, error }] = useMutation(LOGIN);
+  const [login, { loading, error }] = useLoginMutation();
   const {
     register,
     handleSubmit,

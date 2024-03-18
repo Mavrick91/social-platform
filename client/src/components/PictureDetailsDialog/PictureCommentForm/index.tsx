@@ -1,14 +1,13 @@
-import TextareaAutosize from 'react-textarea-autosize';
-import { COMMENT_PICTURE_MUTATION } from '@/graphql/mutations/comment';
-import { useMutation } from '@apollo/client';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useCommentPictureMutation } from '@/__generated__/graphql';
+import { Separator } from '@/components/ui/separator';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { useAppSelector } from '@/store/hooks.ts';
-import { RefObject, useEffect } from 'react';
-import { Separator } from '@/components/ui/separator';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
+import { RefObject, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import TextareaAutosize from 'react-textarea-autosize';
+import * as z from 'zod';
 
 const commentSchema = z.object({
   content: z
@@ -33,12 +32,11 @@ function PictureCommentForm({
   setErrorMutation,
 }: Props) {
   const userInfo = useAppSelector(selectAuthenticatedUser);
-  const [commentPicture, { error: commentPictureError }] = useMutation(
-    COMMENT_PICTURE_MUTATION,
-    {
+
+  const [commentPicture, { error: commentPictureError }] =
+    useCommentPictureMutation({
       refetchQueries: ['GetPictures'],
-    }
-  );
+    });
 
   const { register, handleSubmit, reset, watch } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),

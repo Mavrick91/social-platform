@@ -1,9 +1,7 @@
-import { GET_COMMENTS_BY_PICTURE } from '@/graphql/queries/comment';
-import { useQuery } from '@apollo/client';
-import moment from 'moment';
+import { useGetCommentsByPictureQuery } from '@/__generated__/graphql';
 import PictureCommentForm from '@/components/PictureDetailsDialog/PictureCommentForm';
+import moment from 'moment';
 import { useEffect, useRef } from 'react';
-import { Comment } from '@/__generated__/graphql';
 
 type Props = {
   pictureId: number;
@@ -12,7 +10,7 @@ type Props = {
 
 function PictureCommentList({ pictureId, setErrorMutation }: Props) {
   const commentListRef = useRef<HTMLDivElement>(null);
-  const { data, loading, refetch, error } = useQuery(GET_COMMENTS_BY_PICTURE, {
+  const { data, loading, refetch, error } = useGetCommentsByPictureQuery({
     variables: { pictureId },
   });
 
@@ -30,7 +28,7 @@ function PictureCommentList({ pictureId, setErrorMutation }: Props) {
         className="space-y-2 pr-6 pl-3 max-h-[500px] grow overflow-y-auto"
         ref={commentListRef}
       >
-        {data.commentsByPictureId.map((comment: Comment) => {
+        {data?.commentsByPictureId.map((comment) => {
           return (
             <div
               key={comment.id}

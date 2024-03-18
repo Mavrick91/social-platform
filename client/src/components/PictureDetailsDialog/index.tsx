@@ -5,17 +5,31 @@ import moment from 'moment/moment';
 import { ReactNode, useState } from 'react';
 import { Separator } from '../ui/separator';
 import { Picture } from '@/__generated__/graphql';
+import PictureAction from './PictureAction';
+import { useAppSelector } from '@/store/hooks';
+import { selectAuthenticatedUser } from '@/features/users/selectors';
 
 type Props = {
   trigger: ReactNode;
   selectedPicture: null | Picture;
+  handleOpenUpdatePictureDialog: (isOpen: boolean) => void;
 };
 
-function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
+function PictureDetailsDialog({
+  trigger,
+  selectedPicture,
+  handleOpenUpdatePictureDialog,
+}: Props) {
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
+  const userInfo = useAppSelector(selectAuthenticatedUser);
+  const [open, setOpen] = useState(false);
+
+  const handleToggleDialog = (isOpen: boolean) => {
+    setOpen(isOpen);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleToggleDialog}>
       {trigger}
 
       <DialogContent className="max-w-3xl p-0 rounded-md min-h-[600px]">
@@ -35,10 +49,22 @@ function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
           </div>
           <div className="flex-1 flex border-l border-bg-border flex-col space-y-4">
             <div className="flex flex-col pt-3 pl-3">
-              <span className="font-medium text-gray-700">
-                {selectedPicture?.author?.firstName}{' '}
-                {selectedPicture?.author?.lastName}
-              </span>
+              <div className="flex justify-between items-center pr-10">
+                <span className="font-medium text-gray-700">
+                  {selectedPicture?.author?.firstName}{' '}
+                  {selectedPicture?.author?.lastName}
+                </span>
+                {selectedPicture?.id &&
+                  userInfo.sub === selectedPicture.author?.id && (
+                    <PictureAction
+                      handleToggleDialog={handleToggleDialog}
+                      pictureId={selectedPicture.id}
+                      handleOpenUpdatePictureDialog={
+                        handleOpenUpdatePictureDialog
+                      }
+                    />
+                  )}
+              </div>
               <span className="text-gray-500 text-xs">
                 {moment(selectedPicture?.createdAt).format('MMMM Do YYYY')}
               </span>

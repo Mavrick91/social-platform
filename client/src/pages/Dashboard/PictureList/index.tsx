@@ -1,8 +1,7 @@
-import { Picture } from '@/__generated__/graphql';
+import { Picture, useGetPictureByAuthorQuery } from '@/__generated__/graphql';
 import PictureDetailsDialog from '@/components/PictureDetailsDialog';
+import UploadPictureDialog from '@/components/UploadPictureDialog';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog.tsx';
-import { GET_PICTURE_BY_AUTHOR } from '@/graphql/queries/picture';
-import { useQuery } from '@apollo/client';
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import Loading from './loading';
@@ -11,17 +10,18 @@ type Props = {
   userId?: number;
 };
 function PictureList({ userId }: Props) {
-  const { data, loading } = useQuery(GET_PICTURE_BY_AUTHOR, {
-    variables: userId ? { authorId: userId } : undefined,
-    fetchPolicy: 'network-only',
+  const { data, loading } = useGetPictureByAuthorQuery({
+    variables: { authorId: userId },
   });
 
+  const [editPictureDialogOpen, setEditPictureDialogOpen] = useState(false);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
   const handleClickPicture = (picture: Picture) => {
     setSelectedPicture(picture);
   };
 
+  console.log('🚀 ~ data:', data?.picturesByAuthor);
   return (
     <>
       <div className="grid w-full sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1 mt-4">
@@ -29,6 +29,7 @@ function PictureList({ userId }: Props) {
           ? data.picturesByAuthor.map((picture) => (
               <Dialog key={picture.id}>
                 <PictureDetailsDialog
+                  handleOpenUpdatePictureDialog={setEditPictureDialogOpen}
                   trigger={
                     <DialogTrigger
                       asChild
@@ -61,6 +62,18 @@ function PictureList({ userId }: Props) {
               <Loading key={index} />
             ))}
       </div>
+
+      {selectedPicture && (
+        <UploadPictureDialog
+          open={editPictureDialogOpen}
+          setOpen={setEditPictureDialogOpen}
+          defaultValues={{
+            id: selectedPicture.id,
+            fileUrl: selectedPicture.fileUrl,
+            description: selectedPicture.description,
+          }}
+        />
+      )}
     </>
   );
 }

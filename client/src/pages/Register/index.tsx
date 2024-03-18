@@ -1,12 +1,11 @@
+import { useRegisterUserMutation } from '@/__generated__/graphql';
+import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link, useNavigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import * as z from 'zod';
-import { Alert } from '@/components/ui/alert';
-import { useMutation } from '@apollo/client';
-import { REGISTER_USER } from '@/graphql/mutations/user';
 
 const registerSchema = z.object({
   firstName: z
@@ -37,7 +36,7 @@ export default function Register() {
     resolver: zodResolver(registerSchema),
   });
 
-  const [registerUser, { loading, error }] = useMutation(REGISTER_USER);
+  const [registerUser, { loading, error }] = useRegisterUserMutation();
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
