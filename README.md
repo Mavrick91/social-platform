@@ -76,7 +76,15 @@ echo "JWT_REFRESH_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> .env
 Apply the database migrations by running:
 
 ```bash
-npx prisma migrate dev
+(cd server && npx prisma migrate dev)
+```
+
+### 6. Seed the database (optional)
+
+If you want to seed the database with initial data, run the following command from the root directory:
+
+```bash
+(cd server && npm run seed)
 ```
 
 ### 6. Running the Application
