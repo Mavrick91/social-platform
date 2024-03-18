@@ -8,11 +8,10 @@ import {
 import { ReactNode, useState } from 'react';
 import UploadPictureForm, {
   FormDataWithoutFile,
-} from '@/components/UploadPicture/UploadPictureForm';
+} from '@/components/UploadPictureDialog/UploadPictureForm';
 import ErrorAlert from '@/components/AlertError';
 
 type Props = {
-  refetch: () => void;
   trigger: ReactNode;
   defaultValues?: FormDataWithoutFile & {
     id: number;
@@ -20,7 +19,7 @@ type Props = {
   };
 };
 
-function UploadPictureDialog({ refetch, trigger, defaultValues }: Props) {
+function UploadPictureDialog({ trigger, defaultValues }: Props) {
   const [open, setOpen] = useState(false);
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
 
@@ -47,7 +46,6 @@ function UploadPictureDialog({ refetch, trigger, defaultValues }: Props) {
 
         <UploadPictureForm
           setErrorMutation={setErrorMutation}
-          refetch={refetch}
           defaultValues={defaultValues}
           setOpen={setOpen}
         />

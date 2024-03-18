@@ -1,4 +1,4 @@
-import FileUploadArea from '@/components/UploadPicture/FileUploadArea';
+import client from '@/apollo-client';
 import { Button } from '@/components/ui/button.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { ACCEPTED_IMAGE_TYPES } from '@/constant/image.ts';
@@ -7,13 +7,16 @@ import {
   UPDATE_PICTURE_MUTATION,
   UPLOAD_PICTURE_MUTATION,
 } from '@/graphql/mutations/picture';
+import { GET_PICTURE_BY_AUTHOR } from '@/graphql/queries/picture';
 import uploadImage from '@/lib/uploadImage.ts';
 import { useAppSelector } from '@/store/hooks.ts';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import * as z from 'zod';
+import FileUploadArea from '../FileUploadArea';
 
 const schemaWithFile = z.object({
   description: z.string().transform((val) => val.trim()),
@@ -36,19 +39,18 @@ type Props = {
     fileUrl: string;
   };
   setOpen: (value: boolean) => void;
-  refetch: () => void;
   setErrorMutation: Dispatch<SetStateAction<string | null>>;
 };
 
 function UploadPictureForm({
   defaultValues,
   setOpen,
-  refetch,
   setErrorMutation,
 }: Props) {
   const schema = defaultValues?.fileUrl ? schemaWithoutFile : schemaWithFile;
   const userInfo = useAppSelector(selectAuthenticatedUser);
   const [uploadStatus, setUploadStatus] = useState(false);
+  const { userId } = useParams();
 
   const {
     register,
@@ -71,6 +73,14 @@ function UploadPictureForm({
     if (errorUploading) setErrorMutation(errorUploading.message);
     if (errorUpdating) setErrorMutation(errorUpdating.message);
   }, [errorUpdating, errorUploading, setErrorMutation]);
+
+  const refetchQuery = async () => {
+    await client.query({
+      query: GET_PICTURE_BY_AUTHOR,
+      variables: userId ? { authorId: Number(userId) } : undefined,
+      fetchPolicy: 'network-only',
+    });
+  };
 
   const onSubmit = async (data: FormDataWithFile | FormDataWithoutFile) => {
     try {
@@ -101,7 +111,7 @@ function UploadPictureForm({
         await uploadPicture({ variables });
       }
 
-      refetch();
+      refetchQuery();
       setOpen(false);
       reset();
     } catch (error) {

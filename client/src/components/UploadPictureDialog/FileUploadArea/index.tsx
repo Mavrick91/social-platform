@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils.ts';
 import {
   FormDataWithFile,
   FormDataWithoutFile,
-} from '@/components/UploadPicture/UploadPictureForm';
+} from '@/components/UploadPictureDialog/UploadPictureForm';
 
 type FileUploadAreaProps = {
   register: UseFormRegister<FormDataWithFile | FormDataWithoutFile>;
