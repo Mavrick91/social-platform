@@ -12,13 +12,14 @@ export class Comment {
 
   @Field(() => User, {
     description: 'The user who created the comment',
+    nullable: true,
   })
-  author: User;
+  author?: User;
 
   @Field(() => Int, {
-    description: 'The ID of the user who created the comment',
+    nullable: true,
   })
-  authorId: number;
+  authorId?: number;
 
   @Field(() => Picture, {
     nullable: true,
@@ -27,13 +28,13 @@ export class Comment {
   picture?: Picture;
 
   @Field(() => Int, {
-    description: 'The ID of the picture the comment belongs to',
+    nullable: true,
   })
-  pictureId: number;
+  pictureId?: number;
 
-  @Field(() => Date, { description: 'The creation date of the comment' })
-  createdAt: Date;
+  @Field(() => Date, { nullable: true })
+  createdAt?: Date;
 
-  @Field(() => Date, { description: 'The update date of the comment' })
-  updatedAt: Date;
+  @Field(() => Date, { nullable: true })
+  updatedAt?: Date;
 }

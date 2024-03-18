@@ -12,12 +12,12 @@ export class PictureService {
   async findAll(): Promise<Picture[]> {
     const pictures = await this.prisma.picture.findMany({
       include: {
-        comments: {
-          include: {
-            author: true,
+        author: true,
+        _count: {
+          select: {
+            comments: true,
           },
         },
-        author: true,
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -25,10 +25,18 @@ export class PictureService {
     return pictures;
   }
 
-  async findByAuthor(authorId: number): Promise<Picture[]> {
+  async findByAuthor(authorId?: number): Promise<Picture[]> {
     const pictures = await this.prisma.picture.findMany({
-      where: { authorId },
+      where: authorId ? { authorId } : undefined,
       orderBy: { createdAt: 'desc' },
+      include: {
+        author: true,
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
     });
 
     return pictures as Picture[];

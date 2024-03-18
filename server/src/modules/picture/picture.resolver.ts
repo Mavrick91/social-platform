@@ -34,11 +34,10 @@ export class PictureResolver {
 
   @Query(() => [Picture])
   async picturesByAuthor(
-    @Args('authorId') authorId: number,
+    @Args('authorId', { nullable: true }) authorId?: number,
   ): Promise<Picture[]> {
     return this.pictureService.findByAuthor(authorId);
   }
-
   @Mutation(() => Picture)
   async createPicture(
     @Args('input') input: CreatePictureInput,

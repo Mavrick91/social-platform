@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,14 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     return (await this.prisma.user.findMany()) as User[];
+  }
+
+  async findMockedUser(): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        isMock: true,
+      },
+    });
   }
 
   async validateUser(email: string, pass: string): Promise<any> {
@@ -40,6 +49,31 @@ export class UserService {
       accessToken: this.jwtService.sign(payload),
       refreshToken: this.jwtService.sign(payload, { expiresIn: '60m' }),
     };
+  }
+
+  async findOne(id: number): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            pictures: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return user as User;
+  }
+
+  async update(id: number, data: UpdateUserDto): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
   }
 
   async create(data: CreateUserDto): Promise<User> {

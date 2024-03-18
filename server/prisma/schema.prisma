@@ -17,6 +17,7 @@ model User {
   updatedAt DateTime  @updatedAt
   pictures  Picture[]
   comments  Comment[]
+  isMock    Boolean   @default(false)
 }
 
 model Picture {

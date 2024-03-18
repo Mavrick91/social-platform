@@ -10,22 +10,14 @@ type Comment {
   content: String!
 
   """The user who created the comment"""
-  author: User!
-
-  """The ID of the user who created the comment"""
-  authorId: Int!
+  author: User
+  authorId: Int
 
   """The picture the comment belongs to"""
   picture: Picture
-
-  """The ID of the picture the comment belongs to"""
-  pictureId: Int!
-
-  """The creation date of the comment"""
-  createdAt: DateTime!
-
-  """The update date of the comment"""
-  updatedAt: DateTime!
+  pictureId: Int
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 """
@@ -33,16 +25,24 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type PictureCount {
+  comments: Int!
+}
+
 type Picture {
   id: Int!
   fileUrl: String!
-  fileName: String!
+  fileName: String
   description: String
-  author: User!
-  authorId: Int!
+  author: User
   comments: [Comment!]
+  _count: PictureCount
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type UserCount {
+  pictures: Int!
 }
 
 type User {
@@ -51,8 +51,10 @@ type User {
   password: String!
   firstName: String!
   lastName: String!
-  pictures: [Picture!]
-  comments: [Comment!]
+  pictures: [Picture!]!
+  _count: UserCount!
+  comments: [Comment!]!
+  isMocked: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -64,15 +66,18 @@ type LoginResponse {
 
 type Query {
   users: [User!]!
+  user(userId: Float!): User!
+  mockedUser: [User!]!
   pictures: [Picture!]!
   picture(id: Float!): Picture!
-  picturesByAuthor(authorId: Float!): [Picture!]!
+  picturesByAuthor(authorId: Float): [Picture!]!
   commentsByPictureId(pictureId: Int!): [Comment!]!
   comments: [Comment!]!
   comment(id: Int!): Comment!
 }
 
 type Mutation {
+  updateUser(userId: Float!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!
   login(email: String!, password: String!): LoginResponse!
   createPicture(input: CreatePictureInput!): Picture!
@@ -81,6 +86,13 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
+}
+
+input UpdateUserDto {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
 }
 
 input CreateUserDto {

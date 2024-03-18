@@ -3,6 +3,12 @@ import { User } from '../../user/entities/user.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 
 @ObjectType()
+class PictureCount {
+  @Field(() => Int)
+  comments: number;
+}
+
+@ObjectType()
 export class Picture {
   @Field(() => Int)
   id: number;
@@ -10,20 +16,23 @@ export class Picture {
   @Field()
   fileUrl: string;
 
-  @Field()
+  @Field({ nullable: true })
   fileName: string;
 
   @Field({ nullable: true })
   description?: string;
 
-  @Field(() => User)
-  author: User;
+  @Field(() => User, { nullable: true })
+  author?: User;
 
-  @Field(() => Int)
-  authorId: number;
+  // @Field(() => Int, { nullable: true })
+  // authorId: number;
 
   @Field(() => [Comment], { nullable: true })
   comments?: Comment[];
+
+  @Field(() => PictureCount, { nullable: true })
+  _count?: PictureCount;
 
   @Field(() => Date)
   createdAt: Date;

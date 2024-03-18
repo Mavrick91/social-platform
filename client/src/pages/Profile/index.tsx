@@ -1,50 +1,29 @@
-import { useQuery } from '@apollo/client';
-import { GET_PICTURE_BY_AUTHOR } from '@/graphql/queries/picture';
-import { useAppSelector } from '@/store/hooks.ts';
-import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
-import { DialogTrigger } from '@/components/ui/dialog.tsx';
-import { Button } from '@/components/ui/button.tsx';
-import { ArrowLeft, Plus } from 'lucide-react';
-import UploadPicture from '@/components/UploadPicture';
-import { Link } from 'react-router-dom';
-import ProfilePics from '@/pages/Profile/ProfilePicture';
+import { selectAuthenticatedUser } from '@/features/users/selectors';
+import { useAppSelector } from '@/store/hooks';
+import { useNavigate, useParams } from 'react-router-dom';
+import UserProfile from './UserProfile';
+import { useEffect } from 'react';
+import PictureList from '../Dashboard/PictureList';
 
 function Profile() {
   const userInfo = useAppSelector(selectAuthenticatedUser);
-  const { data, loading, refetch } = useQuery(GET_PICTURE_BY_AUTHOR, {
-    variables: {
-      authorId: userInfo.sub,
-    },
-    fetchPolicy: 'network-only',
-  });
+  const navigate = useNavigate();
+  const userId: number = Number(useParams().userId);
 
-  const trigger = (
-    <DialogTrigger className="flex items-center w-full justify-between" asChild>
-      <div>
-        <Link to="/dashboard">
-          <ArrowLeft />
-        </Link>
-        <Button className="gap-2">
-          <Plus />
-          Upload
-        </Button>
-      </div>
-    </DialogTrigger>
-  );
+  useEffect(() => {
+    if (isNaN(userId)) {
+      navigate(`/profile/${userInfo.sub}`);
+    }
+  }, [userId, navigate, userInfo.sub]);
 
-  if (loading) {
-    return null;
+  if (isNaN(userId)) {
+    return;
   }
 
   return (
     <div className="flex flex-col">
-      <UploadPicture refetch={refetch} trigger={trigger} />
-      <div className="mt-4">
-        <ProfilePics
-          pictures={data.picturesByAuthor}
-          refetchPictures={refetch}
-        />
-      </div>
+      <UserProfile userId={userId} />
+      <PictureList userId={userId} />
     </div>
   );
 }

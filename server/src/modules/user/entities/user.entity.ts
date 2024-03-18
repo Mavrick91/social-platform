@@ -3,15 +3,21 @@ import { Picture } from '../../picture/entities/picture.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 
 @ObjectType()
+class UserCount {
+  @Field(() => Int, { defaultValue: 0 })
+  pictures: number;
+}
+
+@ObjectType()
 export class User {
   @Field(() => Int)
   id: number;
 
   @Field()
-  email: string;
+  email?: string;
 
   @Field()
-  password: string;
+  password?: string;
 
   @Field()
   firstName: string;
@@ -19,15 +25,21 @@ export class User {
   @Field()
   lastName: string;
 
-  @Field(() => [Picture], { nullable: true })
+  @Field(() => [Picture], { defaultValue: [] })
   pictures?: Picture[];
 
-  @Field(() => [Comment], { nullable: true })
+  @Field(() => UserCount)
+  _count?: UserCount;
+
+  @Field(() => [Comment], { defaultValue: [] })
   comments?: Comment[];
 
-  @Field(() => Date)
-  createdAt: Date;
+  @Field(() => Boolean, { defaultValue: false })
+  isMocked?: boolean;
 
   @Field(() => Date)
-  updatedAt: Date;
+  createdAt?: Date;
+
+  @Field(() => Date)
+  updatedAt?: Date;
 }
