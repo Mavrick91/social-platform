@@ -1,6 +1,7 @@
 import { useCommentPictureMutation } from '@/__generated__/graphql';
 import { Separator } from '@/components/ui/separator';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
+import { useCreateComment } from '@/hooks/useCreateComment';
 import { useAppSelector } from '@/store/hooks.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
@@ -33,10 +34,7 @@ function PictureCommentForm({
 }: Props) {
   const userInfo = useAppSelector(selectAuthenticatedUser);
 
-  const [commentPicture, { error: commentPictureError }] =
-    useCommentPictureMutation({
-      refetchQueries: ['GetPictures'],
-    });
+  const [commentPicture, { error: commentPictureError }] = useCreateComment();
 
   const { register, handleSubmit, reset, watch } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),

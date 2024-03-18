@@ -36,3 +36,18 @@ export function updateUserCount(
     },
   });
 }
+
+export function modifyCommentCount(
+  cache: ApolloCache<GraphQLSchema>,
+  pictureId: number,
+  delta: number
+) {
+  cache.modify({
+    id: `Picture:${pictureId}`,
+    fields: {
+      _count(existingCount = { comments: 0 }) {
+        return { ...existingCount, comments: existingCount.comments + delta };
+      },
+    },
+  });
+}

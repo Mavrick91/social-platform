@@ -229,7 +229,7 @@ export type CommentPictureMutationVariables = Exact<{
 }>;
 
 
-export type CommentPictureMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: number } };
+export type CommentPictureMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: number, pictureId?: number | null } };
 
 export type UploadPictureMutationVariables = Exact<{
   input: CreatePictureInput;
@@ -323,6 +323,7 @@ export const CommentPictureDocument = gql`
     mutation CommentPicture($createCommentInput: CreateCommentInput!) {
   createComment(createCommentInput: $createCommentInput) {
     id
+    pictureId
   }
 }
     `;
