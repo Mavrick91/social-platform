@@ -20,24 +20,21 @@ export default function MockedForm({ setValue }: Props) {
     setValue('password', 'test');
   };
 
-  if (loading || !data) {
-    return <p>Loading...</p>;
-  }
-
   return (
-    <Select
-      onValueChange={handleOnChange}
-      defaultValue={data.mockedUser[0].email!}
-    >
+    <Select onValueChange={handleOnChange}>
       <SelectTrigger className="w-full h-12">
         <SelectValue placeholder="Choose an user" />
       </SelectTrigger>
       <SelectContent>
-        {data.mockedUser.map((user) => (
-          <SelectItem key={user.id} value={user.email}>
-            {user.email}
-          </SelectItem>
-        ))}
+        {loading || !data ? (
+          <SelectItem value="Loading...">Loading...</SelectItem>
+        ) : (
+          data.mockedUser.map((user) => (
+            <SelectItem key={user.id} value={user.email}>
+              {user.email}
+            </SelectItem>
+          ))
+        )}
       </SelectContent>
     </Select>
   );
