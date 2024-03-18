@@ -41,7 +41,9 @@ export default function Header() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{`${userInfo.firstName} ${userInfo.lastName}`}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                <DropdownMenuItem
+                  onClick={() => navigate(`/profile/${userInfo.sub}`)}
+                >
                   Profile
                 </DropdownMenuItem>
               </DropdownMenuContent>
