@@ -9,13 +9,28 @@ import {
 import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { logout } from '@/features/users/userSlice.ts';
+import UploadPicture from '@/components/UploadPictureDialog';
 import { Link, useNavigate } from 'react-router-dom';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { DialogTrigger } from '@/components/ui/dialog';
 
 export default function Header() {
   const userInfo = useAppSelector(selectAuthenticatedUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [uploadPictureDialogOpen, setUploadPictureDialogOpen] = useState(false);
+
+  const trigger = (
+    <DialogTrigger asChild>
+      <Button className="gap-2 flex items-center w-full">
+        <Plus />
+        Upload
+      </Button>
+    </DialogTrigger>
+  );
 
   return (
     <header className="shadow-md z-50">
@@ -34,7 +49,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="size-10 items-center justify-center flex rounded-full bg-slate-400">
+                <button className="size-10 items-center justify-center shrink-0 flex rounded-full bg-slate-400">
                   {userInfo.firstName[0]}
                 </button>
               </DropdownMenuTrigger>
@@ -46,18 +61,22 @@ export default function Header() {
                 >
                   Profile
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-red-500"
+                  onClick={() => {
+                    dispatch(logout());
+                    navigate('/login');
+                  }}
+                >
+                  Log out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            <Button
-              variant="ghost"
-              onClick={() => {
-                dispatch(logout());
-                navigate('/login');
-              }}
-            >
-              Log out
-            </Button>
+            <UploadPicture
+              trigger={trigger}
+              open={uploadPictureDialogOpen}
+              setOpen={setUploadPictureDialogOpen}
+            />
           </div>
         </div>
       </nav>

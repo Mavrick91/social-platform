@@ -8,16 +8,27 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  firstName String
-  lastName  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  pictures  Picture[]
-  comments  Comment[]
-  isMock    Boolean   @default(false)
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  password   String
+  firstName  String
+  lastName   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  pictures   Picture[]
+  comments   Comment[]
+  isMock     Boolean   @default(false)
+  following  Follow[]  @relation("Following")
+  followedBy Follow[]  @relation("FollowedBy")
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  follower    User     @relation("FollowedBy", fields: [followerId], references: [id])
+  followerId  Int
+  following   User     @relation("Following", fields: [followingId], references: [id])
+  followingId Int
 }
 
 model Picture {

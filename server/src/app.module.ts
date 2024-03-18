@@ -12,6 +12,7 @@ import { PictureModule } from './modules/picture/picture.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { S3Module } from './modules/s3/s3.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { FollowModule } from './modules/follow/follow.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UploadModule } from './modules/upload/upload.module';
     CommentModule,
     S3Module,
     UploadModule,
+    FollowModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, UserService],

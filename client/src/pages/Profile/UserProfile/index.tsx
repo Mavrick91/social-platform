@@ -2,14 +2,12 @@ import {
   UserProfileFragment,
   useGetUserProfileQuery,
 } from '@/__generated__/graphql';
-import UploadPicture from '@/components/UploadPictureDialog';
-import { Button } from '@/components/ui/button';
-import { DialogTrigger } from '@/components/ui/dialog';
 import { selectAuthenticatedUser } from '@/features/users/selectors';
 import { useAppSelector } from '@/store/hooks';
-import { Plus, SettingsIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import OtherProfile from './OtherProfile';
+import OwnProfile from './OwnProfile';
 
 type Props = {
   userId: number;
@@ -21,7 +19,6 @@ function UserProfile({ userId }: Props) {
   const { data, loading, error } = useGetUserProfileQuery({
     variables: { userId },
   });
-  const [uploadPictureDialogOpen, setUploadPictureDialogOpen] = useState(false);
   // const [updateUserProfile] = useUpdateUserProfileMutation;
 
   console.log('🚀 ~ data:', data?.user._count);
@@ -45,15 +42,6 @@ function UserProfile({ userId }: Props) {
   //   }
   // };
 
-  const trigger = (
-    <DialogTrigger asChild>
-      <Button className="gap-2 flex items-center w-full">
-        <Plus />
-        Upload
-      </Button>
-    </DialogTrigger>
-  );
-
   if (loading || !data) {
     return null;
   }
@@ -75,19 +63,17 @@ function UserProfile({ userId }: Props) {
               {user.firstName} {user.lastName}
             </h1>
             <div className="flex items-center space-x-2">
-              <Button>Edit Profile</Button>
-              <UploadPicture
-                trigger={trigger}
-                open={uploadPictureDialogOpen}
-                setOpen={setUploadPictureDialogOpen}
-              />
-              <SettingsIcon className="text-gray-600 shrink-0" />
+              {userInfo.sub === user.id ? (
+                <OwnProfile />
+              ) : (
+                <OtherProfile followings={user.following} userId={userId} />
+              )}
             </div>
           </div>
           <div className="flex space-x-8 my-3">
             <span>{user._count.pictures} posts</span>
-            <span>0 followers</span>
-            <span>0 following</span>
+            <span>{user._count.following} followers</span>
+            <span>{user._count.followedBy} following</span>
           </div>
         </div>
       </div>

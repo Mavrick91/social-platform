@@ -5,11 +5,13 @@ import { GraphQLSchema } from 'graphql';
 
 interface Count {
   pictures: number;
+  followedBy: number;
 }
 
 export function updateUserCount(
   cache: ApolloCache<GraphQLSchema>,
   userId: number,
+  countProperty: keyof Count,
   delta: number
 ): void {
   const user: User | null = cache.readFragment({
@@ -18,20 +20,20 @@ export function updateUserCount(
   });
 
   const count = user?._count as Count | undefined;
-  const pictureCount = count?.pictures ? Number(count.pictures) : 0;
+  const currentCount = count ? Number(count[countProperty]) : 0;
 
   cache.writeFragment({
     id: `User:${userId}`,
     fragment: gql`
       fragment NewCount on User {
         _count {
-          pictures
+          ${countProperty}
         }
       }
     `,
     data: {
       _count: {
-        pictures: pictureCount + delta, // add the delta to the picture count
+        [countProperty]: currentCount + delta,
       },
     },
   });

@@ -17,7 +17,7 @@ export function useUploadPicture(userId?: number) {
             user(existingUser = {}, { readField }) {
               const userId: number | undefined = readField('id', existingUser);
 
-              if (userId) updateUserCount(cache, userId, +1);
+              if (userId) updateUserCount(cache, userId, 'pictures', +1);
               return existingUser;
             },
           },

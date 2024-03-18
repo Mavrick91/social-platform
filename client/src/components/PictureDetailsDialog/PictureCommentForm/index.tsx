@@ -1,4 +1,3 @@
-import { useCommentPictureMutation } from '@/__generated__/graphql';
 import { Separator } from '@/components/ui/separator';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { useCreateComment } from '@/hooks/useCreateComment';

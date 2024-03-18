@@ -58,8 +58,12 @@ export class UserService {
         _count: {
           select: {
             pictures: true,
+            followedBy: true,
+            following: true,
           },
         },
+        following: true,
+        followedBy: true,
       },
     });
 

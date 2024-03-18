@@ -1,11 +1,18 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Picture } from '../../picture/entities/picture.entity';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Follow } from '../../follow/entities/follow.entity';
 
 @ObjectType()
 class UserCount {
   @Field(() => Int, { defaultValue: 0 })
   pictures: number;
+
+  @Field(() => Int, { defaultValue: 0 })
+  followedBy: number;
+
+  @Field(() => Int, { defaultValue: 0 })
+  following: number;
 }
 
 @ObjectType()
@@ -36,6 +43,12 @@ export class User {
 
   @Field(() => Boolean, { defaultValue: false })
   isMocked?: boolean;
+
+  @Field(() => [Follow], { defaultValue: [] })
+  following?: Follow[];
+
+  @Field(() => [Follow], { defaultValue: [] })
+  followedBy?: Follow[];
 
   @Field(() => Date)
   createdAt?: Date;

@@ -12,6 +12,7 @@ type Props = {
 function PictureList({ userId }: Props) {
   const { data, loading } = useGetPictureByAuthorQuery({
     variables: { authorId: userId },
+    fetchPolicy: 'network-only',
   });
 
   const [editPictureDialogOpen, setEditPictureDialogOpen] = useState(false);
@@ -21,7 +22,6 @@ function PictureList({ userId }: Props) {
     setSelectedPicture(picture);
   };
 
-  console.log('🚀 ~ data:', data?.picturesByAuthor);
   return (
     <>
       <div className="grid w-full sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1 mt-4">

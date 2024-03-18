@@ -1,8 +1,8 @@
-import { useUpdatePictureMutation } from '@/__generated__/graphql';
 import { Button } from '@/components/ui/button.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { ACCEPTED_IMAGE_TYPES } from '@/constant/image.ts';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
+import { useUpdatePicture } from '@/hooks/useUpdatePicture';
 import { useUploadPicture } from '@/hooks/useUploadPicture';
 import uploadImage from '@/lib/uploadImage.ts';
 import { useAppSelector } from '@/store/hooks.ts';
@@ -12,7 +12,6 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import * as z from 'zod';
 import FileUploadArea from '../FileUploadArea';
-import { useUpdatePicture } from '@/hooks/useUpdatePicture';
 
 const schemaWithFile = z.object({
   description: z.string().transform((val) => val.trim()),

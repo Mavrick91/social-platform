@@ -5,8 +5,18 @@ export const USER_PROFILE_FRAGMENT = gql`
     id
     firstName
     lastName
+    following {
+      followerId
+      followingId
+    }
+    followedBy {
+      followerId
+      followingId
+    }
     _count {
       pictures
+      followedBy
+      following
     }
   }
 `;

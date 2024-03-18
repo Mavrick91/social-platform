@@ -8,6 +8,7 @@ import { Picture } from '@/__generated__/graphql';
 import PictureAction from './PictureAction';
 import { useAppSelector } from '@/store/hooks';
 import { selectAuthenticatedUser } from '@/features/users/selectors';
+import { Link } from 'react-router-dom';
 
 type Props = {
   trigger: ReactNode;
@@ -50,10 +51,13 @@ function PictureDetailsDialog({
           <div className="flex-1 flex border-l border-bg-border flex-col space-y-4">
             <div className="flex flex-col pt-3 pl-3">
               <div className="flex justify-between items-center pr-10">
-                <span className="font-medium text-gray-700">
+                <Link
+                  to={`/profile/${selectedPicture?.author?.id}`}
+                  className="font-medium text-gray-700"
+                >
                   {selectedPicture?.author?.firstName}{' '}
                   {selectedPicture?.author?.lastName}
-                </span>
+                </Link>
                 {selectedPicture?.id &&
                   userInfo.sub === selectedPicture.author?.id && (
                     <PictureAction

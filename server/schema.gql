@@ -41,8 +41,15 @@ type Picture {
   updatedAt: DateTime!
 }
 
+type Follow {
+  followerId: Float!
+  followingId: Float!
+}
+
 type UserCount {
   pictures: Int!
+  followedBy: Int!
+  following: Int!
 }
 
 type User {
@@ -55,6 +62,8 @@ type User {
   _count: UserCount!
   comments: [Comment!]!
   isMocked: Boolean!
+  following: [Follow!]!
+  followedBy: [Follow!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -86,6 +95,8 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
+  followUser(input: FollowDto!): Follow!
+  unfollowUser(input: UnfollowDto!): Follow!
 }
 
 input UpdateUserDto {
@@ -137,4 +148,14 @@ input UpdateCommentInput {
   """The ID of the picture the comment belongs to"""
   pictureId: Int
   id: Int!
+}
+
+input FollowDto {
+  userId: Float!
+  followingId: Float!
+}
+
+input UnfollowDto {
+  userId: Float!
+  followingId: Float!
 }
