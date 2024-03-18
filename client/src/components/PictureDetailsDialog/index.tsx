@@ -1,14 +1,14 @@
 import ErrorAlert from '@/components/AlertError';
 import PictureCommentList from '@/components/PictureDetailsDialog/PictureCommentList';
 import { Dialog, DialogContent } from '@/components/ui/dialog.tsx';
-import { Picture } from '@/generated/graphql.tsx';
 import moment from 'moment/moment';
 import { ReactNode, useState } from 'react';
 import { Separator } from '../ui/separator';
+import { Picture } from '@/__generated__/graphql';
 
 type Props = {
   trigger: ReactNode;
-  selectedPicture: Picture;
+  selectedPicture: null | Picture;
 };
 
 function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
@@ -36,8 +36,8 @@ function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
           <div className="flex-1 flex border-l border-bg-border flex-col space-y-4">
             <div className="flex flex-col pt-3 pl-3">
               <span className="font-medium text-gray-700">
-                {selectedPicture?.author.firstName}{' '}
-                {selectedPicture?.author.lastName}
+                {selectedPicture?.author?.firstName}{' '}
+                {selectedPicture?.author?.lastName}
               </span>
               <span className="text-gray-500 text-xs">
                 {moment(selectedPicture?.createdAt).format('MMMM Do YYYY')}
@@ -48,10 +48,12 @@ function PictureDetailsDialog({ trigger, selectedPicture }: Props) {
             </div>
             <Separator />
 
-            <PictureCommentList
-              pictureId={selectedPicture?.id}
-              setErrorMutation={setErrorMutation}
-            />
+            {selectedPicture && (
+              <PictureCommentList
+                pictureId={selectedPicture.id}
+                setErrorMutation={setErrorMutation}
+              />
+            )}
           </div>
         </div>
       </DialogContent>

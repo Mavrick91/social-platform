@@ -1,9 +1,9 @@
 import { GET_COMMENTS_BY_PICTURE } from '@/graphql/queries/comment';
 import { useQuery } from '@apollo/client';
-import { Comment } from '@/generated/graphql.tsx';
 import moment from 'moment';
 import PictureCommentForm from '@/components/PictureDetailsDialog/PictureCommentForm';
 import { useEffect, useRef } from 'react';
+import { Comment } from '@/__generated__/graphql';
 
 type Props = {
   pictureId: number;
@@ -38,7 +38,7 @@ function PictureCommentList({ pictureId, setErrorMutation }: Props) {
             >
               <div className="flex items-center justify-between">
                 <p className="inline-flex items-center mr-3 text-base text-gray-900 dark:text-white font-semibold">
-                  {comment.author.firstName} {comment.author.lastName}
+                  {comment.author?.firstName} {comment.author?.lastName}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   <time>{moment(comment.createdAt).fromNow()}</time>
