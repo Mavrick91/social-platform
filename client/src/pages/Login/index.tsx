@@ -10,6 +10,11 @@ import { useAppDispatch } from '@/store/hooks.ts';
 import { jwtDecode } from 'jwt-decode';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '@/graphql/mutations/user';
+import LoginForm from './LoginForm';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import LoginMode from './LoginMode';
+import MockedForm from './MockedForm';
 
 const loginSchema = z.object({
   email: z
@@ -23,11 +28,12 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const dispatch = useAppDispatch();
-
+  const [loginChoice, setLoginChoice] = useState<'custom' | 'mocked'>('custom');
   const [login, { loading, error }] = useMutation(LOGIN);
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
@@ -53,32 +59,19 @@ export default function Login() {
           <div />
           <h1 className="text-3xl font-bold">Login</h1>
         </div>
+        <LoginMode setLoginChoice={setLoginChoice} loginChoice={loginChoice} />
         {error && (
           <Alert variant="destructive">
             <p>{error.message}</p>
           </Alert>
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Input
-              {...register('email')}
-              label="Email"
-              error={errors.email?.message}
-              id="email"
-              placeholder="m@example.com"
-              type="email"
-            />
-          </div>
-          <div className="space-y-2">
-            <Input
-              id="password"
-              required
-              type="password"
-              {...register('password')}
-              label="Password"
-              error={errors.password?.message}
-              placeholder="********"
-            />
+          <div className="mt-10">
+            {loginChoice === 'mocked' ? (
+              <MockedForm setValue={setValue} />
+            ) : (
+              <LoginForm register={register} errors={errors} />
+            )}
           </div>
           <Button className="w-full" type="submit" loading={loading}>
             Login
