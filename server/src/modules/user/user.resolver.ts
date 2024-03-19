@@ -5,10 +5,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginResponse } from './dto/login-response.dto';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { S3Service } from '../s3/s3.service';
+import { ConfigService } from '@nestjs/config';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private s3Service: S3Service,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Query(() => [User])
   async users(): Promise<User[]> {
@@ -39,6 +45,20 @@ export class UserResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserDto,
   ): Promise<User> {
     try {
+      const user = await this.userService.findOne(profileId);
+      const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
+
+      if (
+        updateUserInput.avatar &&
+        user.avatar &&
+        user.avatar.startsWith(`https://${bucketName}.s3.amazonaws.com`)
+      ) {
+        const avatarName = user.avatarName;
+        if (avatarName) {
+          await this.s3Service.deleteFile(bucketName, avatarName);
+        }
+      }
+
       return await this.userService.update(profileId, updateUserInput);
     } catch (error) {
       throw new BadRequestException('Failed to update user');

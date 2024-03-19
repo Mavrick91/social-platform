@@ -228,16 +228,19 @@ export type UpdatePictureInput = {
 };
 
 export type UpdateUserDto = {
-  email: Scalars['String']['input'];
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  avatarName?: InputMaybe<Scalars['String']['input']>;
+  bio?: InputMaybe<Scalars['String']['input']>;
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
-  password: Scalars['String']['input'];
 };
 
 export type User = {
   __typename?: 'User';
   _count: UserCount;
   avatar?: Maybe<Scalars['String']['output']>;
+  avatarName?: Maybe<Scalars['String']['output']>;
+  bio?: Maybe<Scalars['String']['output']>;
   comments: Array<Comment>;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
@@ -323,7 +326,7 @@ export type UpdateUserProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, firstName: string, lastName: string } };
+export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } };
 
 export type GetCommentsByPictureQueryVariables = Exact<{
   pictureId: Scalars['Int']['input'];
@@ -332,29 +335,29 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 
 export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, author?: { __typename?: 'User', id: number, firstName: string, lastName: string } | null }> };
 
-export type PictureFragmentFragment = { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null, _count?: { __typename?: 'PictureCount', comments: number } | null };
+export type PictureFragmentFragment = { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null, _count?: { __typename?: 'PictureCount', comments: number } | null };
 
 export type GetPictureByAuthorQueryVariables = Exact<{
   authorId?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
 
-export type GetPictureByAuthorQuery = { __typename?: 'Query', picturesByAuthor: Array<{ __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null, _count?: { __typename?: 'PictureCount', comments: number } | null }> };
+export type GetPictureByAuthorQuery = { __typename?: 'Query', picturesByAuthor: Array<{ __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, author?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null, _count?: { __typename?: 'PictureCount', comments: number } | null }> };
 
-export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null };
+export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null };
 
-export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null };
+export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null };
 
-export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null };
+export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
+export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
 
 export type GetUserProfileQueryVariables = Exact<{
   profileId: Scalars['Float']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } | null }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } | null }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
 
 export type GetMockedUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -367,6 +370,7 @@ export const UserFragmentFragmentDoc = gql`
   firstName
   lastName
   avatar
+  bio
 }
     `;
 export const PictureFragmentFragmentDoc = gql`
@@ -698,6 +702,8 @@ export const UpdateUserProfileDocument = gql`
     email
     firstName
     lastName
+    avatar
+    bio
   }
 }
     `;

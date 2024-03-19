@@ -20,27 +20,12 @@ function UserProfile({ profileId }: Props) {
   const { data, loading, error } = useGetUserProfileQuery({
     variables: { profileId },
   });
-  // const [updateUserProfile] = useUpdateUserProfileMutation;
 
   useEffect(() => {
     if (error) {
       navigate(`/profile/${user.id}`);
     }
   }, [error, navigate, user.id]);
-
-  // const handleUpdateProfile = async (updatedData) => {
-  //   try {
-  //     await updateUserProfile({
-  //       variables: {
-  //         userId: data?.user.id,
-  //         ...updatedData,
-  //       },
-  //     });
-  //     // Optionally refetch the user profile data after updating
-  //   } catch (error) {
-  //     console.error('Failed to update user profile:', error);
-  //   }
-  // };
 
   if (loading || !data) {
     return null;
@@ -63,7 +48,8 @@ function UserProfile({ profileId }: Props) {
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold">
-              {currentProfile.firstName} {currentProfile.lastName}
+              <span>{currentProfile.firstName}</span>{' '}
+              <span>{currentProfile.lastName}</span>
             </h1>
             <div className="flex items-center space-x-2">
               {user.id === currentProfile.id ? (
@@ -90,6 +76,9 @@ function UserProfile({ profileId }: Props) {
               <b>{currentProfile._count.initiatedFollows}</b> followings
             </FollowersDialog>
           </div>
+          <p className="text-gray-800 font-medium max-w-xl">
+            {currentProfile.bio}
+          </p>
         </div>
       </div>
     </div>

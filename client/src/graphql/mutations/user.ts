@@ -30,6 +30,8 @@ export const UPDATE_USER_PROFILE = gql`
       email
       firstName
       lastName
+      avatar
+      bio
     }
   }
 `;

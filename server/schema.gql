@@ -60,7 +60,9 @@ type User {
   password: String!
   firstName: String!
   lastName: String!
+  bio: String
   avatar: String
+  avatarName: String
   pictures: [Picture!]!
   _count: UserCount!
   comments: [Comment!]!
@@ -103,10 +105,11 @@ type Mutation {
 }
 
 input UpdateUserDto {
-  email: String!
-  password: String!
   firstName: String!
   lastName: String!
+  bio: String
+  avatar: String
+  avatarName: String
 }
 
 input CreateUserDto {

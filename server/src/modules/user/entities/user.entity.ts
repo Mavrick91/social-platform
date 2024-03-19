@@ -33,7 +33,13 @@ export class User {
   lastName: string;
 
   @Field({ nullable: true })
-  avatar?: string;
+  bio: string;
+
+  @Field({ nullable: true })
+  avatar: string;
+
+  @Field({ nullable: true })
+  avatarName: string;
 
   @Field(() => [Picture], { defaultValue: [] })
   pictures?: Picture[];
