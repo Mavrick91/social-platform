@@ -67,8 +67,8 @@ You will also need to create env variables for the authentication process
 - To generate `JWT_SECRET` and `JWT_REFRESH_SECRET`, you can use the following commands in your terminal:
 
 ```bash
-echo "JWT_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> .env
-echo "JWT_REFRESH_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> .env
+echo "JWT_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> server/.env
+echo "JWT_REFRESH_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> server/.env
 ```
 
 ### 5. Run database migrations
