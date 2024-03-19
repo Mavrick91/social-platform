@@ -5,7 +5,7 @@ import { GraphQLSchema } from 'graphql';
 
 interface Count {
   pictures: number;
-  followedBy: number;
+  initiatedFollows: number;
 }
 
 export function updateUserCount(
@@ -17,6 +17,7 @@ export function updateUserCount(
   const user: User | null = cache.readFragment({
     id: `User:${userId}`,
     fragment: USER_PROFILE_FRAGMENT,
+    fragmentName: 'UserProfile',
   });
 
   const count = user?._count as Count | undefined;
@@ -36,6 +37,7 @@ export function updateUserCount(
         [countProperty]: currentCount + delta,
       },
     },
+    fragmentName: 'NewCount',
   });
 }
 

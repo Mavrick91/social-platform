@@ -42,14 +42,16 @@ type Picture {
 }
 
 type Follow {
-  followerId: Float!
-  followingId: Float!
+  initiatorId: Float
+  targetUserId: Float
+  initiator: User
+  targetUser: User
 }
 
 type UserCount {
   pictures: Int!
-  followedBy: Int!
-  following: Int!
+  initiatedFollows: Int!
+  receivedFollows: Int!
 }
 
 type User {
@@ -58,12 +60,13 @@ type User {
   password: String!
   firstName: String!
   lastName: String!
+  avatar: String
   pictures: [Picture!]!
   _count: UserCount!
   comments: [Comment!]!
   isMocked: Boolean!
-  following: [Follow!]!
-  followedBy: [Follow!]!
+  initiatedFollows: [Follow!]!
+  receivedFollows: [Follow!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -75,7 +78,7 @@ type LoginResponse {
 
 type Query {
   users: [User!]!
-  user(userId: Float!): User!
+  user(profileId: Float!): User!
   mockedUser: [User!]!
   pictures: [Picture!]!
   picture(id: Float!): Picture!
@@ -86,7 +89,7 @@ type Query {
 }
 
 type Mutation {
-  updateUser(userId: Float!, updateUserInput: UpdateUserDto!): User!
+  updateUser(profileId: Float!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!
   login(email: String!, password: String!): LoginResponse!
   createPicture(input: CreatePictureInput!): Picture!

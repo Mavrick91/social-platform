@@ -4,6 +4,7 @@ import { useAppSelector } from '../store/hooks';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { isTokenExpired } from '@/lib/authUtils.ts';
+import { UserInfoProvider } from '@/providers/UserInfoProvider';
 
 type Props = {
   children: React.ReactNode;
@@ -27,13 +28,15 @@ const AuthenticatedLayout = ({ children }: Props) => {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <Header />
-      <div className="p-10 overflow-y-auto bg-[#f9f9f9] h-full">
-        <div className="max-w-screen-xl mx-auto grow">{children}</div>
-        <Footer />
+    <UserInfoProvider>
+      <div className="flex flex-col h-full">
+        <Header />
+        <div className="p-10 overflow-y-auto bg-[#f9f9f9] h-full">
+          <div className="max-w-screen-xl mx-auto grow">{children}</div>
+          <Footer />
+        </div>
       </div>
-    </div>
+    </UserInfoProvider>
   );
 };
 

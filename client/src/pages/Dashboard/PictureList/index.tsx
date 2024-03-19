@@ -1,4 +1,7 @@
-import { Picture, useGetPictureByAuthorQuery } from '@/__generated__/graphql';
+import {
+  PictureFragmentFragment,
+  useGetPictureByAuthorQuery,
+} from '@/__generated__/graphql';
 import PictureDetailsDialog from '@/components/PictureDetailsDialog';
 import UploadPictureDialog from '@/components/UploadPictureDialog';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog.tsx';
@@ -7,18 +10,19 @@ import { useState } from 'react';
 import Loading from './loading';
 
 type Props = {
-  userId?: number;
+  profileId?: number;
 };
-function PictureList({ userId }: Props) {
+function PictureList({ profileId }: Props) {
   const { data, loading } = useGetPictureByAuthorQuery({
-    variables: { authorId: userId },
+    variables: { authorId: profileId },
     fetchPolicy: 'network-only',
   });
 
   const [editPictureDialogOpen, setEditPictureDialogOpen] = useState(false);
-  const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
+  const [selectedPicture, setSelectedPicture] =
+    useState<PictureFragmentFragment | null>(null);
 
-  const handleClickPicture = (picture: Picture) => {
+  const handleClickPicture = (picture: PictureFragmentFragment) => {
     setSelectedPicture(picture);
   };
 
@@ -70,7 +74,7 @@ function PictureList({ userId }: Props) {
           defaultValues={{
             id: selectedPicture.id,
             fileUrl: selectedPicture.fileUrl,
-            description: selectedPicture.description,
+            description: selectedPicture.description ?? '',
           }}
         />
       )}

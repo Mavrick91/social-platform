@@ -1,29 +1,58 @@
 import { gql } from '@apollo/client';
 
-export const USER_PROFILE_FRAGMENT = gql`
-  fragment UserProfile on User {
+export const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
     id
     firstName
     lastName
-    following {
-      followerId
-      followingId
-    }
-    followedBy {
-      followerId
-      followingId
-    }
-    _count {
-      pictures
-      followedBy
-      following
-    }
+    avatar
   }
 `;
 
+export const INITIATED_FOLLOWS_FRAGMENT = gql`
+  fragment InitiatedFollows on Follow {
+    targetUserId
+    targetUser {
+      ...UserFragment
+    }
+    ${USER_FRAGMENT}
+
+  }
+`;
+
+export const RECEIVED_FOLLOWS_FRAGMENT = gql`
+  fragment ReceivedFollows on Follow {
+    initiator {
+      ...UserFragment
+    }
+    ${USER_FRAGMENT}
+
+  }
+`;
+
+export const USER_PROFILE_FRAGMENT = gql`
+  fragment UserProfile on User {
+    ...UserFragment
+    initiatedFollows {
+      ...InitiatedFollows
+    }
+    receivedFollows {
+      ...ReceivedFollows
+    }
+    _count {
+      pictures
+      initiatedFollows
+      receivedFollows
+    }
+  }
+  ${INITIATED_FOLLOWS_FRAGMENT}
+  ${RECEIVED_FOLLOWS_FRAGMENT}
+  ${USER_FRAGMENT}
+`;
+
 export const GET_USER_PROFILE = gql`
-  query GetUserProfile($userId: Float!) {
-    user(userId: $userId) {
+  query GetUserProfile($profileId: Float!) {
+    user(profileId: $profileId) {
       ...UserProfile
     }
   }

@@ -16,6 +16,7 @@ type Props = {
   defaultValues?: FormDataWithoutFile & {
     id: number;
     fileUrl: string;
+    description?: string | null;
   };
   open: boolean;
   setOpen: (value: boolean) => void;

@@ -13,7 +13,7 @@ type Props = {
 
 export default function LoginForm({ register, errors }: Props) {
   return (
-    <>
+    <div className="space-y-4">
       <div className="space-y-2">
         <Input
           {...register('email')}
@@ -35,6 +35,6 @@ export default function LoginForm({ register, errors }: Props) {
           placeholder="********"
         />
       </div>
-    </>
+    </div>
   );
 }

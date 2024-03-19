@@ -4,7 +4,7 @@ export interface DecodedToken {
   firstName: string;
   lastName: string;
   email: string;
-  sub: number;
+  id: number;
 }
 
 export interface AuthState {

@@ -9,10 +9,10 @@ class UserCount {
   pictures: number;
 
   @Field(() => Int, { defaultValue: 0 })
-  followedBy: number;
+  initiatedFollows: number;
 
   @Field(() => Int, { defaultValue: 0 })
-  following: number;
+  receivedFollows: number;
 }
 
 @ObjectType()
@@ -32,6 +32,9 @@ export class User {
   @Field()
   lastName: string;
 
+  @Field({ nullable: true })
+  avatar?: string;
+
   @Field(() => [Picture], { defaultValue: [] })
   pictures?: Picture[];
 
@@ -45,10 +48,10 @@ export class User {
   isMocked?: boolean;
 
   @Field(() => [Follow], { defaultValue: [] })
-  following?: Follow[];
+  initiatedFollows?: Follow[];
 
   @Field(() => [Follow], { defaultValue: [] })
-  followedBy?: Follow[];
+  receivedFollows?: Follow[];
 
   @Field(() => Date)
   createdAt?: Date;

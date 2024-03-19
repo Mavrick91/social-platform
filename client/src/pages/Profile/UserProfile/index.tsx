@@ -2,31 +2,31 @@ import {
   UserProfileFragment,
   useGetUserProfileQuery,
 } from '@/__generated__/graphql';
-import { selectAuthenticatedUser } from '@/features/users/selectors';
-import { useAppSelector } from '@/store/hooks';
+import FollowersDialog from '@/components/FollowersDialog';
+import UserAvatar from '@/components/UserAvatar';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import OtherProfile from './OtherProfile';
+import ButtonFollow from './ButtonFollow';
 import OwnProfile from './OwnProfile';
 
 type Props = {
-  userId: number;
+  profileId: number;
 };
 
-function UserProfile({ userId }: Props) {
-  const userInfo = useAppSelector(selectAuthenticatedUser);
+function UserProfile({ profileId }: Props) {
+  const { user } = useUserInfo();
   const navigate = useNavigate();
   const { data, loading, error } = useGetUserProfileQuery({
-    variables: { userId },
+    variables: { profileId },
   });
   // const [updateUserProfile] = useUpdateUserProfileMutation;
 
-  console.log('🚀 ~ data:', data?.user._count);
   useEffect(() => {
     if (error) {
-      navigate(`/profile/${userInfo.sub}`);
+      navigate(`/profile/${user.id}`);
     }
-  }, [error, navigate, userInfo.sub]);
+  }, [error, navigate, user.id]);
 
   // const handleUpdateProfile = async (updatedData) => {
   //   try {
@@ -46,34 +46,49 @@ function UserProfile({ userId }: Props) {
     return null;
   }
 
-  const user = data.user as UserProfileFragment;
+  const currentProfile = data.user as UserProfileFragment;
+
+  const isFollowingCurrentProfile = user.initiatedFollows.some(
+    (follow) => follow.targetUserId === currentProfile.id
+  );
 
   return (
     <div>
       <div className="flex items-center space-x-6">
-        {/* <Avatar>
-          <AvatarImage
-            alt="Profile picture"
-            src="/placeholder.svg?height=128&width=128"
-          />
-        </Avatar> */}
+        <UserAvatar
+          alt="Profile picture"
+          avatar={currentProfile.avatar}
+          className="size-24"
+        />
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold">
-              {user.firstName} {user.lastName}
+              {currentProfile.firstName} {currentProfile.lastName}
             </h1>
             <div className="flex items-center space-x-2">
-              {userInfo.sub === user.id ? (
+              {user.id === currentProfile.id ? (
                 <OwnProfile />
               ) : (
-                <OtherProfile followings={user.following} userId={userId} />
+                <ButtonFollow
+                  isFollowing={isFollowingCurrentProfile}
+                  targetUserId={profileId}
+                />
               )}
             </div>
           </div>
           <div className="flex space-x-8 my-3">
-            <span>{user._count.pictures} posts</span>
-            <span>{user._count.following} followers</span>
-            <span>{user._count.followedBy} following</span>
+            <span>
+              <b>{currentProfile._count.pictures}</b> posts
+            </span>
+            <FollowersDialog
+              isFollowers
+              followers={currentProfile.receivedFollows}
+            >
+              <b>{currentProfile._count.receivedFollows}</b> followers
+            </FollowersDialog>
+            <FollowersDialog followers={currentProfile.initiatedFollows}>
+              <b>{currentProfile._count.initiatedFollows}</b> followings
+            </FollowersDialog>
           </div>
         </div>
       </div>

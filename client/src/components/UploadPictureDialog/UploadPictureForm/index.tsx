@@ -45,7 +45,7 @@ function UploadPictureForm({
   const schema = defaultValues?.fileUrl ? schemaWithoutFile : schemaWithFile;
   const userInfo = useAppSelector(selectAuthenticatedUser);
   const [uploadStatus, setUploadStatus] = useState(false);
-  const { userId } = useParams();
+  const { profileId } = useParams();
 
   const {
     register,
@@ -60,7 +60,7 @@ function UploadPictureForm({
   });
 
   const [uploadPicture, { loading: uploadLoading, error: errorUploading }] =
-    useUploadPicture(Number(userId));
+    useUploadPicture(Number(profileId));
   const [updatePicture, { loading: updateLoading, error: errorUpdating }] =
     useUpdatePicture();
 
@@ -92,7 +92,7 @@ function UploadPictureForm({
             description,
             fileUrl,
             fileName: fileKey,
-            authorId: userInfo.sub,
+            authorId: userInfo.id,
           },
         };
         await uploadPicture({ variables });

@@ -16,6 +16,7 @@ async function main() {
       password: hashedPassword,
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
+      avatar: faker.image.avatar(),
       isMock: true,
     };
   });

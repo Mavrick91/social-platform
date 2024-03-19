@@ -53,7 +53,7 @@ function PictureCommentForm({
         variables: {
           createCommentInput: {
             content: data.content,
-            authorId: userInfo.sub,
+            authorId: userInfo.id,
             pictureId,
           },
         },

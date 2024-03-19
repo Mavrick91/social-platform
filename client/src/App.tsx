@@ -1,10 +1,10 @@
-import { Provider } from 'react-redux';
-import { AppRoutes } from './route';
-import { persistor, store } from './store';
 import client from '@/apollo-client.ts';
 import { ApolloProvider } from '@apollo/client';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import { AppRoutes } from './route';
+import { persistor, store } from './store';
 
 if (process.env.NODE_ENV === 'development') {
   loadDevMessages();

@@ -28,6 +28,7 @@ export class UserService {
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (user && (await bcrypt.compare(pass, user.password))) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
@@ -41,7 +42,7 @@ export class UserService {
     }
     const payload = {
       email: user.email,
-      sub: user.id,
+      id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
     };
@@ -58,24 +59,29 @@ export class UserService {
         _count: {
           select: {
             pictures: true,
-            followedBy: true,
-            following: true,
+            initiatedFollows: true,
+            receivedFollows: true,
           },
         },
-        following: true,
-        followedBy: true,
+        initiatedFollows: {
+          include: {
+            targetUser: true,
+          },
+        },
+        receivedFollows: {
+          include: {
+            initiator: true,
+          },
+        },
       },
     });
 
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    return user as User;
+    return user;
   }
 
-  async update(id: number, data: UpdateUserDto): Promise<User> {
+  async update(profileId: number, data: UpdateUserDto): Promise<User> {
     return this.prisma.user.update({
-      where: { id },
+      where: { id: profileId },
       data,
     });
   }

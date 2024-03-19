@@ -16,7 +16,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  async user(@Args('userId') id: number): Promise<User> {
+  async user(@Args('profileId') id: number): Promise<User> {
     try {
       return await this.userService.findOne(id);
     } catch (error) {
@@ -35,11 +35,11 @@ export class UserResolver {
 
   @Mutation(() => User)
   async updateUser(
-    @Args('userId') id: number,
+    @Args('profileId') profileId: number,
     @Args('updateUserInput') updateUserInput: UpdateUserDto,
   ): Promise<User> {
     try {
-      return await this.userService.update(id, updateUserInput);
+      return await this.userService.update(profileId, updateUserInput);
     } catch (error) {
       throw new BadRequestException('Failed to update user');
     }

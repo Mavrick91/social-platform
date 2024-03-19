@@ -5,24 +5,24 @@ import { PrismaService } from '../prisma/prisma.service';
 export class FollowService {
   constructor(private prisma: PrismaService) {}
 
-  async followUser(userId: number, followingId: number) {
+  async followUser(initiatorId: number, targetUserId: number) {
     return this.prisma.follow.create({
       data: {
-        follower: {
-          connect: { id: userId },
+        initiator: {
+          connect: { id: targetUserId },
         },
-        following: {
-          connect: { id: followingId },
+        targetUser: {
+          connect: { id: initiatorId },
         },
       },
     });
   }
 
-  async unfollowUser(userId: number, followingId: number) {
+  async unfollowUser(initiatorId: number, targetUserId: number) {
     const follow = await this.prisma.follow.findFirst({
       where: {
-        followerId: userId,
-        followingId: followingId,
+        initiatorId: initiatorId,
+        targetUserId: targetUserId,
       },
     });
 

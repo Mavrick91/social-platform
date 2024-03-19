@@ -8,22 +8,22 @@ import PictureList from '../Dashboard/PictureList';
 function Profile() {
   const userInfo = useAppSelector(selectAuthenticatedUser);
   const navigate = useNavigate();
-  const userId: number = Number(useParams().userId);
+  const profileId: number = Number(useParams().profileId);
 
   useEffect(() => {
-    if (isNaN(userId)) {
-      navigate(`/profile/${userInfo.sub}`);
+    if (isNaN(profileId)) {
+      navigate(`/profile/${userInfo.id}`);
     }
-  }, [userId, navigate, userInfo.sub]);
+  }, [profileId, navigate, userInfo.id]);
 
-  if (isNaN(userId)) {
+  if (isNaN(profileId)) {
     return;
   }
 
   return (
     <div className="flex flex-col">
-      <UserProfile userId={userId} />
-      <PictureList userId={userId} />
+      <UserProfile profileId={profileId} />
+      <PictureList profileId={profileId} />
     </div>
   );
 }
