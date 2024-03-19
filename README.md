@@ -73,10 +73,10 @@ echo "JWT_REFRESH_SECRET=\"$(openssl rand -base64 64 | tr -d '\n')\"" >> server/
 
 ### 5. Run database migrations
 
-Apply the database migrations by running:
+Sync the database with the prisma schema:
 
 ```bash
-(cd server && npx prisma migrate dev)
+(cd server && npx prisma db push)
 ```
 
 ### 6. Seed the database (optional)
