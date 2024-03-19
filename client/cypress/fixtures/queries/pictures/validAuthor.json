@@ -1,0 +1,86 @@
+{
+  "data": {
+    "picturesByAuthor": [
+      {
+        "id": 1,
+        "description": "Taceo coepi quaerat quae adimpleo.",
+        "createdAt": "2024-03-19T16:29:08.019Z",
+        "updatedAt": "2024-03-19T16:29:08.019Z",
+        "fileUrl": "https://loremflickr.com/640/480?lock=783240220639232",
+        "author": {
+          "id": 8,
+          "firstName": "Casey",
+          "lastName": "Collins",
+          "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/144.jpg",
+          "bio": null,
+          "__typename": "User"
+        },
+        "_count": {
+          "comments": 3,
+          "__typename": "PictureCount"
+        },
+        "__typename": "Picture"
+      },
+      {
+        "id": 2,
+        "description": "Quisquam corroboro universe administratio pectus vomito temptatio cetera supellex confido.",
+        "createdAt": "2024-03-19T16:29:08.019Z",
+        "updatedAt": "2024-03-19T16:29:08.019Z",
+        "fileUrl": "https://picsum.photos/seed/ANh0mVfo/640/480",
+        "author": {
+          "id": 6,
+          "firstName": "Freeman",
+          "lastName": "Koch-Watsica",
+          "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/282.jpg",
+          "bio": null,
+          "__typename": "User"
+        },
+        "_count": {
+          "comments": 4,
+          "__typename": "PictureCount"
+        },
+        "__typename": "Picture"
+      },
+      {
+        "id": 3,
+        "description": "Stabilis caelum conscendo.",
+        "createdAt": "2024-03-19T16:29:08.019Z",
+        "updatedAt": "2024-03-19T16:29:08.019Z",
+        "fileUrl": "https://loremflickr.com/640/480?lock=1208784829546496",
+        "author": {
+          "id": 1,
+          "firstName": "Cade",
+          "lastName": "Altenwerth",
+          "avatar": "https://avatars.githubusercontent.com/u/45815910",
+          "bio": null,
+          "__typename": "User"
+        },
+        "_count": {
+          "comments": 2,
+          "__typename": "PictureCount"
+        },
+        "__typename": "Picture"
+      },
+      {
+        "id": 4,
+        "description": "Corporis accusantium tamquam deleo casus.",
+        "createdAt": "2024-03-19T16:29:08.019Z",
+        "updatedAt": "2024-03-19T16:29:08.019Z",
+        "fileUrl": "https://loremflickr.com/640/480?lock=3078174556553216",
+        "author": {
+          "id": 8,
+          "firstName": "Casey",
+          "lastName": "Collins",
+          "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/144.jpg",
+          "bio": null,
+          "__typename": "User"
+        },
+        "_count": {
+          "comments": 3,
+          "__typename": "PictureCount"
+        },
+        "__typename": "Picture"
+      }
+    ]
+  }
+}

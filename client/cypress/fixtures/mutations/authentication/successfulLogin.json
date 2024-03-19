@@ -1,0 +1,9 @@
+
+{
+  "data": {
+    "login": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsZnJlZDU3QHlhaG9vLmNvbSIsImlkIjo5LCJmaXJzdE5hbWUiOiJHdXN0IiwibGFzdE5hbWUiOiJFbWFyZCIsImlhdCI6MTcxMDg3MzQ1MSwiZXhwIjoxNzEwODc3MDUxfQ.s8nR1CNSQr2sipPCBgAAPRGU-eY5yc50SFkfqaOhZ2Q",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzEwODczNDUxLCJleHAiOjE3MTE0NzgyNTF9.nFliICZF_B60imJA4s3EeaSKfQSe2iJsyv0GRXMXHVQ",
+      "__typename": "LoginResponse"
+  }  }
+}

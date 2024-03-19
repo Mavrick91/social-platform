@@ -26,7 +26,8 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 export default function Login() {
   const dispatch = useAppDispatch();
   const [loginChoice, setLoginChoice] = useState<'custom' | 'mocked'>('custom');
-  const [login, { loading, error }] = useLoginMutation();
+  const [login, { loading, error, data }] = useLoginMutation();
+  console.log('🚀 ~ data:', data);
   const {
     register,
     handleSubmit,
@@ -49,6 +50,8 @@ export default function Login() {
     }
   };
 
+  console.log('🚀 ~ error:', error);
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen space-y-4 w-full">
       <div className="w-full max-w-sm space-y-4">
@@ -58,12 +61,12 @@ export default function Login() {
         </div>
         <LoginMode setLoginChoice={setLoginChoice} loginChoice={loginChoice} />
         {error && (
-          <Alert variant="destructive">
+          <Alert id="error-message" variant="destructive">
             <p>{error.message}</p>
           </Alert>
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="mt-10">
+          <div>
             {loginChoice === 'mocked' ? (
               <MockedForm setValue={setValue} />
             ) : (

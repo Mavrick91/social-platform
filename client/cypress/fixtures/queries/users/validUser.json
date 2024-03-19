@@ -1,0 +1,19 @@
+{
+  "data": {
+    "user": {
+      "id": 10,
+      "firstName": "Test",
+      "lastName": "User",
+      "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/468.jpg",
+      "bio": "This is a test user",
+      "__typename": "User",
+      "initiatedFollows": [],
+      "receivedFollows": [],
+      "_count": {
+          "pictures": 5,
+          "initiatedFollows": 2,
+          "receivedFollows": 2,
+          "__typename": "UserCount"
+      }
+  }  }
+}
