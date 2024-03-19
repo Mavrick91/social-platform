@@ -3,10 +3,15 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginResponse } from './dto/login-response.dto';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { S3Service } from '../s3/s3.service';
 import { ConfigService } from '@nestjs/config';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -17,11 +22,13 @@ export class UserResolver {
   ) {}
 
   @Query(() => [User])
+  @UseGuards(GqlAuthGuard)
   async users(): Promise<User[]> {
     return this.userService.findAll();
   }
 
   @Query(() => User)
+  @UseGuards(GqlAuthGuard)
   async user(@Args('profileId') id: number): Promise<User> {
     try {
       return await this.userService.findOne(id);
@@ -40,6 +47,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
   async updateUser(
     @Args('profileId') profileId: number,
     @Args('updateUserInput') updateUserInput: UpdateUserDto,

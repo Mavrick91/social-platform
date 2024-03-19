@@ -1,12 +1,16 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PictureService } from './picture.service';
-import { Picture } from './entities/picture.entity';
-import { UpdatePictureInput } from './dto/update-picture.input';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { CreatePictureInput } from './dto/create-picture.input';
-import { S3Service } from '../s3/s3.service';
+import {
+  BadRequestException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { S3Service } from '../s3/s3.service';
+import { CreatePictureInput } from './dto/create-picture.input';
+import { UpdatePictureInput } from './dto/update-picture.input';
+import { Picture } from './entities/picture.entity';
+import { PictureService } from './picture.service';
 
 @Resolver(() => Picture)
 export class PictureResolver {
@@ -17,31 +21,18 @@ export class PictureResolver {
   ) {}
 
   @Query(() => [Picture])
-  async pictures(): Promise<Picture[]> {
-    return this.pictureService.findAll();
-  }
-
-  @Query(() => Picture)
-  async picture(
-    @Args('id') id: number,
-  ): Promise<Prisma.PictureUncheckedCreateInput> {
-    try {
-      return await this.pictureService.findOne(id);
-    } catch (error) {
-      throw new NotFoundException('Picture not found');
-    }
-  }
-
-  @Query(() => [Picture])
+  @UseGuards(GqlAuthGuard)
   async picturesByAuthor(
     @Args('authorId', { nullable: true }) authorId?: number,
   ): Promise<Picture[]> {
     return this.pictureService.findByAuthor(authorId);
   }
+
   @Mutation(() => Picture)
+  @UseGuards(GqlAuthGuard)
   async createPicture(
     @Args('input') input: CreatePictureInput,
-  ): Promise<Prisma.PictureUncheckedCreateInput> {
+  ): Promise<Picture> {
     try {
       return await this.pictureService.create(input);
     } catch (error) {
@@ -50,10 +41,11 @@ export class PictureResolver {
   }
 
   @Mutation(() => Picture)
+  @UseGuards(GqlAuthGuard)
   async updatePicture(
     @Args('id') id: number,
     @Args('input') input: UpdatePictureInput,
-  ): Promise<Prisma.PictureUncheckedCreateInput> {
+  ): Promise<Picture> {
     try {
       return await this.pictureService.update(id, input);
     } catch (error) {
@@ -62,6 +54,7 @@ export class PictureResolver {
   }
 
   @Mutation(() => Picture)
+  @UseGuards(GqlAuthGuard)
   async deletePicture(@Args('id') id: number): Promise<Picture> {
     const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
 

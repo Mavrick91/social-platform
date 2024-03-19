@@ -5,12 +5,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -46,9 +48,18 @@ export class UserService {
       firstName: user.firstName,
       lastName: user.lastName,
     };
+
+    const refreshTokenPayload = { id: user.id };
+
     return {
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, { expiresIn: '60m' }),
+      accessToken: this.jwtService.sign(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expiresIn: '1h',
+      }),
+      refreshToken: this.jwtService.sign(refreshTokenPayload, {
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        expiresIn: '7d',
+      }),
     };
   }
 

@@ -8,28 +8,23 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { updateTokens } from '@/features/users/userSlice.ts';
-import { store } from '@/store';
+import { RootState, store } from '@/store';
+import axios from './axios';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql',
 });
 
-async function refreshAccessToken() {
+async function refreshAccessToken(state: RootState) {
   try {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const response = await fetch('http://localhost:3000/auth/refresh_token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refreshToken }),
+    const response = await axios.post('/auth/refresh_token', {
+      refreshToken: state.user.refreshToken,
     });
-    const { accessToken, refreshToken: newRefreshToken } =
-      await response.json();
 
-    store.dispatch(
-      updateTokens({ accessToken, refreshToken: newRefreshToken })
-    );
+    const { accessToken } = response.data;
+    console.log('🚀 ~ response.data:', response.data);
+
+    store.dispatch(updateTokens({ accessToken }));
 
     return accessToken;
   } catch (error) {
@@ -39,12 +34,14 @@ async function refreshAccessToken() {
 }
 
 const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
+  console.log('🚀 ~ graphQLErrors:', graphQLErrors);
   if (
     graphQLErrors &&
     graphQLErrors.some((err) => err.message === 'UNAUTHENTICATED')
   ) {
     return new Observable((observer) => {
-      refreshAccessToken()
+      const state = store.getState();
+      refreshAccessToken(state)
         .then((accessToken) => {
           operation.setContext(({ headers = {} }) => ({
             headers: {
@@ -67,12 +64,14 @@ const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('accessToken');
+  const state = store.getState();
 
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: state.user.accessToken
+        ? `Bearer ${state.user.accessToken}`
+        : '',
     },
   };
 });

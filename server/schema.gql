@@ -82,8 +82,6 @@ type Query {
   users: [User!]!
   user(profileId: Float!): User!
   mockedUser: [User!]!
-  pictures: [Picture!]!
-  picture(id: Float!): Picture!
   picturesByAuthor(authorId: Float): [Picture!]!
   commentsByPictureId(pictureId: Int!): [Comment!]!
   comments: [Comment!]!

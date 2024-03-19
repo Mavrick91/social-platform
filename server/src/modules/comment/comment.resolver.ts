@@ -3,13 +3,15 @@ import { CommentService } from './comment.service';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 
 @Resolver(() => Comment)
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
 
   @Mutation(() => Comment)
+  @UseGuards(GqlAuthGuard)
   async createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
@@ -21,6 +23,7 @@ export class CommentResolver {
   }
 
   @Query(() => [Comment], { name: 'commentsByPictureId' })
+  @UseGuards(GqlAuthGuard)
   async commentsByPictureId(
     @Args('pictureId', { type: () => Int }) pictureId: number,
   ) {
@@ -32,6 +35,7 @@ export class CommentResolver {
   }
 
   @Query(() => [Comment], { name: 'comments' })
+  @UseGuards(GqlAuthGuard)
   async findAll() {
     try {
       return await this.commentService.findAll();
@@ -41,6 +45,7 @@ export class CommentResolver {
   }
 
   @Query(() => Comment, { name: 'comment' })
+  @UseGuards(GqlAuthGuard)
   async findOne(@Args('id', { type: () => Int }) id: number) {
     try {
       const comment = await this.commentService.findOne(id);
@@ -54,6 +59,7 @@ export class CommentResolver {
   }
 
   @Mutation(() => Comment)
+  @UseGuards(GqlAuthGuard)
   async updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
   ) {
@@ -68,6 +74,7 @@ export class CommentResolver {
   }
 
   @Mutation(() => Comment)
+  @UseGuards(GqlAuthGuard)
   async removeComment(@Args('id', { type: () => Int }) id: number) {
     try {
       const comment = await this.commentService.findOne(id);

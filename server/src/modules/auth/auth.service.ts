@@ -1,9 +1,13 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   async refreshAccessToken(
     refreshToken: string,
@@ -14,9 +18,13 @@ export class AuthService {
       throw new Error('Invalid refresh token');
     }
 
-    const accessToken = this.jwtService.sign({
-      userId: userId,
-    });
+    const accessToken = this.jwtService.sign(
+      { userId: userId },
+      {
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expiresIn: '1h',
+      },
+    );
 
     return { accessToken };
   }
@@ -24,7 +32,7 @@ export class AuthService {
   private extractUserIdFromRefreshToken(refreshToken: string): string | null {
     try {
       const payload = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET,
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       });
 
       return payload.id;

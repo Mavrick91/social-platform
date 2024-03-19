@@ -33,12 +33,8 @@ export const userSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
     },
-    updateTokens: (
-      state,
-      action: PayloadAction<{ accessToken: string; refreshToken: string }>
-    ) => {
+    updateTokens: (state, action: PayloadAction<{ accessToken: string }>) => {
       state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
     },
     logout: (state) => {
       state.authStatus = 'unauthenticated';

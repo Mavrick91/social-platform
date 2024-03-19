@@ -16,7 +16,7 @@ const AuthenticatedLayout = ({ children }: Props) => {
   const [isValidatingToken, setIsValidatingToken] = useState(true);
 
   useEffect(() => {
-    if (!accessToken || isTokenExpired(accessToken)) {
+    if (!accessToken) {
       navigate('/login');
     } else {
       setIsValidatingToken(false);
