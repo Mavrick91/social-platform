@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store/hooks';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { isTokenExpired } from '@/lib/authUtils.ts';
 import { UserInfoProvider } from '@/providers/UserInfoProvider';
 
 type Props = {

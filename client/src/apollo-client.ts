@@ -22,7 +22,6 @@ async function refreshAccessToken(state: RootState) {
     });
 
     const { accessToken } = response.data;
-    console.log('🚀 ~ response.data:', response.data);
 
     store.dispatch(updateTokens({ accessToken }));
 
@@ -34,7 +33,6 @@ async function refreshAccessToken(state: RootState) {
 }
 
 const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
-  console.log('🚀 ~ graphQLErrors:', graphQLErrors);
   if (
     graphQLErrors &&
     graphQLErrors.some((err) => err.message === 'UNAUTHENTICATED')

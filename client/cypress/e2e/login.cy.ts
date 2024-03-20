@@ -20,7 +20,7 @@ describe('Login', () => {
     cy.get('input#password').type('password');
     cy.get('button[type="submit"]').click();
 
-    cy.wait('@graphqlMutation');
+    cy.wait('@Login');
 
     cy.get('#error-message')
       .should('be.visible')

@@ -26,8 +26,8 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 export default function Login() {
   const dispatch = useAppDispatch();
   const [loginChoice, setLoginChoice] = useState<'custom' | 'mocked'>('custom');
-  const [login, { loading, error, data }] = useLoginMutation();
-  console.log('🚀 ~ data:', data);
+  const [login, { loading, error }] = useLoginMutation();
+
   const {
     register,
     handleSubmit,
@@ -49,8 +49,6 @@ export default function Login() {
       console.error(error);
     }
   };
-
-  console.log('🚀 ~ error:', error);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen space-y-4 w-full">
