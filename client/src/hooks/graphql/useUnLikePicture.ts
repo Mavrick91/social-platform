@@ -6,17 +6,14 @@ export default function useUnLikePicture(likeId: number) {
     variables: { likeId },
     update(cache, { data }) {
       if (data?.unlikePicture) {
-        const pictureIdInCache = cache.identify({
-          __typename: 'Picture',
-          id: data.unlikePicture.id,
-        });
-
-        cache.writeFragment({
-          id: pictureIdInCache,
-          fragment: PICTURE_FRAGMENT,
-          data: data.unlikePicture,
-          fragmentName: 'PictureFragment',
-        });
+        if (data?.unlikePicture) {
+          cache.writeFragment({
+            id: cache.identify(data.unlikePicture),
+            fragment: PICTURE_FRAGMENT,
+            data: data.unlikePicture,
+            fragmentName: 'PictureFragment',
+          });
+        }
       }
     },
   });

@@ -62,7 +62,6 @@ export default function SideNavItem({ item, isSmall }: SideNavItemProps) {
           {
             'scale-110': isActiveItem && sideNavOpen,
             'mx-auto': isSmall,
-            'mr-4': !isSmall,
           },
           userAvatarProps?.className
         )}
@@ -71,7 +70,7 @@ export default function SideNavItem({ item, isSmall }: SideNavItemProps) {
       />
       {!isSmall && (
         <motion.span
-          className={cn('transition-colors duration-200 ease-out')}
+          className={cn('transition-colors duration-200 ml-4 ease-out')}
           initial={{ opacity: 0 }}
           animate={{ opacity: isSmall ? 0 : 1 }}
           transition={{ delay: 0.2 }}

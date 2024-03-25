@@ -62,7 +62,7 @@ export const getNavigationItems = (
     userAvatarProps: {
       avatar: user.avatar,
       alt: `${user.firstName} ${user.lastName}`,
-      className: 'w-6 h-6 mr-4',
+      className: 'w-6 h-6',
     },
     isActive: (path) => path === `/profile/${user.id}`,
   },

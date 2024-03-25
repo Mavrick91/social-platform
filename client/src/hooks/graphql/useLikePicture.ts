@@ -6,15 +6,8 @@ export default function useLikePicture(pictureId: number) {
     variables: { pictureId },
     update(cache, { data }) {
       if (data?.likePicture) {
-        const pictureIdInCache = cache.identify({
-          __typename: 'Picture',
-          id: data.likePicture.id,
-        });
-        console.log('🚀 ~ pictureIdInCache:', pictureIdInCache);
-        console.log('🚀 ~ data.likePicture:', data.likePicture);
-
         cache.writeFragment({
-          id: pictureIdInCache,
+          id: cache.identify(data.likePicture),
           fragment: PICTURE_FRAGMENT,
           data: data.likePicture,
           fragmentName: 'PictureFragment',

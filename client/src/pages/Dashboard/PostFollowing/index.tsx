@@ -11,7 +11,6 @@ export default function PostFollowing() {
   );
 
   const { data, loading, error } = useGetPicturesFromFollowingQuery({
-    fetchPolicy: 'no-cache',
     variables: {
       authorId: followingPeopleIds,
     },
