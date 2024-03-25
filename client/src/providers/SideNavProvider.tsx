@@ -1,9 +1,18 @@
 import useWindowWidth from '@/hooks/useWindowWidth';
-import React, { createContext, useContext, useEffect } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { useLocation } from 'react-router-dom';
 
 type SideNavContextType = {
   sideNavOpen: boolean;
   toggleSideNav: () => void;
+  toggleSearch: () => void;
+  isSearchVisible: boolean;
 };
 
 const SideNavContext = createContext<SideNavContextType | undefined>(undefined);
@@ -16,9 +25,9 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
   children,
 }) => {
   const windowWidth = useWindowWidth();
-  const [sideNavOpen, setSideNavOpen] = React.useState<boolean>(
-    windowWidth < 1264
-  );
+  const [sideNavOpen, setSideNavOpen] = useState(windowWidth < 1264);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (windowWidth > 1264) {
@@ -26,13 +35,27 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
     } else setSideNavOpen(false);
   }, [windowWidth]);
 
-  const toggleSideNav = () => {
-    setSideNavOpen((prev) => !prev);
-  };
+  const toggleSideNav = useCallback(() => {
+    setSideNavOpen((prevSideNavOpen) => !prevSideNavOpen);
+  }, []);
+
+  const toggleSearch = useCallback(() => {
+    setIsSearchVisible((prevIsSearchVisible) => !prevIsSearchVisible);
+  }, []);
+
+  const closeSearch = useCallback(() => {
+    setIsSearchVisible(false);
+  }, []);
+
+  useEffect(() => {
+    closeSearch();
+  }, [pathname, closeSearch]);
 
   const value = {
     sideNavOpen,
     toggleSideNav,
+    toggleSearch,
+    isSearchVisible,
   };
 
   return (
@@ -40,10 +63,10 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
   );
 };
 
-export const useSideNavOpen = (): SideNavContextType => {
+export const useSideNav = (): SideNavContextType => {
   const context = useContext(SideNavContext);
   if (!context) {
-    throw new Error('useSideNavOpen must be used within a SideNavProvider');
+    throw new Error('useSideNav must be used within a SideNavProvider');
   }
   return context;
 };

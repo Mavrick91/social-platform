@@ -4,7 +4,7 @@ import { useAppSelector } from '../store/hooks';
 import SideNav from '@/components/SideNav';
 import Footer from '@/components/Footer';
 import { UserInfoProvider } from '@/providers/UserInfoProvider';
-import { SideNavProvider, useSideNavOpen } from '@/providers/SideNavProvider';
+import { SideNavProvider, useSideNav } from '@/providers/SideNavProvider';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const MainContent = ({ children }: Props) => {
-  const { sideNavOpen } = useSideNavOpen();
+  const { sideNavOpen } = useSideNav();
 
   return (
     <div className="flex h-full">

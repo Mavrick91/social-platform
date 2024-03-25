@@ -1,22 +1,21 @@
 import { useGetUsersByUsernameQuery } from '@/__generated__/graphql';
 import UserAvatar from '@/components/UserAvatar';
 import useClickOutside from '@/hooks/useOnClickOutside';
+import { useSideNav } from '@/providers/SideNavProvider';
 import { motion } from 'framer-motion';
+import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-type Props = {
-  setShowSearch: (showSearch: boolean) => void;
-};
-
-export default function SideSearchUser({ setShowSearch }: Props) {
+export default function UserSearchOverlay() {
   const [inputValue, setInputValue] = useState('');
+  const { toggleSearch } = useSideNav();
   const [debouncedInputValue, setDebouncedInputValue] = useState('');
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const ref = useRef(null);
 
   useClickOutside(ref, () => {
-    setShowSearch(false);
+    toggleSearch();
   });
 
   const { data } = useGetUsersByUsernameQuery({
@@ -47,7 +46,7 @@ export default function SideSearchUser({ setShowSearch }: Props) {
       className="bg-white z-10 shadow-2xl border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-[#DBDBDB] py-2"
     >
       <div className="text-2xl font-semibold pt-3 pl-6 pb-9">Search</div>
-      <div className="px-4 mb-6">
+      <div className="px-4 mb-6 relative">
         <input
           value={inputValue}
           onChange={(e) => {
@@ -56,8 +55,17 @@ export default function SideSearchUser({ setShowSearch }: Props) {
           placeholder="Search"
           className="bg-zinc-200/80 px-4 py-1 rounded-md w-full h-10 focus:outline-none"
         />
+        <button
+          className="absolute top-1/2 transform right-8 -translate-y-1/2"
+          onClick={() => setInputValue('')}
+        >
+          <CircleX size={20} color="gray" />
+        </button>
       </div>
-      {!data?.usersByUsername && <div className="border-b border-[#DBDBDB]" />}
+      {(!data?.usersByUsername ||
+        (data.usersByUsername && data.usersByUsername.length === 0)) && (
+        <div className="border-b border-[#DBDBDB]" />
+      )}
       {/* Render search results */}
       {data?.usersByUsername.map((user) => (
         <Link

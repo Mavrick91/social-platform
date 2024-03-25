@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonFollow from './ButtonFollow';
 import OwnProfile from './OwnProfile';
-import { pluralize } from '@/lib/utils';
 import { Pluralize } from '@/components/Pluralize';
 
 type Props = {
