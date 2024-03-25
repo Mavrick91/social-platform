@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { JwtService } from '@nestjs/jwt';
-import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -15,8 +15,8 @@ export class UserService {
     private configService: ConfigService,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return (await this.prisma.user.findMany()) as User[];
+  async findAll(user: User): Promise<User[]> {
+    return this.prisma.user.findMany({ where: { id: { not: user.id } } });
   }
 
   async findMockedUser(): Promise<User[]> {
@@ -63,6 +63,18 @@ export class UserService {
     };
   }
 
+  async findUsersByUsername(user: User, username: string): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        username: {
+          contains: username,
+          mode: 'insensitive',
+        },
+        id: { not: user.id },
+      },
+    });
+  }
+
   async findOne(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -98,16 +110,24 @@ export class UserService {
   }
 
   async create(data: CreateUserDto): Promise<User> {
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUserByEmail = await this.prisma.user.findUnique({
       where: { email: data.email },
     });
-    if (existingUser) {
+    if (existingUserByEmail) {
       throw new UnauthorizedException('Email already exists');
     }
+
+    const existingUserByUsername = await this.prisma.user.findUnique({
+      where: { username: data.username },
+    });
+    if (existingUserByUsername) {
+      throw new UnauthorizedException('Username already exists');
+    }
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const user = await this.prisma.user.create({
       data: { ...data, password: hashedPassword },
     });
-    return user as User;
+    return user;
   }
 }

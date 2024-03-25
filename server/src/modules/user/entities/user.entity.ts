@@ -2,6 +2,7 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Picture } from '../../picture/entities/picture.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 import { Follow } from '../../follow/entities/follow.entity';
+import { Like } from '../../like/entities/like.entity';
 
 @ObjectType()
 class UserCount {
@@ -32,6 +33,9 @@ export class User {
   @Field()
   lastName: string;
 
+  @Field()
+  username: string;
+
   @Field({ nullable: true })
   bio: string;
 
@@ -42,7 +46,7 @@ export class User {
   avatarName: string;
 
   @Field(() => [Picture], { defaultValue: [] })
-  pictures?: Picture[];
+  pictures: Picture[];
 
   @Field(() => UserCount)
   _count?: UserCount;
@@ -58,6 +62,9 @@ export class User {
 
   @Field(() => [Follow], { defaultValue: [] })
   receivedFollows?: Follow[];
+
+  @Field(() => [Like], { nullable: true })
+  likes?: Like[];
 
   @Field(() => Date)
   createdAt?: Date;

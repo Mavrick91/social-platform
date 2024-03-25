@@ -9,10 +9,11 @@ import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { S3Service } from '../s3/s3.service';
 import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
-import { Picture } from './entities/picture.entity';
 import { PictureService } from './picture.service';
+import { Picture } from '@prisma/client';
+import { Picture as PictureResponse } from './entities/picture.entity';
 
-@Resolver(() => Picture)
+@Resolver(() => PictureResponse)
 export class PictureResolver {
   constructor(
     private readonly pictureService: PictureService,
@@ -20,7 +21,7 @@ export class PictureResolver {
     private readonly configService: ConfigService,
   ) {}
 
-  @Query(() => [Picture])
+  @Query(() => [PictureResponse])
   @UseGuards(GqlAuthGuard)
   async picturesByAuthor(
     @Args('authorId', { nullable: true }) authorId?: number,
@@ -28,7 +29,15 @@ export class PictureResolver {
     return this.pictureService.findByAuthor(authorId);
   }
 
-  @Mutation(() => Picture)
+  @Query(() => [PictureResponse])
+  @UseGuards(GqlAuthGuard)
+  async picturesFromFollowing(
+    @Args('authorId', { type: () => [Number] }) authorId?: number[],
+  ): Promise<Picture[]> {
+    return this.pictureService.findByFollowing(authorId);
+  }
+
+  @Mutation(() => PictureResponse)
   @UseGuards(GqlAuthGuard)
   async createPicture(
     @Args('input') input: CreatePictureInput,
@@ -40,7 +49,7 @@ export class PictureResolver {
     }
   }
 
-  @Mutation(() => Picture)
+  @Mutation(() => PictureResponse)
   @UseGuards(GqlAuthGuard)
   async updatePicture(
     @Args('id') id: number,
@@ -53,7 +62,7 @@ export class PictureResolver {
     }
   }
 
-  @Mutation(() => Picture)
+  @Mutation(() => PictureResponse)
   @UseGuards(GqlAuthGuard)
   async deletePicture(@Args('id') id: number): Promise<Picture> {
     const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');

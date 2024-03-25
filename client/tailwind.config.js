@@ -16,6 +16,9 @@ module.exports = {
         '2xl': '1400px',
       },
     },
+    screens: {
+      lg: '1264px',
+    },
     extend: {
       colors: {
         border: 'hsl(var(--border))',
@@ -30,6 +33,12 @@ module.exports = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+        },
+        'secondary-button': {
+          DEFAULT: 'hsl(var(--secondary-button-background))',
+        },
+        'secondary-button-hover': {
+          DEFAULT: 'hsl(var(--secondary-button-foreground))',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',

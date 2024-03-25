@@ -1,11 +1,15 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/entities/user.entity';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Like } from '../../like/entities/like.entity';
 
 @ObjectType()
 class PictureCount {
   @Field(() => Int)
   comments: number;
+
+  @Field(() => Int)
+  likes: number;
 }
 
 @ObjectType()
@@ -22,17 +26,17 @@ export class Picture {
   @Field({ nullable: true })
   description?: string;
 
-  @Field(() => User, { nullable: true })
-  author?: User;
+  @Field(() => User)
+  author: User;
 
-  // @Field(() => Int, { nullable: true })
-  // authorId: number;
+  @Field(() => [Like], { defaultValue: [] })
+  likes: Like[];
 
   @Field(() => [Comment], { nullable: true })
   comments?: Comment[];
 
-  @Field(() => PictureCount, { nullable: true })
-  _count?: PictureCount;
+  @Field(() => PictureCount)
+  _count: PictureCount;
 
   @Field(() => Date)
   createdAt: Date;

@@ -17,6 +17,7 @@ async function main() {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       avatar: faker.image.avatar(),
+      username: faker.internet.userName().toLowerCase(),
       isMock: true,
     };
   });

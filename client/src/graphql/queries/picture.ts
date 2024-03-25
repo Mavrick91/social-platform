@@ -11,8 +11,14 @@ export const PICTURE_FRAGMENT = gql`
     author {
       ...UserFragment
     }
+    likes {
+      id
+      userId
+      pictureId
+    }
     _count {
       comments
+      likes
     }
   }
   ${USER_FRAGMENT}
@@ -24,5 +30,15 @@ export const GET_PICTURE_BY_AUTHOR = gql`
       ...PictureFragment
     }
   }
+  ${PICTURE_FRAGMENT}
+`;
+
+export const GET_PICTURE_FROM_FOLLOWING = gql`
+  query GetPicturesFromFollowing($authorId: [Float!]!) {
+    picturesFromFollowing(authorId: $authorId) {
+      ...PictureFragment
+    }
+  }
+
   ${PICTURE_FRAGMENT}
 `;

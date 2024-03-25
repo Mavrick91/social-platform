@@ -25,7 +25,7 @@ type Props = {
   setErrorMutation: (value: string | null) => void;
 };
 
-function PictureCommentForm({
+function PostCommentForm({
   pictureId,
   refetchCommentList,
   commentListRef,
@@ -91,4 +91,4 @@ function PictureCommentForm({
   );
 }
 
-export default PictureCommentForm;
+export default PostCommentForm;

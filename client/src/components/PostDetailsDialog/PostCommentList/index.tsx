@@ -1,5 +1,5 @@
 import { useGetCommentsByPictureQuery } from '@/__generated__/graphql';
-import PictureCommentForm from '@/components/PictureDetailsDialog/PictureCommentForm';
+import PictureCommentForm from '@/components/PostDetailsDialog/PostCommentForm';
 import moment from 'moment';
 import { useEffect, useRef } from 'react';
 
@@ -8,7 +8,7 @@ type Props = {
   setErrorMutation: (value: string | null) => void;
 };
 
-function PictureCommentList({ pictureId, setErrorMutation }: Props) {
+function PostCommentList({ pictureId, setErrorMutation }: Props) {
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data, loading, refetch, error } = useGetCommentsByPictureQuery({
     variables: { pictureId },
@@ -23,9 +23,9 @@ function PictureCommentList({ pictureId, setErrorMutation }: Props) {
   if (loading) return <div>Loading comments...</div>;
 
   return (
-    <div className="space-y-4 flex flex-col grow">
+    <div className="flex flex-col grow">
       <div
-        className="space-y-2 pr-6 pl-3 max-h-[500px] grow overflow-y-auto"
+        className="space-y-2 pr-6 p-3 h-0 grow overflow-y-auto"
         ref={commentListRef}
       >
         {data?.commentsByPictureId.map((comment) => {
@@ -59,4 +59,4 @@ function PictureCommentList({ pictureId, setErrorMutation }: Props) {
   );
 }
 
-export default PictureCommentList;
+export default PostCommentList;

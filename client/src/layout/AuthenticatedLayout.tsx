@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store/hooks';
-import Header from '@/components/Header';
+import SideNav from '@/components/SideNav';
 import Footer from '@/components/Footer';
 import { UserInfoProvider } from '@/providers/UserInfoProvider';
 
@@ -28,9 +28,9 @@ const AuthenticatedLayout = ({ children }: Props) => {
 
   return (
     <UserInfoProvider>
-      <div className="flex flex-col h-full">
-        <Header />
-        <div className="p-10 overflow-y-auto bg-[#f9f9f9] h-full">
+      <div className="flex h-full">
+        <SideNav />
+        <div className="p-10 overflow-y-auto h-full w-full">
           <div className="max-w-screen-xl mx-auto grow">{children}</div>
           <Footer />
         </div>

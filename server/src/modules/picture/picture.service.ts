@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
-import { Picture } from './entities/picture.entity';
+import { Picture } from '@prisma/client';
 
 @Injectable()
 export class PictureService {
@@ -17,6 +17,30 @@ export class PictureService {
         _count: {
           select: {
             comments: true,
+            likes: true,
+          },
+        },
+      },
+    });
+
+    return pictures;
+  }
+
+  async findByFollowing(authorId: number[]): Promise<Picture[]> {
+    const pictures = await this.prisma.picture.findMany({
+      where: {
+        authorId: {
+          in: authorId,
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: true,
+        likes: true,
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
           },
         },
       },
@@ -48,6 +72,7 @@ export class PictureService {
         where: { id },
         include: {
           author: true,
+          likes: true,
         },
       });
 

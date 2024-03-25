@@ -1,11 +1,7 @@
-import PictureList from '@/pages/Dashboard/PictureList';
+import PostFollowing from './PostFollowing';
 
 function Dashboard() {
-  return (
-    <>
-      <PictureList />
-    </>
-  );
+  return <PostFollowing />;
 }
 
 export default Dashboard;

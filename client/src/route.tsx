@@ -5,6 +5,7 @@ import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
 import Dashboard from '@/pages/Dashboard';
 import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
 import Profile from '@/pages/Profile';
+import Explore from '@/pages/Explore';
 
 const router = createBrowserRouter([
   {
@@ -24,10 +25,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/dashboard',
+    path: '/dashboard/:section?',
     element: (
       <AuthenticatedLayout>
         <Dashboard />
+      </AuthenticatedLayout>
+    ),
+  },
+  {
+    path: '/dashboard/explore',
+    element: (
+      <AuthenticatedLayout>
+        <Explore />
       </AuthenticatedLayout>
     ),
   },

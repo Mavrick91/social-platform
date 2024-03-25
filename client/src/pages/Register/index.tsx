@@ -16,6 +16,16 @@ const registerSchema = z.object({
     .string()
     .min(1, 'Last name is required')
     .transform((val) => val.trim()),
+  username: z
+    .string()
+    .min(1, 'Username is required')
+    .max(30, 'Username must be less than 30 characters')
+    .regex(
+      /^[a-zA-Z0-9._]+$/,
+      'Username can only contain letters, numbers, periods, and underscores'
+    )
+    .transform((val) => val.trim().toLowerCase()),
+
   email: z
     .string()
     .email('Invalid email address')
@@ -84,6 +94,12 @@ export default function Register() {
               />
             </div>
           </div>
+          <Input
+            label="Username"
+            id="username"
+            error={errors.username?.message}
+            {...register('username', { required: 'Username is required' })}
+          />
           <div className="space-y-2">
             <Input
               label="Email"

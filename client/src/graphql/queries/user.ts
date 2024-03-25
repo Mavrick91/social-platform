@@ -5,6 +5,7 @@ export const USER_FRAGMENT = gql`
     id
     firstName
     lastName
+    username
     avatar
     bio
   }
@@ -58,6 +59,24 @@ export const GET_USER_PROFILE = gql`
     }
   }
   ${USER_PROFILE_FRAGMENT}
+`;
+
+export const GET_ALL_USERS = gql`
+  query GetAllUsers {
+    users {
+      ...UserFragment
+    }
+  }
+  ${USER_FRAGMENT}
+`;
+
+export const GET_USERS_BY_USERNAME = gql`
+  query GetUsersByUsername($username: String!) {
+    usersByUsername(username: $username) {
+      ...UserFragment
+    }
+  }
+  ${USER_FRAGMENT}
 `;
 
 export const GET_MOCKED_USER = gql`

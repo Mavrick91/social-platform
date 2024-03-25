@@ -13,6 +13,8 @@ import { CommentModule } from './modules/comment/comment.module';
 import { S3Module } from './modules/s3/s3.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { FollowModule } from './modules/follow/follow.module';
+import { LikeResolver } from './modules/like/like.resolver';
+import { LikeModule } from './modules/like/like.module';
 
 @Module({
   imports: [
@@ -30,8 +32,9 @@ import { FollowModule } from './modules/follow/follow.module';
     S3Module,
     UploadModule,
     FollowModule,
+    LikeModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, UserService],
+  providers: [AppService, PrismaService, UserService, LikeResolver],
 })
 export class AppModule {}

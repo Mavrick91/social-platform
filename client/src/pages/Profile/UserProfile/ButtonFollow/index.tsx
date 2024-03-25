@@ -8,12 +8,14 @@ type Props = {
   isFollowing: boolean;
   targetUserId: number;
   callback?: () => void;
+  className?: string;
 };
 
 const ButtonFollow: React.FC<Props> = ({
   isFollowing,
   targetUserId,
   callback,
+  className,
 }) => {
   const [follow] = useFollow();
   const [unfollow] = useUnFollow();
@@ -21,6 +23,7 @@ const ButtonFollow: React.FC<Props> = ({
 
   const handleFollow = useCallback(async () => {
     await follow({
+      fetchPolicy: 'no-cache',
       variables: {
         input: { userId: targetUserId, followingId: user.id },
       },
@@ -40,25 +43,13 @@ const ButtonFollow: React.FC<Props> = ({
   }, [unfollow, targetUserId, user.id, callback]);
 
   return (
-    <div>
-      {isFollowing ? (
-        <Button
-          size="sm"
-          className="bg-blue-500 hover:bg-blue-600"
-          onClick={handleUnfollow}
-        >
-          Unfollow
-        </Button>
-      ) : (
-        <Button
-          size="sm"
-          className="bg-blue-500 hover:bg-blue-600"
-          onClick={handleFollow}
-        >
-          Follow
-        </Button>
-      )}
-    </div>
+    <Button
+      size="xs"
+      className={className}
+      onClick={isFollowing ? handleUnfollow : handleFollow}
+    >
+      {isFollowing ? `Unfollow` : `Follow`}
+    </Button>
   );
 };
 

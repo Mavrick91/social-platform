@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button';
 
 export default function OwnProfile() {
   return (
-    <>
+    <div className="flex">
       <EditProfileDialog>
-        <Button>Edit Profile</Button>
+        <Button variant="gray" size="xs">
+          <b>Edit Profile</b>
+        </Button>
       </EditProfileDialog>
-    </>
+    </div>
   );
 }

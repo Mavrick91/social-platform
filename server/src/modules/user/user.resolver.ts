@@ -1,6 +1,5 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginResponse } from './dto/login-response.dto';
 import {
@@ -12,8 +11,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { S3Service } from '../s3/s3.service';
 import { ConfigService } from '@nestjs/config';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { User } from '@prisma/client';
+import { User as UserResponse } from './entities/user.entity';
+import { CurrentUser } from '../auth/current-user.decorator';
 
-@Resolver(() => User)
+@Resolver(() => UserResponse)
 export class UserResolver {
   constructor(
     private userService: UserService,
@@ -21,13 +23,22 @@ export class UserResolver {
     private readonly configService: ConfigService,
   ) {}
 
-  @Query(() => [User])
+  @Query(() => [UserResponse])
   @UseGuards(GqlAuthGuard)
-  async users(): Promise<User[]> {
-    return this.userService.findAll();
+  async users(@CurrentUser() user: User): Promise<User[]> {
+    return this.userService.findAll(user);
   }
 
-  @Query(() => User)
+  @Query(() => [UserResponse])
+  @UseGuards(GqlAuthGuard)
+  async usersByUsername(
+    @Args('username') username: string,
+    @CurrentUser() user: User,
+  ): Promise<User[]> {
+    return this.userService.findUsersByUsername(user, username);
+  }
+
+  @Query(() => UserResponse)
   @UseGuards(GqlAuthGuard)
   async user(@Args('profileId') id: number): Promise<User> {
     try {
@@ -37,7 +48,7 @@ export class UserResolver {
     }
   }
 
-  @Query(() => [User])
+  @Query(() => [UserResponse])
   async mockedUser(): Promise<User[]> {
     try {
       return await this.userService.findMockedUser();
@@ -46,7 +57,7 @@ export class UserResolver {
     }
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   @UseGuards(GqlAuthGuard)
   async updateUser(
     @Args('profileId') profileId: number,
@@ -73,7 +84,7 @@ export class UserResolver {
     }
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserDto,
   ): Promise<User> {
