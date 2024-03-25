@@ -35,6 +35,7 @@ export default function SideNav() {
                   key={item.name}
                   item={item}
                   isSmall={!sideNavOpen || isSearchVisible}
+                  isSearchVisible={isSearchVisible}
                 />
               ))}
             </ul>

@@ -13,7 +13,7 @@ function ThumbnailGrid({ profileId }: Props) {
 
   return (
     <>
-      <div className="grid w-full sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+      <div className="grid w-full grid-cols-3 gap-1">
         {data && !loading
           ? data.picturesByAuthor.map((picture) => (
               <ThumbnailGridItem picture={picture} key={picture.id} />

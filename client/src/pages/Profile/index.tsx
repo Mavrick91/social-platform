@@ -53,7 +53,7 @@ function Profile() {
   }
 
   return (
-    <div className="flex flex-col w-lg-page mx-auto">
+    <div className="flex flex-col max-w-lg-page mx-auto">
       <div className="px-5 pt-9">
         <UserProfile profileId={profileId} />
         <div className="relative flex border-t cursor-pointer justify-center gap-14 border-gray-200">

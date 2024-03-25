@@ -38,9 +38,14 @@ const LinkOrButton: React.FC<LinkOrButtonProps> = ({
 interface SideNavItemProps {
   item: SideNavItemType;
   isSmall: boolean;
+  isSearchVisible: boolean;
 }
 
-export default function SideNavItem({ item, isSmall }: SideNavItemProps) {
+export default function SideNavItem({
+  item,
+  isSmall,
+  isSearchVisible,
+}: SideNavItemProps) {
   const { sideNavOpen, toggleSearch } = useSideNav();
   const { pathname } = useLocation();
   const { name, path, Icon, isActive, onClick, userAvatarProps } = item;
@@ -52,8 +57,9 @@ export default function SideNavItem({ item, isSmall }: SideNavItemProps) {
 
   const renderContent = () => (
     <div
-      className={cn('flex items-center', {
+      className={cn('flex', {
         'font-bold': isActiveItem,
+        'items-center': !isSmall,
       })}
     >
       <Icon
@@ -65,7 +71,12 @@ export default function SideNavItem({ item, isSmall }: SideNavItemProps) {
           },
           userAvatarProps?.className
         )}
-        strokeWidth={isActiveItem ? 2.1 : 1.8}
+        strokeWidth={
+          (isActiveItem && !isSearchVisible) ||
+          (name === 'Search' && isSearchVisible)
+            ? 2.3
+            : 1.5
+        }
         {...userAvatarProps}
       />
       {!isSmall && (
@@ -83,12 +94,8 @@ export default function SideNavItem({ item, isSmall }: SideNavItemProps) {
 
   const linkOrButtonProps: LinkOrButtonProps = {
     className: cn(
-      'flex items-center my-1 p-3 rounded-md transition-colors duration-200 ease-out',
+      'flex items-center my-1 p-3 rounded-md transition-colors duration-200 ease-out hover:bg-[#0000000D]',
       {
-        'bg-[#0000000D]': isActiveItem && sideNavOpen,
-        'hover:bg-[#0000000D]': !isActiveItem || !sideNavOpen,
-        'justify-center': isSmall,
-        'justify-start': !isSmall,
         relative: onClick === toggleSearch,
       }
     ),

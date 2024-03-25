@@ -31,6 +31,8 @@ module.exports = {
       },
       width: {
         ...sidenavSizes,
+      },
+      maxWidth: {
         'lg-page': '935px',
       },
       colors: {
