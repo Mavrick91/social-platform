@@ -1,9 +1,8 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import { Pluralize } from '@/components/Pluralize';
 import PostDetailsDialog from '@/components/PostDetailsDialog';
-import useLikePicture from '@/hooks/useLikePicture';
-import useUnLikePicture from '@/hooks/useUnLikePicture';
-import { pluralize } from '@/lib/utils';
+import useLikePicture from '@/hooks/graphql/useLikePicture';
+import useUnLikePicture from '@/hooks/graphql/useUnLikePicture';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { BookmarkIcon, HeartIcon, MessageCircle, SendIcon } from 'lucide-react';
 

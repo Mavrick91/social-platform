@@ -1,4 +1,4 @@
-import { useCreateComment } from '@/hooks/useCreateComment';
+import { useCreateComment } from '@/hooks/graphql/useCreateComment';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';

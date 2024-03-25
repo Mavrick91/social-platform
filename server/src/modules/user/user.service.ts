@@ -64,7 +64,6 @@ export class UserService {
   }
 
   async findUsersByUsername(user: User, username: string): Promise<User[]> {
-    console.log('🚀 ~ username:', username);
     return this.prisma.user.findMany({
       where: {
         username: {

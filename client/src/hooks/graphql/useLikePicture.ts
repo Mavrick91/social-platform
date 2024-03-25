@@ -10,6 +10,8 @@ export default function useLikePicture(pictureId: number) {
           __typename: 'Picture',
           id: data.likePicture.id,
         });
+        console.log('🚀 ~ pictureIdInCache:', pictureIdInCache);
+        console.log('🚀 ~ data.likePicture:', data.likePicture);
 
         cache.writeFragment({
           id: pictureIdInCache,

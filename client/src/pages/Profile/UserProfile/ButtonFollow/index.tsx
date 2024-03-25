@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import useFollow from '@/hooks/useFollow';
-import useUnFollow from '@/hooks/useUnFollow';
+import useFollow from '@/hooks/graphql/useFollow';
+import useUnFollow from '@/hooks/graphql/useUnFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import React, { useCallback } from 'react';
 

@@ -1,8 +1,8 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { useDeletePicture } from '@/hooks/useDeletePicture';
-import useUnFollow from '@/hooks/useUnFollow';
+import { useDeletePicture } from '@/hooks/graphql/useDeletePicture';
+import useUnFollow from '@/hooks/graphql/useUnFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Fragment, useMemo, useState } from 'react';
 

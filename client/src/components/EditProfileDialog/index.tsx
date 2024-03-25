@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ACCEPTED_IMAGE_TYPES } from '@/constant/image';
-import { useUpdateUserProfile } from '@/hooks/useUpdateUserProfile';
+import { useUpdateUserProfile } from '@/hooks/graphql/useUpdateUserProfile';
 import uploadImage from '@/lib/uploadImage';
 import { cn } from '@/lib/utils';
 import { useUserInfo } from '@/providers/UserInfoProvider';

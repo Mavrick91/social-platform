@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
-import { useCreateComment } from '@/hooks/useCreateComment';
+import { useCreateComment } from '@/hooks/graphql/useCreateComment';
 import { useAppSelector } from '@/store/hooks.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
