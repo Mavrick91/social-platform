@@ -9,8 +9,7 @@ import { Link } from 'react-router-dom';
 
 type Props = {
   avatar?: string | null;
-  firstName: string;
-  lastName: string;
+  username: string;
   createdAt: string;
   profileId: number;
   pictureId: number;
@@ -18,8 +17,7 @@ type Props = {
 
 export default function PostHeader({
   avatar,
-  firstName,
-  lastName,
+  username,
   createdAt,
   profileId,
   pictureId,
@@ -39,10 +37,10 @@ export default function PostHeader({
         <div className="ml-3">
           <p className="text-sm font-semibold">
             <Link to={`/profile/${profileId}`} className="shrink-0">
-              <span>{firstName}</span> <span>{lastName}</span>
+              <span>{username}</span>
             </Link>{' '}
             •{' '}
-            <span className="text-xs text-zinc-500">
+            <span className="text-sm font-medium text-zinc-500">
               {moment(createdAt).fromNow()}
               {!isFollowingCurrentProfile && (
                 <>

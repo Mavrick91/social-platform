@@ -16,8 +16,7 @@ export default function PostItem({ picture }: Props) {
       <PostHeader
         profileId={picture.author?.id}
         avatar={picture.author?.avatar}
-        firstName={picture.author?.firstName}
-        lastName={picture.author?.lastName}
+        username={picture.author.username}
         createdAt={picture.createdAt}
         pictureId={picture.id}
       />

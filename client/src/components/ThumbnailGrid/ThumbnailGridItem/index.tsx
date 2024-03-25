@@ -8,7 +8,7 @@ type Props = {
   picture: PictureFragmentFragment;
 };
 
-export default function PostProfileItem({ picture }: Props) {
+export default function ThumbnailGridItem({ picture }: Props) {
   const [selectedPicture, setSelectedPicture] =
     useState<PictureFragmentFragment | null>(null);
   const [editPictureDialogOpen, setEditPictureDialogOpen] = useState(false);

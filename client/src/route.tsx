@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/dashboard/:section?',
+    path: '/',
     element: (
       <AuthenticatedLayout>
         <Dashboard />
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/dashboard/explore',
+    path: '/explore',
     element: (
       <AuthenticatedLayout>
         <Explore />

@@ -1,7 +1,11 @@
 import PostFollowing from './PostFollowing';
 
 function Dashboard() {
-  return <PostFollowing />;
+  return (
+    <div className="mt-4">
+      <PostFollowing />
+    </div>
+  );
 }
 
 export default Dashboard;

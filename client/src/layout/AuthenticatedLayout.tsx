@@ -4,9 +4,30 @@ import { useAppSelector } from '../store/hooks';
 import SideNav from '@/components/SideNav';
 import Footer from '@/components/Footer';
 import { UserInfoProvider } from '@/providers/UserInfoProvider';
+import { SideNavProvider, useSideNavOpen } from '@/providers/SideNavProvider';
+import { cn } from '@/lib/utils';
 
 type Props = {
   children: React.ReactNode;
+};
+
+const MainContent = ({ children }: Props) => {
+  const { sideNavOpen } = useSideNavOpen();
+
+  return (
+    <div className="flex h-full">
+      <SideNav />
+      <div
+        className={cn('overflow-y-auto h-full w-full', {
+          'ml-small-sidenav': !sideNavOpen,
+          'ml-medium-sidenav': sideNavOpen,
+        })}
+      >
+        <div className="max-w-screen-xl mx-auto grow">{children}</div>
+        <Footer />
+      </div>
+    </div>
+  );
 };
 
 const AuthenticatedLayout = ({ children }: Props) => {
@@ -27,15 +48,11 @@ const AuthenticatedLayout = ({ children }: Props) => {
   }
 
   return (
-    <UserInfoProvider>
-      <div className="flex h-full">
-        <SideNav />
-        <div className="p-10 overflow-y-auto h-full w-full">
-          <div className="max-w-screen-xl mx-auto grow">{children}</div>
-          <Footer />
-        </div>
-      </div>
-    </UserInfoProvider>
+    <SideNavProvider>
+      <UserInfoProvider>
+        <MainContent>{children}</MainContent>
+      </UserInfoProvider>
+    </SideNavProvider>
   );
 };
 

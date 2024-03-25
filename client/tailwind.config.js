@@ -1,4 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+
+const sidenavSizes = {
+  'small-sidenav': '77px',
+  'medium-sidenav': '244px',
+};
+
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -20,6 +26,13 @@ module.exports = {
       lg: '1264px',
     },
     extend: {
+      margin: {
+        ...sidenavSizes,
+      },
+      width: {
+        ...sidenavSizes,
+        'lg-page': '935px',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

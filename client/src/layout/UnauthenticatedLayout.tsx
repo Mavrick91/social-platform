@@ -13,7 +13,7 @@ export default function UnauthenticatedLayout({ children }: Props) {
 
   useEffect(() => {
     if (accessToken) {
-      navigate('/dashboard');
+      navigate('/');
     } else {
       setIsValidatingToken(false);
     }

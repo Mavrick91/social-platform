@@ -1,35 +1,24 @@
 import UserAvatar from '@/components/UserAvatar';
+import { cn } from '@/lib/utils';
+import { useSideNavOpen } from '@/providers/SideNavProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import {
-  Compass,
-  Heart,
-  Home,
-  MonitorPlay,
-  Search,
-  Send,
-  SquarePlus,
-} from 'lucide-react';
+import { Compass, Heart, Home, Search, Send, SquarePlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import DropdownMore from './DropdownMore';
 import NavigationItem from './NavigationItem';
 import SideNavLogo from './SideNavLogo';
 import SideSearchUser from './SideSearchUser';
-import './sidenav.css';
-import { cn } from '@/lib/utils';
-import useWindowWidth from '@/hooks/useWindowWidth';
 
 export default function SideNav() {
   const { user } = useUserInfo();
   const { section, profileId } = useParams();
-  console.log('🚀 ~ useParams():', useParams());
-  console.log('🚀 ~ section:', section);
   const [uploadPictureDialogOpen, setUploadPictureDialogOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const windowWidth = useWindowWidth();
   const location = useLocation();
+  const { sideNavOpen } = useSideNavOpen();
 
-  const displaySmallNav = windowWidth < 1264 || showSearch;
+  const displaySmallNav = !sideNavOpen || showSearch;
 
   useEffect(() => {
     setShowSearch(false);
@@ -38,7 +27,7 @@ export default function SideNav() {
   const navigationItems = [
     {
       name: 'Home',
-      path: '/dashboard',
+      path: '/',
       Icon: Home,
       isActive: !section || !profileId || !showSearch,
     },
@@ -46,19 +35,18 @@ export default function SideNav() {
       name: 'Search',
       Icon: Search,
       isActive: showSearch,
-      onClick: () => setShowSearch(!showSearch),
+      onClick: (event: React.MouseEvent) => {
+        event.stopPropagation();
+        setTimeout(() => {
+          setShowSearch((prevShowSearch) => !prevShowSearch);
+        }, 0);
+      },
     },
     {
       name: 'Explore',
-      path: '/dashboard/explore',
+      path: '/explore',
       Icon: Compass,
       isActive: section === 'explore',
-    },
-    {
-      name: 'Reels',
-      path: '/dashboard/reels',
-      Icon: MonitorPlay,
-      isActive: section === 'reels',
     },
     {
       name: 'Messages',
@@ -97,8 +85,8 @@ export default function SideNav() {
         className={cn(
           `bg-white h-full z-20 absolute py-2.5 transition-all px-3 border-r border-[#DBDBDB]`,
           {
-            'sidenav-search': displaySmallNav,
-            'w-[244px]': !displaySmallNav,
+            'w-small-sidenav': displaySmallNav,
+            'w-medium-sidenav': !displaySmallNav,
           }
         )}
       >

@@ -68,7 +68,7 @@ export default function NavigationItem({
       <motion.span
         className={cn('ml-4', {
           'font-bold': isActive,
-          'ospacity-0 ml-0': displaySmallNav,
+          'opacity-0 ml-0': displaySmallNav,
         })}
         initial={{ opacity: 0 }}
         animate={{ opacity: displaySmallNav ? 0 : 1 }}

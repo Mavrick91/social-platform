@@ -44,7 +44,7 @@ export default function SideSearchUser({ setShowSearch }: Props) {
       initial={{ left: '-400px' }}
       animate={{ left: '77px' }}
       transition={{ duration: 0.3 }}
-      className="bg-white z-10 border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-[#DBDBDB] py-2"
+      className="bg-white z-10 shadow-2xl border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-[#DBDBDB] py-2"
     >
       <div className="text-2xl font-semibold pt-3 pl-6 pb-9">Search</div>
       <div className="px-4 mb-6">
