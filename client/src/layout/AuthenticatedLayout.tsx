@@ -1,11 +1,11 @@
+import Footer from '@/components/Footer';
+import SideNav from '@/components/SideNav';
+import { cn } from '@/lib/utils';
+import { SideNavProvider, useSideNav } from '@/providers/SideNavProvider';
+import { UserInfoProvider } from '@/providers/UserInfoProvider';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../store/hooks';
-import SideNav from '@/components/SideNav';
-import Footer from '@/components/Footer';
-import { UserInfoProvider } from '@/providers/UserInfoProvider';
-import { SideNavProvider, useSideNav } from '@/providers/SideNavProvider';
-import { cn } from '@/lib/utils';
 
 type Props = {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const MainContent = ({ children }: Props) => {
           'ml-medium-sidenav': sideNavOpen,
         })}
       >
-        <div className="max-w-screen-xl mx-auto grow">{children}</div>
+        {children}
         <Footer />
       </div>
     </div>

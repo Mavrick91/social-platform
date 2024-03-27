@@ -96,6 +96,16 @@ export class UserService {
             initiator: true,
           },
         },
+        collections: {
+          include: {
+            user: true,
+            pictures: {
+              include: {
+                picture: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -127,6 +137,13 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const user = await this.prisma.user.create({
       data: { ...data, password: hashedPassword },
+    });
+
+    await this.prisma.collection.create({
+      data: {
+        name: 'All posts',
+        userId: user.id,
+      },
     });
     return user;
   }

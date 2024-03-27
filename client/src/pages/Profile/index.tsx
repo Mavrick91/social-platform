@@ -6,11 +6,12 @@ import ThumbnailGrid from '../../components/ThumbnailGrid';
 import UserProfile from './UserProfile';
 import { cn } from '@/lib/utils';
 import { Bookmark, Grid3X3, SquareUser } from 'lucide-react';
+import UserCollections from './UserCollections';
 
 function Profile() {
   const userInfo = useAppSelector(selectAuthenticatedUser);
   const navigate = useNavigate();
-  const profileId: number = Number(useParams().profileId);
+  const profileId = Number(useParams().profileId);
   const [selectedTab, setSelectedTab] = useState('Posts');
   const [borderPos, setBorderPos] = useState(0);
   const tabRef = useRef<HTMLDivElement>(null);
@@ -20,13 +21,17 @@ function Profile() {
     () => [
       {
         name: 'Posts',
-        component: <ThumbnailGrid profileId={profileId} />,
+        component: <ThumbnailGrid />,
         icon: <Grid3X3 size={12} />,
       },
-      { name: 'Saved', component: <></>, icon: <Bookmark size={12} /> },
+      {
+        name: 'Saved',
+        component: <UserCollections />,
+        icon: <Bookmark size={12} />,
+      },
       { name: 'Tags', component: <></>, icon: <SquareUser size={12} /> },
     ],
-    [profileId]
+    []
   );
 
   useEffect(() => {

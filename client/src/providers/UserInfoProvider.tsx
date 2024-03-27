@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { useAppSelector } from '@/store/hooks';
 import {
@@ -23,12 +23,16 @@ export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
     variables: { profileId: userInfo.id },
   });
 
+  const value = useMemo(() => data, [data]);
+
   if (loading || !data) {
     return null;
   }
 
   return (
-    <UserInfoContext.Provider value={data}>{children}</UserInfoContext.Provider>
+    <UserInfoContext.Provider value={value}>
+      {children}
+    </UserInfoContext.Provider>
   );
 };
 

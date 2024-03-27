@@ -1,13 +1,13 @@
 import { useGetPictureByAuthorQuery } from '@/__generated__/graphql';
+import { useParams } from 'react-router-dom';
 import ThumbnailGridItem from './ThumbnailGridItem';
 import Loading from './loading';
 
-type Props = {
-  profileId?: number;
-};
-function ThumbnailGrid({ profileId }: Props) {
+function ThumbnailGrid() {
+  const { profileId } = useParams();
+
   const { data, loading } = useGetPictureByAuthorQuery({
-    variables: { authorId: profileId },
+    variables: { authorId: Number(profileId) },
     fetchPolicy: 'network-only',
   });
 

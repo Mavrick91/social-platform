@@ -97,7 +97,9 @@ const PostAction = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <button>{children}</button>
+      </DialogTrigger>
       <DialogContent className="p-0 gap-0" showClose={false}>
         {actions
           .filter((action) => action.isActive)

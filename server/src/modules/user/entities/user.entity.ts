@@ -3,6 +3,8 @@ import { Picture } from '../../picture/entities/picture.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 import { Follow } from '../../follow/entities/follow.entity';
 import { Like } from '../../like/entities/like.entity';
+import { PictureOnCollection } from '@prisma/client';
+import { Collection } from 'src/modules/collection/entities/collection.entity';
 
 @ObjectType()
 class UserCount {
@@ -65,6 +67,9 @@ export class User {
 
   @Field(() => [Like], { nullable: true })
   likes?: Like[];
+
+  @Field(() => [Collection], { defaultValue: [] })
+  collections: Collection[];
 
   @Field(() => Date)
   createdAt?: Date;

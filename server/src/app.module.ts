@@ -15,6 +15,8 @@ import { UploadModule } from './modules/upload/upload.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { LikeResolver } from './modules/like/like.resolver';
 import { LikeModule } from './modules/like/like.module';
+import { CollectionResolver } from './modules/collection/collection.resolver';
+import { CollectionModule } from './modules/collection/collection.module';
 
 @Module({
   imports: [
@@ -33,8 +35,15 @@ import { LikeModule } from './modules/like/like.module';
     UploadModule,
     FollowModule,
     LikeModule,
+    CollectionModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, UserService, LikeResolver],
+  providers: [
+    AppService,
+    PrismaService,
+    UserService,
+    LikeResolver,
+    CollectionResolver,
+  ],
 })
 export class AppModule {}

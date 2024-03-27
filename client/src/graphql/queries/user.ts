@@ -11,15 +11,27 @@ export const USER_FRAGMENT = gql`
   }
 `;
 
+export const COLLECTION_FRAGMENT = gql`
+  fragment CollectionFragment on Collection {
+    id
+    name
+    pictures {
+      pictureId
+      picture {
+        fileUrl
+      }
+    }
+  }
+`;
+
 export const INITIATED_FOLLOWS_FRAGMENT = gql`
   fragment InitiatedFollows on Follow {
     targetUserId
     targetUser {
       ...UserFragment
     }
-    ${USER_FRAGMENT}
-
   }
+  ${USER_FRAGMENT}
 `;
 
 export const RECEIVED_FOLLOWS_FRAGMENT = gql`
@@ -27,9 +39,8 @@ export const RECEIVED_FOLLOWS_FRAGMENT = gql`
     initiator {
       ...UserFragment
     }
-    ${USER_FRAGMENT}
-
   }
+  ${USER_FRAGMENT}
 `;
 
 export const USER_PROFILE_FRAGMENT = gql`
@@ -41,6 +52,10 @@ export const USER_PROFILE_FRAGMENT = gql`
     receivedFollows {
       ...ReceivedFollows
     }
+    collections {
+      ...CollectionFragment
+    }
+
     _count {
       pictures
       initiatedFollows
@@ -49,6 +64,7 @@ export const USER_PROFILE_FRAGMENT = gql`
   }
   ${INITIATED_FOLLOWS_FRAGMENT}
   ${RECEIVED_FOLLOWS_FRAGMENT}
+  ${COLLECTION_FRAGMENT}
   ${USER_FRAGMENT}
 `;
 

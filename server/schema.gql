@@ -63,6 +63,22 @@ type Follow {
   targetUser: User
 }
 
+type PictureOnCollection {
+  pictureId: Int!
+  picture: Picture!
+  collectionId: String!
+  collection: Collection!
+}
+
+type Collection {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+  userId: Int!
+  user: User!
+  pictures: [PictureOnCollection!]!
+}
+
 type UserCount {
   pictures: Int!
   initiatedFollows: Int!
@@ -86,11 +102,13 @@ type User {
   initiatedFollows: [Follow!]!
   receivedFollows: [Follow!]!
   likes: [Like!]
+  collections: [Collection!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type Query {
+  getCollectionsByUser(userId: Float!): [Collection!]!
   users: [User!]!
   usersByUsername(username: String!): [User!]!
   user(profileId: Float!): User!
@@ -105,6 +123,11 @@ type Query {
 type Mutation {
   likePicture(pictureId: Float!): Picture!
   unlikePicture(likeId: Float!): Picture!
+  addPictureToCollection(collectionId: Float!, pictureId: [Float!]!): [PictureOnCollection!]!
+  removePictureFromCollection(collectionId: Float!, pictureId: Float!): PictureOnCollection!
+  createCollection(name: String!): Collection!
+  deleteCollection(collectionId: Float!): Collection!
+  deleteAllCollectionsForUser(userId: Float!): Collection!
   updateUser(profileId: Float!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!
   login(email: String!, password: String!): LoginResponse!

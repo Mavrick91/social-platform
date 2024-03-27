@@ -10,7 +10,7 @@ type Props = {
 export default function SideNavLogo({ displaySmallNav }: Props) {
   return (
     <Link
-      to="/dashboard"
+      to="/"
       className="flex mb-5 w-full justify-center h-[73px] items-center"
     >
       <motion.div

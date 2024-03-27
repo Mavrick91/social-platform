@@ -31,7 +31,15 @@ async function main() {
     take: createdUsers.count,
   });
 
-  // Create mock pictures
+  for (const user of userIds) {
+    await prisma.collection.create({
+      data: {
+        name: 'All posts',
+        userId: user.id,
+      },
+    });
+  }
+
   const mockPictures = Array.from({ length: 20 }, () => ({
     fileUrl: faker.image.url(),
     fileName: faker.system.commonFileName('jpg'),

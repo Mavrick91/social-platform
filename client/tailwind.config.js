@@ -36,6 +36,8 @@ module.exports = {
         'lg-page': '935px',
       },
       colors: {
+        'ig-blue': '#0095F6',
+        'ig-blue-dark': '#00376B',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

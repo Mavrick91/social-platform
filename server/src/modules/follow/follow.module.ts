@@ -3,6 +3,6 @@ import { FollowService } from './follow.service';
 import { FollowResolver } from './follow.resolver';
 
 @Module({
-  providers: [FollowService, FollowResolver]
+  providers: [FollowService, FollowResolver],
 })
 export class FollowModule {}

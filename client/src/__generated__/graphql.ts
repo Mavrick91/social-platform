@@ -18,6 +18,16 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Collection = {
+  __typename?: 'Collection';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  pictures: Array<PictureOnCollection>;
+  user: User;
+  userId: Scalars['Int']['output'];
+};
+
 export type Comment = {
   __typename?: 'Comment';
   /** The user who created the comment */
@@ -88,19 +98,35 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addPictureToCollection: Array<PictureOnCollection>;
+  createCollection: Collection;
   createComment: Comment;
   createPicture: Picture;
   createUser: User;
+  deleteAllCollectionsForUser: Collection;
+  deleteCollection: Collection;
   deletePicture: Picture;
   followUser: Follow;
   likePicture: Picture;
   login: LoginResponse;
   removeComment: Comment;
+  removePictureFromCollection: PictureOnCollection;
   unfollowUser: Follow;
   unlikePicture: Picture;
   updateComment: Comment;
   updatePicture: Picture;
   updateUser: User;
+};
+
+
+export type MutationAddPictureToCollectionArgs = {
+  collectionId: Scalars['Float']['input'];
+  pictureId: Array<Scalars['Float']['input']>;
+};
+
+
+export type MutationCreateCollectionArgs = {
+  name: Scalars['String']['input'];
 };
 
 
@@ -116,6 +142,16 @@ export type MutationCreatePictureArgs = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserDto;
+};
+
+
+export type MutationDeleteAllCollectionsForUserArgs = {
+  userId: Scalars['Float']['input'];
+};
+
+
+export type MutationDeleteCollectionArgs = {
+  collectionId: Scalars['Float']['input'];
 };
 
 
@@ -142,6 +178,12 @@ export type MutationLoginArgs = {
 
 export type MutationRemoveCommentArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type MutationRemovePictureFromCollectionArgs = {
+  collectionId: Scalars['Float']['input'];
+  pictureId: Scalars['Float']['input'];
 };
 
 
@@ -191,11 +233,20 @@ export type PictureCount = {
   likes: Scalars['Int']['output'];
 };
 
+export type PictureOnCollection = {
+  __typename?: 'PictureOnCollection';
+  collection: Collection;
+  collectionId: Scalars['String']['output'];
+  picture: Picture;
+  pictureId: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   comment: Comment;
   comments: Array<Comment>;
   commentsByPictureId: Array<Comment>;
+  getCollectionsByUser: Array<Collection>;
   mockedUser: Array<User>;
   picturesByAuthor: Array<Picture>;
   picturesFromFollowing: Array<Picture>;
@@ -212,6 +263,11 @@ export type QueryCommentArgs = {
 
 export type QueryCommentsByPictureIdArgs = {
   pictureId: Scalars['Int']['input'];
+};
+
+
+export type QueryGetCollectionsByUserArgs = {
+  userId: Scalars['Float']['input'];
 };
 
 
@@ -270,6 +326,7 @@ export type User = {
   avatar?: Maybe<Scalars['String']['output']>;
   avatarName?: Maybe<Scalars['String']['output']>;
   bio?: Maybe<Scalars['String']['output']>;
+  collections: Array<Collection>;
   comments: Array<Comment>;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
@@ -292,6 +349,29 @@ export type UserCount = {
   pictures: Scalars['Int']['output'];
   receivedFollows: Scalars['Int']['output'];
 };
+
+export type CreateCollectionMutationVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+
+export type CreateCollectionMutation = { __typename?: 'Mutation', createCollection: { __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number }> } };
+
+export type AddPictureToCollectionMutationVariables = Exact<{
+  pictureId: Array<Scalars['Float']['input']> | Scalars['Float']['input'];
+  collectionId: Scalars['Float']['input'];
+}>;
+
+
+export type AddPictureToCollectionMutation = { __typename?: 'Mutation', addPictureToCollection: Array<{ __typename?: 'PictureOnCollection', collectionId: string, pictureId: number }> };
+
+export type RemovePictureFromCollectionMutationVariables = Exact<{
+  pictureId: Scalars['Float']['input'];
+  collectionId: Scalars['Float']['input'];
+}>;
+
+
+export type RemovePictureFromCollectionMutation = { __typename?: 'Mutation', removePictureFromCollection: { __typename?: 'PictureOnCollection', pictureId: number } };
 
 export type CommentPictureMutationVariables = Exact<{
   createCommentInput: CreateCommentInput;
@@ -373,6 +453,13 @@ export type UpdateUserProfileMutationVariables = Exact<{
 
 export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } };
 
+export type GetCollectionsQueryVariables = Exact<{
+  userId: Scalars['Float']['input'];
+}>;
+
+
+export type GetCollectionsQuery = { __typename?: 'Query', getCollectionsByUser: Array<{ __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, fileUrl: string } }> }> };
+
 export type GetCommentsByPictureQueryVariables = Exact<{
   pictureId: Scalars['Int']['input'];
 }>;
@@ -398,18 +485,20 @@ export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFrom
 
 export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
 
+export type CollectionFragmentFragment = { __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> };
+
 export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
 export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
+export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
 
 export type GetUserProfileQueryVariables = Exact<{
   profileId: Scalars['Float']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -474,6 +563,18 @@ export const ReceivedFollowsFragmentDoc = gql`
   }
 }
     ${UserFragmentFragmentDoc}`;
+export const CollectionFragmentFragmentDoc = gql`
+    fragment CollectionFragment on Collection {
+  id
+  name
+  pictures {
+    pictureId
+    picture {
+      fileUrl
+    }
+  }
+}
+    `;
 export const UserProfileFragmentDoc = gql`
     fragment UserProfile on User {
   ...UserFragment
@@ -483,6 +584,9 @@ export const UserProfileFragmentDoc = gql`
   receivedFollows {
     ...ReceivedFollows
   }
+  collections {
+    ...CollectionFragment
+  }
   _count {
     pictures
     initiatedFollows
@@ -491,7 +595,114 @@ export const UserProfileFragmentDoc = gql`
 }
     ${UserFragmentFragmentDoc}
 ${InitiatedFollowsFragmentDoc}
-${ReceivedFollowsFragmentDoc}`;
+${ReceivedFollowsFragmentDoc}
+${CollectionFragmentFragmentDoc}`;
+export const CreateCollectionDocument = gql`
+    mutation CreateCollection($name: String!) {
+  createCollection(name: $name) {
+    id
+    name
+    pictures {
+      pictureId
+    }
+  }
+}
+    `;
+export type CreateCollectionMutationFn = Apollo.MutationFunction<CreateCollectionMutation, CreateCollectionMutationVariables>;
+
+/**
+ * __useCreateCollectionMutation__
+ *
+ * To run a mutation, you first call `useCreateCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCollectionMutation, { data, loading, error }] = useCreateCollectionMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateCollectionMutation(baseOptions?: Apollo.MutationHookOptions<CreateCollectionMutation, CreateCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCollectionMutation, CreateCollectionMutationVariables>(CreateCollectionDocument, options);
+      }
+export type CreateCollectionMutationHookResult = ReturnType<typeof useCreateCollectionMutation>;
+export type CreateCollectionMutationResult = Apollo.MutationResult<CreateCollectionMutation>;
+export type CreateCollectionMutationOptions = Apollo.BaseMutationOptions<CreateCollectionMutation, CreateCollectionMutationVariables>;
+export const AddPictureToCollectionDocument = gql`
+    mutation AddPictureToCollection($pictureId: [Float!]!, $collectionId: Float!) {
+  addPictureToCollection(pictureId: $pictureId, collectionId: $collectionId) {
+    collectionId
+    pictureId
+  }
+}
+    `;
+export type AddPictureToCollectionMutationFn = Apollo.MutationFunction<AddPictureToCollectionMutation, AddPictureToCollectionMutationVariables>;
+
+/**
+ * __useAddPictureToCollectionMutation__
+ *
+ * To run a mutation, you first call `useAddPictureToCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPictureToCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPictureToCollectionMutation, { data, loading, error }] = useAddPictureToCollectionMutation({
+ *   variables: {
+ *      pictureId: // value for 'pictureId'
+ *      collectionId: // value for 'collectionId'
+ *   },
+ * });
+ */
+export function useAddPictureToCollectionMutation(baseOptions?: Apollo.MutationHookOptions<AddPictureToCollectionMutation, AddPictureToCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddPictureToCollectionMutation, AddPictureToCollectionMutationVariables>(AddPictureToCollectionDocument, options);
+      }
+export type AddPictureToCollectionMutationHookResult = ReturnType<typeof useAddPictureToCollectionMutation>;
+export type AddPictureToCollectionMutationResult = Apollo.MutationResult<AddPictureToCollectionMutation>;
+export type AddPictureToCollectionMutationOptions = Apollo.BaseMutationOptions<AddPictureToCollectionMutation, AddPictureToCollectionMutationVariables>;
+export const RemovePictureFromCollectionDocument = gql`
+    mutation RemovePictureFromCollection($pictureId: Float!, $collectionId: Float!) {
+  removePictureFromCollection(pictureId: $pictureId, collectionId: $collectionId) {
+    pictureId
+  }
+}
+    `;
+export type RemovePictureFromCollectionMutationFn = Apollo.MutationFunction<RemovePictureFromCollectionMutation, RemovePictureFromCollectionMutationVariables>;
+
+/**
+ * __useRemovePictureFromCollectionMutation__
+ *
+ * To run a mutation, you first call `useRemovePictureFromCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemovePictureFromCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removePictureFromCollectionMutation, { data, loading, error }] = useRemovePictureFromCollectionMutation({
+ *   variables: {
+ *      pictureId: // value for 'pictureId'
+ *      collectionId: // value for 'collectionId'
+ *   },
+ * });
+ */
+export function useRemovePictureFromCollectionMutation(baseOptions?: Apollo.MutationHookOptions<RemovePictureFromCollectionMutation, RemovePictureFromCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemovePictureFromCollectionMutation, RemovePictureFromCollectionMutationVariables>(RemovePictureFromCollectionDocument, options);
+      }
+export type RemovePictureFromCollectionMutationHookResult = ReturnType<typeof useRemovePictureFromCollectionMutation>;
+export type RemovePictureFromCollectionMutationResult = Apollo.MutationResult<RemovePictureFromCollectionMutation>;
+export type RemovePictureFromCollectionMutationOptions = Apollo.BaseMutationOptions<RemovePictureFromCollectionMutation, RemovePictureFromCollectionMutationVariables>;
 export const CommentPictureDocument = gql`
     mutation CommentPicture($createCommentInput: CreateCommentInput!) {
   createComment(createCommentInput: $createCommentInput) {
@@ -871,6 +1082,53 @@ export function useUpdateUserProfileMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserProfileMutationHookResult = ReturnType<typeof useUpdateUserProfileMutation>;
 export type UpdateUserProfileMutationResult = Apollo.MutationResult<UpdateUserProfileMutation>;
 export type UpdateUserProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>;
+export const GetCollectionsDocument = gql`
+    query GetCollections($userId: Float!) {
+  getCollectionsByUser(userId: $userId) {
+    id
+    name
+    pictures {
+      picture {
+        id
+        fileUrl
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCollectionsQuery__
+ *
+ * To run a query within a React component, call `useGetCollectionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCollectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCollectionsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetCollectionsQuery(baseOptions: Apollo.QueryHookOptions<GetCollectionsQuery, GetCollectionsQueryVariables> & ({ variables: GetCollectionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCollectionsQuery, GetCollectionsQueryVariables>(GetCollectionsDocument, options);
+      }
+export function useGetCollectionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCollectionsQuery, GetCollectionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCollectionsQuery, GetCollectionsQueryVariables>(GetCollectionsDocument, options);
+        }
+export function useGetCollectionsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCollectionsQuery, GetCollectionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCollectionsQuery, GetCollectionsQueryVariables>(GetCollectionsDocument, options);
+        }
+export type GetCollectionsQueryHookResult = ReturnType<typeof useGetCollectionsQuery>;
+export type GetCollectionsLazyQueryHookResult = ReturnType<typeof useGetCollectionsLazyQuery>;
+export type GetCollectionsSuspenseQueryHookResult = ReturnType<typeof useGetCollectionsSuspenseQuery>;
+export type GetCollectionsQueryResult = Apollo.QueryResult<GetCollectionsQuery, GetCollectionsQueryVariables>;
 export const GetCommentsByPictureDocument = gql`
     query GetCommentsByPicture($pictureId: Int!) {
   commentsByPictureId(pictureId: $pictureId) {
