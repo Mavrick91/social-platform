@@ -1,5 +1,6 @@
 import NewCollectionDialog from '@/components/NewCollectionDialog';
 import { useUserInfo } from '@/providers/UserInfoProvider';
+import { Link } from 'react-router-dom';
 
 export default function UserCollections() {
   const user = useUserInfo();
@@ -19,7 +20,8 @@ export default function UserCollections() {
       <div>
         <div className="grid grid-cols-3 gap-1">
           {user.collections?.map((collection) => (
-            <button
+            <Link
+              to={`/${user.username}/${collection.nameId}`}
               key={collection.id}
               type="button"
               className="relative col-span-1 grid grid-cols-2 bg-gradient-to-t from-black/50 hover:from-black/40 to-transparent aspect-square border border-gray-200 rounded-md"
@@ -35,7 +37,7 @@ export default function UserCollections() {
               <h2 className="absolute bottom-5 left-5 text-white text-xl">
                 {collection.name}
               </h2>
-            </button>
+            </Link>
           ))}
         </div>
       </div>

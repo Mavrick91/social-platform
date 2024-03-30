@@ -48,15 +48,20 @@ export class CollectionService {
     });
   }
 
-  async getCollectionsByUser(userId: number): Promise<Collection[]> {
-    return this.prisma.collection.findMany({
+  async getCollection(collectionName: string): Promise<Collection> {
+    return this.prisma.collection.findFirst({
       where: {
-        userId: userId,
+        nameId: collectionName,
       },
       include: {
         pictures: {
           include: {
-            picture: true,
+            picture: {
+              include: {
+                user: true,
+                _count: true,
+              },
+            },
           },
         },
       },

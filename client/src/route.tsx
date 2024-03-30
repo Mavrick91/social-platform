@@ -6,6 +6,7 @@ import Dashboard from '@/pages/Dashboard';
 import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
 import Profile from '@/pages/Profile';
 import Explore from '@/pages/Explore';
+import Collection from './pages/Collection';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
     element: (
       <AuthenticatedLayout>
         <Profile />
+      </AuthenticatedLayout>
+    ),
+  },
+  {
+    path: '/:username/:collectionName',
+    element: (
+      <AuthenticatedLayout>
+        <Collection />
       </AuthenticatedLayout>
     ),
   },

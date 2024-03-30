@@ -1,11 +1,11 @@
+import { useGetUserProfileQuery } from '@/__generated__/graphql';
 import { cn } from '@/lib/utils';
 import { Bookmark, Grid3X3, SquareUser } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ThumbnailGrid from '../../components/ThumbnailGrid';
 import UserCollections from './UserCollections';
 import UserProfile from './UserProfile';
-import { useGetUserProfileQuery } from '@/__generated__/graphql';
+import UserPosts from './UserProfile/UserPosts';
 
 function Profile() {
   const { username } = useParams();
@@ -22,7 +22,7 @@ function Profile() {
     () => [
       {
         name: 'Posts',
-        component: <ThumbnailGrid />,
+        component: <UserPosts />,
         icon: <Grid3X3 size={12} />,
       },
       {

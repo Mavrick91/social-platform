@@ -109,7 +109,7 @@ type User {
 }
 
 type Query {
-  getCollectionsByUser(userId: Float!): [Collection!]!
+  getCollection(collectionName: String!): Collection!
   users: [User!]!
   usersByUsername(username: String!): [User!]!
   user(username: String!): User!

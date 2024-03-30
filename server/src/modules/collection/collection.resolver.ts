@@ -44,12 +44,12 @@ export class CollectionResolver {
     return this.collectionService.createCollection(user.id, name);
   }
 
-  @Query(() => [CollectionResponse])
+  @Query(() => CollectionResponse)
   @UseGuards(GqlAuthGuard)
-  async getCollectionsByUser(
-    @Args('userId') userId: number,
-  ): Promise<Collection[]> {
-    return this.collectionService.getCollectionsByUser(userId);
+  async getCollection(
+    @Args('collectionName') collectionName: string,
+  ): Promise<Collection> {
+    return this.collectionService.getCollection(collectionName);
   }
 
   @Mutation(() => CollectionResponse)

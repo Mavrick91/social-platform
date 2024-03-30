@@ -15,6 +15,7 @@ export const COLLECTION_FRAGMENT = gql`
   fragment CollectionFragment on Collection {
     id
     name
+    nameId
     pictures {
       pictureId
       picture {

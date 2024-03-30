@@ -1,16 +1,18 @@
 import { gql } from '@apollo/client';
+import { PICTURE_FRAGMENT } from './picture';
 
-export const GET_COLLECTIONS = gql`
-  query GetCollections($userId: Float!) {
-    getCollectionsByUser(userId: $userId) {
+export const GET_COLLECTION = gql`
+  query GetCollection($collectionName: String!) {
+    getCollection(collectionName: $collectionName) {
       id
       name
       pictures {
         picture {
-          id
-          fileUrl
+          ...PictureFragment
         }
       }
     }
   }
+
+  ${PICTURE_FRAGMENT}
 `;

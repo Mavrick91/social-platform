@@ -23,6 +23,7 @@ export type Collection = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  nameId: Scalars['String']['output'];
   pictures: Array<PictureOnCollection>;
   user: User;
   userId: Scalars['Int']['output'];
@@ -246,7 +247,7 @@ export type Query = {
   comment: Comment;
   comments: Array<Comment>;
   commentsByPictureId: Array<Comment>;
-  getCollectionsByUser: Array<Collection>;
+  getCollection: Collection;
   mockedUser: Array<User>;
   picturesByUsername: Array<Picture>;
   picturesFromFollowing: Array<Picture>;
@@ -266,8 +267,8 @@ export type QueryCommentsByPictureIdArgs = {
 };
 
 
-export type QueryGetCollectionsByUserArgs = {
-  userId: Scalars['Float']['input'];
+export type QueryGetCollectionArgs = {
+  collectionName: Scalars['String']['input'];
 };
 
 
@@ -453,12 +454,12 @@ export type UpdateUserProfileMutationVariables = Exact<{
 
 export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } };
 
-export type GetCollectionsQueryVariables = Exact<{
-  userId: Scalars['Float']['input'];
+export type GetCollectionQueryVariables = Exact<{
+  collectionName: Scalars['String']['input'];
 }>;
 
 
-export type GetCollectionsQuery = { __typename?: 'Query', getCollectionsByUser: Array<{ __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, fileUrl: string } }> }> };
+export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
 
 export type GetCommentsByPictureQueryVariables = Exact<{
   pictureId: Scalars['Int']['input'];
@@ -485,20 +486,20 @@ export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFrom
 
 export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
 
-export type CollectionFragmentFragment = { __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> };
+export type CollectionFragmentFragment = { __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> };
 
 export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
 export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
+export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
 
 export type GetUserProfileQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', fileUrl: string } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -567,6 +568,7 @@ export const CollectionFragmentFragmentDoc = gql`
     fragment CollectionFragment on Collection {
   id
   name
+  nameId
   pictures {
     pictureId
     picture {
@@ -1082,53 +1084,52 @@ export function useUpdateUserProfileMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserProfileMutationHookResult = ReturnType<typeof useUpdateUserProfileMutation>;
 export type UpdateUserProfileMutationResult = Apollo.MutationResult<UpdateUserProfileMutation>;
 export type UpdateUserProfileMutationOptions = Apollo.BaseMutationOptions<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>;
-export const GetCollectionsDocument = gql`
-    query GetCollections($userId: Float!) {
-  getCollectionsByUser(userId: $userId) {
+export const GetCollectionDocument = gql`
+    query GetCollection($collectionName: String!) {
+  getCollection(collectionName: $collectionName) {
     id
     name
     pictures {
       picture {
-        id
-        fileUrl
+        ...PictureFragment
       }
     }
   }
 }
-    `;
+    ${PictureFragmentFragmentDoc}`;
 
 /**
- * __useGetCollectionsQuery__
+ * __useGetCollectionQuery__
  *
- * To run a query within a React component, call `useGetCollectionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCollectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCollectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCollectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCollectionsQuery({
+ * const { data, loading, error } = useGetCollectionQuery({
  *   variables: {
- *      userId: // value for 'userId'
+ *      collectionName: // value for 'collectionName'
  *   },
  * });
  */
-export function useGetCollectionsQuery(baseOptions: Apollo.QueryHookOptions<GetCollectionsQuery, GetCollectionsQueryVariables> & ({ variables: GetCollectionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetCollectionQuery(baseOptions: Apollo.QueryHookOptions<GetCollectionQuery, GetCollectionQueryVariables> & ({ variables: GetCollectionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCollectionsQuery, GetCollectionsQueryVariables>(GetCollectionsDocument, options);
+        return Apollo.useQuery<GetCollectionQuery, GetCollectionQueryVariables>(GetCollectionDocument, options);
       }
-export function useGetCollectionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCollectionsQuery, GetCollectionsQueryVariables>) {
+export function useGetCollectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCollectionQuery, GetCollectionQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCollectionsQuery, GetCollectionsQueryVariables>(GetCollectionsDocument, options);
+          return Apollo.useLazyQuery<GetCollectionQuery, GetCollectionQueryVariables>(GetCollectionDocument, options);
         }
-export function useGetCollectionsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCollectionsQuery, GetCollectionsQueryVariables>) {
+export function useGetCollectionSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCollectionQuery, GetCollectionQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCollectionsQuery, GetCollectionsQueryVariables>(GetCollectionsDocument, options);
+          return Apollo.useSuspenseQuery<GetCollectionQuery, GetCollectionQueryVariables>(GetCollectionDocument, options);
         }
-export type GetCollectionsQueryHookResult = ReturnType<typeof useGetCollectionsQuery>;
-export type GetCollectionsLazyQueryHookResult = ReturnType<typeof useGetCollectionsLazyQuery>;
-export type GetCollectionsSuspenseQueryHookResult = ReturnType<typeof useGetCollectionsSuspenseQuery>;
-export type GetCollectionsQueryResult = Apollo.QueryResult<GetCollectionsQuery, GetCollectionsQueryVariables>;
+export type GetCollectionQueryHookResult = ReturnType<typeof useGetCollectionQuery>;
+export type GetCollectionLazyQueryHookResult = ReturnType<typeof useGetCollectionLazyQuery>;
+export type GetCollectionSuspenseQueryHookResult = ReturnType<typeof useGetCollectionSuspenseQuery>;
+export type GetCollectionQueryResult = Apollo.QueryResult<GetCollectionQuery, GetCollectionQueryVariables>;
 export const GetCommentsByPictureDocument = gql`
     query GetCommentsByPicture($pictureId: Int!) {
   commentsByPictureId(pictureId: $pictureId) {

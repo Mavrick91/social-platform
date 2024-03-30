@@ -1,28 +1,24 @@
-import { useGetPictureByUserQuery } from '@/__generated__/graphql';
-import { useParams } from 'react-router-dom';
+import { PictureFragmentFragment } from '@/__generated__/graphql';
 import ThumbnailGridItem from './ThumbnailGridItem';
 import Loading from './loading';
 
-function ThumbnailGrid() {
-  const { username } = useParams();
+type ThumbnailGridProps = {
+  pictures?: PictureFragmentFragment[];
+  loading: boolean;
+};
 
-  const { data, loading } = useGetPictureByUserQuery({
-    variables: { username },
-    fetchPolicy: 'network-only',
-  });
+function ThumbnailGrid({ pictures, loading }: ThumbnailGridProps) {
+  if (loading) {
+    return Array.from({ length: 4 }).map((_, index) => <Loading key={index} />);
+  }
 
   return (
-    <>
-      <div className="grid w-full grid-cols-3 gap-1">
-        {data && !loading
-          ? data.picturesByUsername.map((picture) => (
-              <ThumbnailGridItem picture={picture} key={picture.id} />
-            ))
-          : Array.from({ length: 4 }).map((_, index) => (
-              <Loading key={index} />
-            ))}
-      </div>
-    </>
+    <div className="grid w-full grid-cols-3 gap-1">
+      {pictures &&
+        pictures.map((picture) => (
+          <ThumbnailGridItem picture={picture} key={picture.id} />
+        ))}
+    </div>
   );
 }
 
