@@ -67,6 +67,7 @@ export class CollectionService {
     return this.prisma.collection.create({
       data: {
         name,
+        nameId: name.toLowerCase().replace(/ /g, '-'),
         user: {
           connect: {
             id: userId,

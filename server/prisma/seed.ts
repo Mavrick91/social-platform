@@ -35,6 +35,7 @@ async function main() {
     await prisma.collection.create({
       data: {
         name: 'All posts',
+        nameId: 'all-posts',
         userId: user.id,
       },
     });

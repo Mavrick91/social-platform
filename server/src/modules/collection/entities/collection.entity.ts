@@ -10,6 +10,9 @@ export class Collection {
   @Field()
   name: string;
 
+  @Field()
+  nameId: string;
+
   @Field(() => Date)
   createdAt: Date;
 

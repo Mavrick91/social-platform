@@ -73,6 +73,7 @@ type PictureOnCollection {
 type Collection {
   id: ID!
   name: String!
+  nameId: String!
   createdAt: DateTime!
   userId: Int!
   user: User!

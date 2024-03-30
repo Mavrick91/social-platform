@@ -100,7 +100,6 @@ export class UserService {
         },
       },
     });
-    console.log('🚀 ~ user:', user);
 
     return user;
   }
@@ -135,6 +134,7 @@ export class UserService {
     await this.prisma.collection.create({
       data: {
         name: 'All posts',
+        nameId: 'all-posts',
         userId: user.id,
       },
     });
