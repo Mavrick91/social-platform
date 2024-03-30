@@ -44,7 +44,7 @@ async function main() {
     fileUrl: faker.image.url(),
     fileName: faker.system.commonFileName('jpg'),
     description: faker.lorem.sentence(),
-    authorId: faker.helpers.arrayElement(userIds).id,
+    userId: faker.helpers.arrayElement(userIds).id,
   }));
 
   const createdPictures = await prisma.picture.createMany({
@@ -59,7 +59,7 @@ async function main() {
   // Create mock comments
   const mockComments = Array.from({ length: 50 }, () => ({
     content: faker.lorem.paragraph(),
-    authorId: faker.helpers.arrayElement(userIds).id,
+    userId: faker.helpers.arrayElement(userIds).id,
     pictureId: faker.helpers.arrayElement(pictureIds).id,
   }));
 

@@ -8,7 +8,7 @@ export const PICTURE_FRAGMENT = gql`
     createdAt
     updatedAt
     fileUrl
-    author {
+    user {
       ...UserFragment
     }
     likes {
@@ -24,9 +24,9 @@ export const PICTURE_FRAGMENT = gql`
   ${USER_FRAGMENT}
 `;
 
-export const GET_PICTURE_BY_AUTHOR = gql`
-  query GetPictureByAuthor($authorId: Float) {
-    picturesByAuthor(authorId: $authorId) {
+export const GET_PICTURE_BY_USERNAME = gql`
+  query GetPictureByUser($username: String) {
+    picturesByUsername(username: $username) {
       ...PictureFragment
     }
   }
@@ -34,8 +34,8 @@ export const GET_PICTURE_BY_AUTHOR = gql`
 `;
 
 export const GET_PICTURE_FROM_FOLLOWING = gql`
-  query GetPicturesFromFollowing($authorId: [Float!]!) {
-    picturesFromFollowing(authorId: $authorId) {
+  query GetPicturesFromFollowing($userId: [Float!]!) {
+    picturesFromFollowing(userId: $userId) {
       ...PictureFragment
     }
   }

@@ -22,7 +22,7 @@ export default function PostHeader({
   profileId,
   pictureId,
 }: Props) {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   const isFollowingCurrentProfile = user.initiatedFollows.some(
     (follow) => follow.targetUserId === profileId
@@ -31,12 +31,12 @@ export default function PostHeader({
   return (
     <div className="flex justify-between items-center mb-3 ml-1">
       <div className="flex items-center">
-        <Link to={`/profile/${profileId}`} className="shrink-0">
+        <Link to={`/${username}`} className="shrink-0">
           <UserAvatar avatar={avatar} className="size-8" />
         </Link>
         <div className="ml-3">
           <p className="text-sm font-semibold">
-            <Link to={`/profile/${profileId}`} className="shrink-0">
+            <Link to={`/${username}`} className="shrink-0">
               <span>{username}</span>
             </Link>{' '}
             •{' '}

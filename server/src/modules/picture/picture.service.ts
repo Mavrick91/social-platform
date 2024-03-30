@@ -2,18 +2,28 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
-import { Picture } from '@prisma/client';
+import { Picture, User } from '@prisma/client';
 
 @Injectable()
 export class PictureService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByAuthor(authorId?: number): Promise<Picture[]> {
+  async findByUsername(username?: string): Promise<Picture[]> {
+    let user: User | null = null;
+
+    if (username) {
+      user = await this.prisma.user.findUnique({
+        where: {
+          username,
+        },
+      });
+    }
+
     const pictures = await this.prisma.picture.findMany({
-      where: authorId ? { authorId } : undefined,
+      where: { userId: user ? user.id : undefined },
       orderBy: { createdAt: 'desc' },
       include: {
-        author: true,
+        user: true,
         _count: {
           select: {
             comments: true,
@@ -26,16 +36,16 @@ export class PictureService {
     return pictures;
   }
 
-  async findByFollowing(authorId: number[]): Promise<Picture[]> {
+  async findByFollowing(userId: number[]): Promise<Picture[]> {
     const pictures = await this.prisma.picture.findMany({
       where: {
-        authorId: {
-          in: authorId,
+        userId: {
+          in: userId,
         },
       },
       orderBy: { createdAt: 'desc' },
       include: {
-        author: true,
+        user: true,
         likes: true,
         _count: {
           select: {
@@ -71,7 +81,7 @@ export class PictureService {
       const picture = await this.prisma.picture.delete({
         where: { id },
         include: {
-          author: true,
+          user: true,
           likes: true,
         },
       });

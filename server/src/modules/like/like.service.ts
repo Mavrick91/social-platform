@@ -18,7 +18,7 @@ export class LikeService {
         id: pictureId,
       },
       include: {
-        author: true,
+        user: true,
         likes: true,
         _count: {
           select: {
@@ -44,7 +44,7 @@ export class LikeService {
         id: like.pictureId,
       },
       include: {
-        author: true,
+        user: true,
         likes: true,
         _count: {
           select: {

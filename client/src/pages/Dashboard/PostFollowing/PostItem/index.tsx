@@ -14,17 +14,17 @@ export default function PostItem({ picture }: Props) {
   return (
     <div className="max-w-lg mx-auto">
       <PostHeader
-        profileId={picture.author?.id}
-        avatar={picture.author?.avatar}
-        username={picture.author.username}
+        profileId={picture.user?.id}
+        avatar={picture.user?.avatar}
+        username={picture.user.username}
         createdAt={picture.createdAt}
         pictureId={picture.id}
       />
       <PostPicture picture={picture} />
       <PostCaption
         description={picture.description}
-        firstName={picture.author?.firstName}
-        lastName={picture.author?.lastName}
+        firstName={picture.user?.firstName}
+        lastName={picture.user?.lastName}
       />
       <PostComments commentCount={picture._count.comments} picture={picture} />
       <PostAddComment pictureId={picture.id} />

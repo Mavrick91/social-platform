@@ -8,7 +8,7 @@ export class CreateCommentInput {
   @Field(() => Int, {
     description: 'The ID of the user who created the comment',
   })
-  authorId: number;
+  userId: number;
 
   @Field(() => Int, {
     description: 'The ID of the picture the comment belongs to',

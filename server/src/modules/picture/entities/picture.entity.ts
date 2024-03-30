@@ -27,7 +27,7 @@ export class Picture {
   description?: string;
 
   @Field(() => User)
-  author: User;
+  user: User;
 
   @Field(() => [Like], { defaultValue: [] })
   likes: Like[];

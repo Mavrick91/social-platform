@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function PostPicture({ picture }: Props) {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
   const likeId = picture.likes.find((like) => like.userId === user.id)?.id;
   const pictureInCollection = user.collections[0].pictures.find(
     (pic) => pic.pictureId === picture.id

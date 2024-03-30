@@ -15,8 +15,8 @@ type Comment {
   content: String!
 
   """The user who created the comment"""
-  author: User
-  authorId: Int
+  user: User
+  userId: Int
 
   """The picture the comment belongs to"""
   picture: Picture
@@ -48,7 +48,7 @@ type Picture {
   fileUrl: String!
   fileName: String
   description: String
-  author: User!
+  user: User!
   likes: [Like!]!
   comments: [Comment!]
   _count: PictureCount!
@@ -111,10 +111,10 @@ type Query {
   getCollectionsByUser(userId: Float!): [Collection!]!
   users: [User!]!
   usersByUsername(username: String!): [User!]!
-  user(profileId: Float!): User!
+  user(username: String!): User!
   mockedUser: [User!]!
-  picturesByAuthor(authorId: Float): [Picture!]!
-  picturesFromFollowing(authorId: [Float!]!): [Picture!]!
+  picturesByUsername(username: String): [Picture!]!
+  picturesFromFollowing(userId: [Float!]!): [Picture!]!
   commentsByPictureId(pictureId: Int!): [Comment!]!
   comments: [Comment!]!
   comment(id: Int!): Comment!
@@ -128,7 +128,7 @@ type Mutation {
   createCollection(name: String!): Collection!
   deleteCollection(collectionId: Float!): Collection!
   deleteAllCollectionsForUser(userId: Float!): Collection!
-  updateUser(profileId: Float!, updateUserInput: UpdateUserDto!): User!
+  updateUser(username: String!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!
   login(email: String!, password: String!): LoginResponse!
   createPicture(input: CreatePictureInput!): Picture!
@@ -159,14 +159,14 @@ input CreateUserDto {
 
 input CreatePictureInput {
   description: String
-  authorId: Float!
+  userId: Float!
   fileUrl: String!
   fileName: String!
 }
 
 input UpdatePictureInput {
   description: String
-  authorId: Float
+  userId: Float
   fileUrl: String
   fileName: String
 }
@@ -176,7 +176,7 @@ input CreateCommentInput {
   content: String!
 
   """The ID of the user who created the comment"""
-  authorId: Int!
+  userId: Int!
 
   """The ID of the picture the comment belongs to"""
   pictureId: Int!
@@ -187,7 +187,7 @@ input UpdateCommentInput {
   content: String
 
   """The ID of the user who created the comment"""
-  authorId: Int
+  userId: Int
 
   """The ID of the picture the comment belongs to"""
   pictureId: Int

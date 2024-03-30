@@ -43,7 +43,7 @@ type FormData = z.infer<typeof ProfileSchema>;
 export default function EditProfileDialog({ children }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);
-  const { user } = useUserInfo();
+  const user = useUserInfo();
   const {
     register,
     handleSubmit,
@@ -77,7 +77,7 @@ export default function EditProfileDialog({ children }: Props) {
       }
 
       const variables: UpdateUserProfileMutationVariables = {
-        profileId: user.id,
+        username: user.username,
         updateUserInput: {
           firstName: data.firstName,
           lastName: data.lastName,

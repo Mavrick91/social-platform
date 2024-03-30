@@ -42,21 +42,13 @@ export class UserService {
     if (!user) {
       throw new UnauthorizedException('Email or password is incorrect');
     }
-    const payload = {
-      email: user.email,
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
-
-    const refreshTokenPayload = { id: user.id };
 
     return {
-      accessToken: this.jwtService.sign(payload, {
+      accessToken: this.jwtService.sign(user, {
         secret: this.configService.get<string>('JWT_SECRET'),
         expiresIn: '1h',
       }),
-      refreshToken: this.jwtService.sign(refreshTokenPayload, {
+      refreshToken: this.jwtService.sign(user, {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
         expiresIn: '7d',
       }),
@@ -75,9 +67,9 @@ export class UserService {
     });
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(username: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
-      where: { id },
+      where: { username },
       include: {
         _count: {
           select: {
@@ -108,13 +100,14 @@ export class UserService {
         },
       },
     });
+    console.log('🚀 ~ user:', user);
 
     return user;
   }
 
-  async update(profileId: number, data: UpdateUserDto): Promise<User> {
+  async update(username: string, data: UpdateUserDto): Promise<User> {
     return this.prisma.user.update({
-      where: { id: profileId },
+      where: { username },
       data,
     });
   }

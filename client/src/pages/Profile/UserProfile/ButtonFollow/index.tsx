@@ -19,7 +19,7 @@ const ButtonFollow: React.FC<Props> = ({
 }) => {
   const [follow] = useFollow();
   const [unfollow] = useUnFollow();
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   const handleFollow = useCallback(async () => {
     await follow({

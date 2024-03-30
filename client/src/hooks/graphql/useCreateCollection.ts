@@ -6,7 +6,7 @@ import { USER_PROFILE_FRAGMENT } from '@/graphql/queries/user';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 
 export default function useCreateCollection() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   return useCreateCollectionMutation({
     update: (cache, { data }) => {

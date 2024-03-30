@@ -7,7 +7,7 @@ export const GET_COMMENTS_BY_PICTURE = gql`
       content
       createdAt
       updatedAt
-      author {
+      user {
         id
         firstName
         lastName

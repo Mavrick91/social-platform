@@ -63,25 +63,22 @@ function PostDetailsDialog({ children, picture }: Props) {
             <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-bg-border flex-col">
               <div className="flex pt-3 pl-3 flex-col">
                 <div className="flex gap-3">
-                  <Link
-                    className="shrink-0"
-                    to={`/profile/${picture?.author?.id}`}
-                  >
+                  <Link className="shrink-0" to={`/${picture?.user.username}`}>
                     <UserAvatar
-                      avatar={picture?.author?.avatar}
+                      avatar={picture?.user?.avatar}
                       className="size-9"
-                      alt={`${picture?.author?.firstName} ${picture?.author?.lastName}`}
+                      alt={`${picture?.user?.firstName} ${picture?.user?.lastName}`}
                     />
                   </Link>
                   <div className="flex flex-col w-full">
                     <div className="flex justify-between items-center pr-10">
                       <Link
-                        to={`/profile/${picture?.author?.id}`}
+                        to={`/${picture?.user.username}`}
                         className="font-medium text-gray-700"
                       >
-                        {picture?.author?.firstName} {picture?.author?.lastName}
+                        {picture?.user?.firstName} {picture?.user?.lastName}
                       </Link>
-                      {picture?.id && userInfo.id === picture.author?.id && (
+                      {picture?.id && userInfo.id === picture.user?.id && (
                         <PictureAction
                           isDelete
                           pictureId={picture.id}

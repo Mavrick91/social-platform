@@ -29,7 +29,7 @@ export class CommentService {
     try {
       return await this.prisma.comment.findMany({
         where: { pictureId },
-        include: { author: true },
+        include: { user: true },
         orderBy: { createdAt: 'desc' },
       });
     } catch (error) {

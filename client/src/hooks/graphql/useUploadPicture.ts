@@ -1,12 +1,12 @@
 import { useUploadPictureMutation } from '@/__generated__/graphql';
-import { GET_PICTURE_BY_AUTHOR } from '@/graphql/queries/picture';
+import { GET_PICTURE_BY_USERNAME } from '@/graphql/queries/picture';
 import { updateUserCount } from '@/lib/cacheUtils';
 
 export function useUploadPicture(userId?: number) {
   return useUploadPictureMutation({
     refetchQueries: [
       {
-        query: GET_PICTURE_BY_AUTHOR,
+        query: GET_PICTURE_BY_USERNAME,
         variables: userId ? { authorId: userId } : undefined,
       },
     ],

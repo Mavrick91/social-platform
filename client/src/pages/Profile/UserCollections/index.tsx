@@ -2,7 +2,7 @@ import NewCollectionDialog from '@/components/NewCollectionDialog';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 
 export default function UserCollections() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   const picturesFromSaved = [...user.collections].sort(
     (a, b) => Number(a.id) - Number(b.id)

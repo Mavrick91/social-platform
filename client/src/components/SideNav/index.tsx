@@ -8,7 +8,7 @@ import { getNavigationItems } from './sideNavConfig';
 import SideNavItem from './SideNavItem';
 
 export default function SideNav() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
   const { sideNavOpen, isSearchVisible, toggleSearch } = useSideNav();
   const navigationItems = getNavigationItems(user, toggleSearch);
 

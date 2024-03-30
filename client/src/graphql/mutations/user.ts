@@ -22,10 +22,10 @@ export const LOGIN = gql`
 
 export const UPDATE_USER_PROFILE = gql`
   mutation UpdateUserProfile(
-    $profileId: Float!
+    $username: String!
     $updateUserInput: UpdateUserDto!
   ) {
-    updateUser(profileId: $profileId, updateUserInput: $updateUserInput) {
+    updateUser(username: $username, updateUserInput: $updateUserInput) {
       id
       email
       firstName

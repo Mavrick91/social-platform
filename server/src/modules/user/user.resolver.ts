@@ -40,9 +40,9 @@ export class UserResolver {
 
   @Query(() => UserResponse)
   @UseGuards(GqlAuthGuard)
-  async user(@Args('profileId') id: number): Promise<User> {
+  async user(@Args('username') username: string): Promise<User> {
     try {
-      return await this.userService.findOne(id);
+      return await this.userService.findOne(username);
     } catch (error) {
       throw new BadRequestException('User not found');
     }
@@ -60,11 +60,11 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   @UseGuards(GqlAuthGuard)
   async updateUser(
-    @Args('profileId') profileId: number,
+    @Args('username') username: string,
     @Args('updateUserInput') updateUserInput: UpdateUserDto,
   ): Promise<User> {
     try {
-      const user = await this.userService.findOne(profileId);
+      const user = await this.userService.findOne(username);
       const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
 
       if (
@@ -78,7 +78,7 @@ export class UserResolver {
         }
       }
 
-      return await this.userService.update(profileId, updateUserInput);
+      return await this.userService.update(username, updateUserInput);
     } catch (error) {
       throw new BadRequestException('Failed to update user');
     }

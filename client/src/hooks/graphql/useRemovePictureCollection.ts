@@ -7,7 +7,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { toast } from 'react-toastify';
 
 export default function useRemovePictureCollection() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   return useRemovePictureFromCollectionMutation({
     update(cache, { data }, { variables }) {

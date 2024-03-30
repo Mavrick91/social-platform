@@ -1,5 +1,6 @@
+import { UserProfileFragment } from '@/__generated__/graphql';
+import { AuthState } from '@/features/users/userSlice.ts';
 import { RootState } from '@/store';
-import { AuthState, DecodedToken } from '@/features/users/userSlice.ts';
 
 export function selectAuthState(state: RootState): AuthState {
   return state.user;
@@ -8,7 +9,7 @@ export function selectAuthState(state: RootState): AuthState {
 export const selectIsAuthenticated = (state: RootState) =>
   state.user.authStatus === 'authenticated';
 
-export function selectAuthenticatedUser(state: RootState): DecodedToken {
+export function selectAuthenticatedUser(state: RootState): UserProfileFragment {
   const authState = selectAuthState(state);
   if (selectIsAuthenticated(state)) {
     if (authState.userInfo) {

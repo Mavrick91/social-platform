@@ -36,7 +36,7 @@ function PostCommentList({ pictureId, setErrorMutation }: Props) {
             >
               <div className="flex items-center justify-between">
                 <p className="inline-flex items-center mr-3 text-base text-gray-900 dark:text-white font-semibold">
-                  {comment.author?.firstName} {comment.author?.lastName}
+                  {comment.user?.firstName} {comment.user?.lastName}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   <time>{moment(comment.createdAt).fromNow()}</time>

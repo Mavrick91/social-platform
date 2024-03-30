@@ -23,18 +23,18 @@ export class PictureResolver {
 
   @Query(() => [PictureResponse])
   @UseGuards(GqlAuthGuard)
-  async picturesByAuthor(
-    @Args('authorId', { nullable: true }) authorId?: number,
+  async picturesByUsername(
+    @Args('username', { nullable: true }) username?: string,
   ): Promise<Picture[]> {
-    return this.pictureService.findByAuthor(authorId);
+    return this.pictureService.findByUsername(username);
   }
 
   @Query(() => [PictureResponse])
   @UseGuards(GqlAuthGuard)
   async picturesFromFollowing(
-    @Args('authorId', { type: () => [Number] }) authorId?: number[],
+    @Args('userId', { type: () => [Number] }) userId?: number[],
   ): Promise<Picture[]> {
-    return this.pictureService.findByFollowing(authorId);
+    return this.pictureService.findByFollowing(userId);
   }
 
   @Mutation(() => PictureResponse)

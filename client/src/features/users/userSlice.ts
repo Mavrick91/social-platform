@@ -1,15 +1,9 @@
+import { UserProfileFragment } from '@/__generated__/graphql';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface DecodedToken {
-  firstName: string;
-  lastName: string;
-  email: string;
-  id: number;
-}
 
 export interface AuthState {
   authStatus: 'idle' | 'authenticated' | 'unauthenticated';
-  userInfo: DecodedToken | null;
+  userInfo: UserProfileFragment | null;
   accessToken: string | null;
   refreshToken: string | null;
 }
@@ -42,7 +36,7 @@ export const userSlice = createSlice({
       state.accessToken = null;
       state.refreshToken = null;
     },
-    setUserInfo: (state, action: PayloadAction<DecodedToken>) => {
+    setUserInfo: (state, action: PayloadAction<UserProfileFragment>) => {
       state.userInfo = action.payload;
     },
   },

@@ -47,7 +47,7 @@ const PostAction = ({
   profileId,
   handleOpenUpdatePictureDialog,
 }: Props) => {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   const [deletePicture, { loading }] = useDeletePicture();
   const [unfollow] = useUnFollow();

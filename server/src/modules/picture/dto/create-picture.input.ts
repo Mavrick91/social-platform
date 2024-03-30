@@ -6,7 +6,7 @@ export class CreatePictureInput {
   description?: string;
 
   @Field()
-  authorId: number;
+  userId: number;
 
   @Field()
   fileUrl: string;

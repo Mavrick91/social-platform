@@ -26,7 +26,7 @@ type Props = {
 };
 
 export default function DropdownMore({ displaySmallNav }: Props) {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

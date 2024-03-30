@@ -14,12 +14,12 @@ export class Comment {
     description: 'The user who created the comment',
     nullable: true,
   })
-  author?: User;
+  user?: User;
 
   @Field(() => Int, {
     nullable: true,
   })
-  authorId?: number;
+  userId?: number;
 
   @Field(() => Picture, {
     nullable: true,

@@ -69,8 +69,8 @@ export const USER_PROFILE_FRAGMENT = gql`
 `;
 
 export const GET_USER_PROFILE = gql`
-  query GetUserProfile($profileId: Float!) {
-    user(profileId: $profileId) {
+  query GetUserProfile($username: String!) {
+    user(username: $username) {
       ...UserProfile
     }
   }

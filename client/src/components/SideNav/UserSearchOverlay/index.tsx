@@ -69,7 +69,7 @@ export default function UserSearchOverlay() {
       {/* Render search results */}
       {data?.usersByUsername.map((user) => (
         <Link
-          to={`/profile/${user.id}`}
+          to={`/${user.username}`}
           key={user.id}
           className="py-2 px-6 transition-colors flex gap-2 hover:bg-[#e3e3e3] items-center"
         >

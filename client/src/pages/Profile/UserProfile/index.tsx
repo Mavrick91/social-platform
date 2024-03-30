@@ -1,38 +1,17 @@
-import {
-  UserProfileFragment,
-  useGetUserProfileQuery,
-} from '@/__generated__/graphql';
+import { UserProfileFragment } from '@/__generated__/graphql';
 import FollowersDialog from '@/components/FollowersDialog';
+import { Pluralize } from '@/components/Pluralize';
 import UserAvatar from '@/components/UserAvatar';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ButtonFollow from './ButtonFollow';
 import OwnProfile from './OwnProfile';
-import { Pluralize } from '@/components/Pluralize';
 
 type Props = {
-  profileId: number;
+  currentProfile: UserProfileFragment;
 };
 
-function UserProfile({ profileId }: Props) {
-  const { user } = useUserInfo();
-  const navigate = useNavigate();
-  const { data, loading, error } = useGetUserProfileQuery({
-    variables: { profileId },
-  });
-
-  useEffect(() => {
-    if (error) {
-      navigate(`/profile/${user.id}`);
-    }
-  }, [error, navigate, user.id]);
-
-  if (loading || !data) {
-    return null;
-  }
-
-  const currentProfile = data.user as UserProfileFragment;
+function UserProfile({ currentProfile }: Props) {
+  const user = useUserInfo();
 
   const isFollowingCurrentProfile = user.initiatedFollows.some(
     (follow) => follow.targetUserId === currentProfile.id
@@ -59,7 +38,7 @@ function UserProfile({ profileId }: Props) {
               ) : (
                 <ButtonFollow
                   isFollowing={isFollowingCurrentProfile}
-                  targetUserId={profileId}
+                  targetUserId={currentProfile.id}
                   className="bg-blue-500 hover:bg-blue-600"
                 />
               )}

@@ -19,7 +19,7 @@ export default function PostAddComment({ pictureId }: Props) {
   const { reset, register, handleSubmit, watch } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
-  const { user } = useUserInfo();
+  const user = useUserInfo();
   const [createComment] = useCreateComment();
   const watchComment = watch('comment');
 
@@ -27,7 +27,7 @@ export default function PostAddComment({ pictureId }: Props) {
     await createComment({
       variables: {
         createCommentInput: {
-          authorId: user.id,
+          userId: user.id,
           pictureId,
           content: data.comment,
         },

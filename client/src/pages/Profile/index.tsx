@@ -1,21 +1,22 @@
-import { selectAuthenticatedUser } from '@/features/users/selectors';
-import { useAppSelector } from '@/store/hooks';
+import { cn } from '@/lib/utils';
+import { Bookmark, Grid3X3, SquareUser } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ThumbnailGrid from '../../components/ThumbnailGrid';
-import UserProfile from './UserProfile';
-import { cn } from '@/lib/utils';
-import { Bookmark, Grid3X3, SquareUser } from 'lucide-react';
 import UserCollections from './UserCollections';
+import UserProfile from './UserProfile';
+import { useGetUserProfileQuery } from '@/__generated__/graphql';
 
 function Profile() {
-  const userInfo = useAppSelector(selectAuthenticatedUser);
-  const navigate = useNavigate();
-  const profileId = Number(useParams().profileId);
+  const { username } = useParams();
   const [selectedTab, setSelectedTab] = useState('Posts');
   const [borderPos, setBorderPos] = useState(0);
   const tabRef = useRef<HTMLDivElement>(null);
   const [borderWidth, setBorderWidth] = useState(0);
+  const navigate = useNavigate();
+  const { data, loading, error } = useGetUserProfileQuery({
+    variables: { username: username! },
+  });
 
   const tabs = useMemo(
     () => [
@@ -47,20 +48,26 @@ function Profile() {
     (tab) => tab.name === selectedTab
   )?.component;
 
-  useEffect(() => {
-    if (isNaN(profileId)) {
-      navigate(`/profile/${userInfo.id}`);
-    }
-  }, [profileId, navigate, userInfo.id]);
-
-  if (isNaN(profileId)) {
-    return;
+  if (error || !data?.user) {
+    return (
+      <div className="flex flex-col gap-10 items-center mt-10">
+        <h1 className="text-2xl font-semibold">Profile not found</h1>
+        <span>
+          The link you followed may be broken, or the page may have been
+          removed.{' '}
+          <button className="text-blue-700" onClick={() => navigate('/')}>
+            Go back
+          </button>{' '}
+          to Instagram Clone.
+        </span>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col max-w-lg-page mx-auto">
       <div className="px-5 pt-9">
-        <UserProfile profileId={profileId} />
+        <UserProfile currentProfile={data?.user} />
         <div className="relative flex border-t cursor-pointer justify-center gap-14 border-gray-200">
           {tabs.map((tab) => (
             <div

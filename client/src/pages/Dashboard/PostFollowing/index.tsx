@@ -4,7 +4,7 @@ import PostItem from './PostItem';
 import SuggestFollowList from '../SuggestFollowList';
 
 export default function PostFollowing() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   const followingPeopleIds = user.initiatedFollows.map(
     (follow) => follow.targetUserId!
@@ -12,7 +12,7 @@ export default function PostFollowing() {
 
   const { data, loading, error } = useGetPicturesFromFollowingQuery({
     variables: {
-      authorId: followingPeopleIds,
+      userId: followingPeopleIds,
     },
   });
 

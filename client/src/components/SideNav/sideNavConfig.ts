@@ -57,13 +57,14 @@ export const getNavigationItems = (
   },
   {
     name: 'Profile',
-    path: `/profile/${user.id}`,
+    path: `/${user.username}`,
     Icon: UserAvatar,
     userAvatarProps: {
       avatar: user.avatar,
       alt: `${user.firstName} ${user.lastName}`,
       className: 'w-6 h-6',
     },
-    isActive: (path) => path === `/profile/${user.id}`,
+    isActive: (path) =>
+      !['/', '/explore', '/direct', '/notifications'].includes(path),
   },
 ];

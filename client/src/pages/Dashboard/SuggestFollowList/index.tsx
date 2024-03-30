@@ -5,7 +5,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Link } from 'react-router-dom';
 
 export default function SuggestFollowList() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
   const { data, loading, error } = useGetAllUsersQuery();
 
   if (loading) return <div>Loading...</div>;
@@ -26,11 +26,11 @@ export default function SuggestFollowList() {
               className="flex py-2 px-4 items-center justify-between"
             >
               <div className="flex items-center">
-                <Link to={`/profile/${suggestUser.id}`}>
+                <Link to={`/${suggestUser.username}`}>
                   <UserAvatar className="size-11" avatar={suggestUser.avatar} />
                 </Link>
                 <div className="ml-2">
-                  <Link to={`/profile/${suggestUser.id}`}>
+                  <Link to={`/${suggestUser.username}`}>
                     <p className="text-sm font-semibold">
                       {suggestUser.username}
                     </p>

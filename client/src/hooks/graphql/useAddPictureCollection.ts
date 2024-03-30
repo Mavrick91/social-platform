@@ -8,7 +8,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { toast } from 'react-toastify';
 
 export default function useAddPictureCollection() {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   return useAddPictureToCollectionMutation({
     update(cache, { data }, { variables }) {
