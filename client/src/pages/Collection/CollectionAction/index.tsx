@@ -1,14 +1,13 @@
-import { useDeleteCollectionMutation } from '@/__generated__/graphql';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+import useDeleteCollection from '@/hooks/graphql/useDeleteCollection';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Fragment, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { AddPictures } from './AddPictures';
 import { EditCollectionName } from './EditCollectionName';
-import useDeleteCollection from '@/hooks/graphql/useDeleteCollection';
 
 const formSchema = z.object({
   collectionName: z.string().min(1, { message: 'Collection name is required' }),

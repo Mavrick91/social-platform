@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function FollowersDialogItem({ follower }: Props) {
-  const { user } = useUserInfo();
+  const user = useUserInfo();
 
   const isFollowingProfile = user.initiatedFollows.some(
     (follow) => follow.targetUserId === follower.id

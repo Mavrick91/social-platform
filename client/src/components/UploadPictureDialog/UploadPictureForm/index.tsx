@@ -88,7 +88,7 @@ function UploadPictureForm({
             description,
             fileUrl,
             fileName: fileKey,
-            authorId: userInfo.id,
+            userId: userInfo.id,
           },
         };
         await uploadPicture({ variables });

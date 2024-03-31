@@ -1,7 +1,6 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import { Pluralize } from '@/components/Pluralize';
 import PictureDetailsDialog from '@/components/PostDetailsDialog';
-import { pluralize } from '@/lib/utils';
 
 type Props = {
   commentCount: number;

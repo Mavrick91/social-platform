@@ -1,10 +1,10 @@
-import { produce } from 'immer';
 import {
   UserProfileFragment,
   useAddPictureToCollectionMutation,
 } from '@/__generated__/graphql';
 import { USER_PROFILE_FRAGMENT } from '@/graphql/queries/user';
 import { useUserInfo } from '@/providers/UserInfoProvider';
+import { produce } from 'immer';
 import { toast } from 'react-toastify';
 
 export default function useAddPictureCollection() {
@@ -31,10 +31,16 @@ export default function useAddPictureCollection() {
           );
 
           if (collectionIndex !== -1) {
-            const newPictures = data.addPictureToCollection.map((picture) => ({
-              pictureId: picture.pictureId,
-              __typename: 'PictureOnCollection',
-            }));
+            const newPictures = data.addPictureToCollection.map((picture) => {
+              return {
+                pictureId: picture.pictureId,
+                __typename: 'PictureOnCollection' as const,
+                picture: {
+                  __typename: 'Picture' as const,
+                  fileUrl: '',
+                },
+              };
+            });
 
             draft.collections[collectionIndex].pictures.push(...newPictures);
           }
