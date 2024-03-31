@@ -1,8 +1,28 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
+import sharp from 'sharp';
+import axios from 'axios';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const prisma = new PrismaClient();
+const s3Client = new S3Client({ region: process.env.AWS_REGION });
+
+async function downloadAndConvertImage(url: string, key: string) {
+  const response = await axios.get(url, { responseType: 'arraybuffer' });
+  const webpData = await sharp(response.data).toFormat('webp').toBuffer();
+
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: key,
+    Body: webpData,
+    ContentType: 'image/webp',
+  };
+
+  await s3Client.send(new PutObjectCommand(params));
+
+  return params;
+}
 
 async function main() {
   const password = 'test';
@@ -42,17 +62,20 @@ async function main() {
     });
   }
 
-  const mockPictures = Array.from({ length: 20 }, () => {
-    const seed = faker.datatype.uuid();
-    faker.seed(parseInt(seed.substr(0, 5), 16));
+  const mockPictures = await Promise.all(
+    Array.from({ length: 20 }, async (_, i) => {
+      const imageUrl = faker.image.urlLoremFlickr({ height: 800, width: 800 });
+      const key = `posts/post-${i}.webp`;
+      const params = await downloadAndConvertImage(imageUrl, key);
 
-    return {
-      fileUrl: faker.image.imageUrl(800, 800, 'nature', true),
-      fileName: faker.system.commonFileName('jpg'),
-      description: faker.lorem.sentence(),
-      userId: faker.helpers.arrayElement(userIds).id,
-    };
-  });
+      return {
+        fileUrl: `https://${params.Bucket}.s3.amazonaws.com/${key}`,
+        fileName: faker.system.commonFileName('webp'),
+        description: faker.lorem.sentence(),
+        userId: faker.helpers.arrayElement(userIds).id,
+      };
+    }),
+  );
 
   const createdPictures = await prisma.picture.createMany({
     data: mockPictures,

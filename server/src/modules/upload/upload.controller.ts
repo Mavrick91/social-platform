@@ -9,6 +9,7 @@ import { S3Service } from '../s3/s3.service';
 import { ConfigService } from '@nestjs/config';
 import { FileUpload } from '../decorators/file-upload.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
+import sharp from 'sharp';
 
 @Controller('uploads')
 export class UploadController {
@@ -24,7 +25,8 @@ export class UploadController {
     const fileKey = `${Date.now()}.${file.originalname.split('.').pop()}`;
 
     try {
-      await this.s3Service.uploadFile(file.buffer, bucketName, fileKey);
+      const webpData = await sharp(file.buffer).toFormat('webp').toBuffer();
+      await this.s3Service.uploadFile(webpData, bucketName, fileKey);
 
       const fileUrl = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
 
