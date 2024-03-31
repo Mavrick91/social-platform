@@ -4,7 +4,7 @@ import Loading from './loading';
 
 type ThumbnailGridProps = {
   pictures?: PictureFragmentFragment[];
-  loading: boolean;
+  loading?: boolean;
 };
 
 function ThumbnailGrid({ pictures, loading }: ThumbnailGridProps) {

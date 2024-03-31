@@ -5,10 +5,11 @@ import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
 import Dashboard from '@/pages/Dashboard';
 import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
 import Profile from '@/pages/Profile';
-import Explore from '@/pages/Explore';
+import Explore, { loader as loaderExplore } from '@/pages/Explore';
 import Collection from './pages/Collection';
 import UserPosts from './pages/Profile/UserProfile/UserPosts';
 import UserCollections from './pages/Profile/UserCollections';
+import client from './apollo-client';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/explore',
+    loader: () => loaderExplore(client),
     element: (
       <AuthenticatedLayout>
         <Explore />
