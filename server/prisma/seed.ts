@@ -43,7 +43,7 @@ async function main() {
   }
 
   const mockPictures = Array.from({ length: 20 }, () => ({
-    fileUrl: faker.image.url(),
+    fileUrl: `https://picsum.photos/800/800?random=${Math.floor(Math.random() * 1000)}`,
     fileName: faker.system.commonFileName('jpg'),
     description: faker.lorem.sentence(),
     userId: faker.helpers.arrayElement(userIds).id,
