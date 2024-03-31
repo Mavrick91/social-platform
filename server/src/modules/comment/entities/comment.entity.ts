@@ -12,9 +12,8 @@ export class Comment {
 
   @Field(() => User, {
     description: 'The user who created the comment',
-    nullable: true,
   })
-  user?: User;
+  user: User;
 
   @Field(() => Int, {
     nullable: true,

@@ -15,7 +15,7 @@ type Comment {
   content: String!
 
   """The user who created the comment"""
-  user: User
+  user: User!
   userId: Int
 
   """The picture the comment belongs to"""
