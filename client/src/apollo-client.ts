@@ -63,13 +63,13 @@ const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
 
 const authLink = setContext((_, { headers }) => {
   const state = store.getState();
+  const accessToken =
+    localStorage.getItem('accessToken') || state.user.accessToken;
 
   return {
     headers: {
       ...headers,
-      authorization: state.user.accessToken
-        ? `Bearer ${state.user.accessToken}`
-        : '',
+      authorization: accessToken ? `Bearer ${accessToken}` : '',
     },
   };
 });

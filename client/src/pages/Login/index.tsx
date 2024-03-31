@@ -42,6 +42,9 @@ export default function Login() {
       const response = await login({ variables: data });
 
       if (response.data?.login) {
+        localStorage.setItem('accessToken', response.data.login.accessToken);
+        localStorage.setItem('refreshToken', response.data.login.refreshToken);
+
         dispatch(loginAction(response.data.login));
         dispatch(setUserInfo(jwtDecode(response.data.login.accessToken)));
       }
