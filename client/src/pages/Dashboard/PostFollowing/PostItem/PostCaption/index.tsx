@@ -51,7 +51,10 @@ export default function PostCaption({
       {canExpand && (
         <button
           className="text-zinc-500 text-sm"
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={() => {
+            setIsExpanded(!isExpanded);
+            setCanExpand(false);
+          }}
         >
           More
         </button>
