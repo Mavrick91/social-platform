@@ -28,8 +28,11 @@ export default function UserCollections() {
                 <img
                   key={pic.pictureId}
                   className="col-span-1 aspect-square object-cover"
-                  src={pic.picture.fileUrl}
+                  src={pic.picture.sizes.small}
                   alt="collection"
+                  loading="lazy"
+                  width={150}
+                  height={150}
                 />
               ))}
               <h2 className="absolute bottom-5 left-5 text-white text-xl">

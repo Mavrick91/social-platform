@@ -1,4 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { SizeInput } from '../entities/picture.entity';
 
 @InputType()
 export class CreatePictureInput {
@@ -8,8 +9,8 @@ export class CreatePictureInput {
   @Field()
   userId: number;
 
-  @Field()
-  fileUrl: string;
+  @Field(() => SizeInput)
+  sizes: SizeInput;
 
   @Field()
   fileName: string;

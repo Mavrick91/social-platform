@@ -20,6 +20,7 @@ export const loader = async (
 
 export default function Explore() {
   const pictures = useLoaderData() as PictureFragmentFragment[];
+  console.log('🚀 ~ pictures:', pictures);
 
   return (
     <div className="flex flex-col max-w-lg-page mx-auto">

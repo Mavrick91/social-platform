@@ -61,7 +61,19 @@ export class PictureService {
   }
 
   async create(input: CreatePictureInput): Promise<Picture> {
-    return this.prisma.picture.create({ data: input });
+    const sizesData = {
+      thumbnail: input.sizes.thumbnail,
+      original: input.sizes.original,
+      medium: input.sizes.medium,
+      small: input.sizes.small,
+    };
+
+    return this.prisma.picture.create({
+      data: {
+        ...input,
+        sizes: sizesData,
+      },
+    });
   }
 
   async update(id: number, input: UpdatePictureInput): Promise<Picture> {

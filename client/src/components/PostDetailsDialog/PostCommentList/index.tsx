@@ -46,6 +46,7 @@ function PostCommentList({ picture, setErrorMutation }: Props) {
         {data?.commentsByPictureId.map((comment) => {
           return (
             <PostCommentItem
+              key={comment.id}
               avatar={comment.user.avatar}
               content={comment.content}
               createdAt={comment.createdAt}

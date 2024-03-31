@@ -17,6 +17,7 @@ import { LikeResolver } from './modules/like/like.resolver';
 import { LikeModule } from './modules/like/like.module';
 import { CollectionResolver } from './modules/collection/collection.resolver';
 import { CollectionModule } from './modules/collection/collection.module';
+import GraphQLJSON from './scalars';
 
 @Module({
   imports: [
@@ -26,6 +27,9 @@ import { CollectionModule } from './modules/collection/collection.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
+      buildSchemaOptions: {
+        scalarsMap: [{ type: GraphQLJSON, scalar: GraphQLJSON() }],
+      },
     }),
     UserModule,
     AuthModule,

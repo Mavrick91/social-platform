@@ -48,7 +48,7 @@ export const AddPicturesStep = ({
                 className="col-span-1 aspect-square relative"
               >
                 <img
-                  src={pic.picture.fileUrl}
+                  src={pic.picture.sizes.small}
                   alt="collection"
                   className="object-cover aspect-square"
                 />

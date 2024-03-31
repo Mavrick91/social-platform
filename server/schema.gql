@@ -43,14 +43,21 @@ type PictureCount {
   likes: Int!
 }
 
+type SizeType {
+  thumbnail: String!
+  original: String!
+  medium: String!
+  small: String!
+}
+
 type Picture {
   id: Int!
-  fileUrl: String!
+  sizes: SizeType!
   fileName: String
   description: String
   user: User!
   likes: [Like!]!
-  comments: [Comment!]
+  comments: [Comment!]!
   _count: PictureCount!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -163,15 +170,19 @@ input CreateUserDto {
 input CreatePictureInput {
   description: String
   userId: Float!
-  fileUrl: String!
+  sizes: SizeInput!
   fileName: String!
+}
+
+input SizeInput {
+  thumbnail: String!
+  original: String!
+  medium: String!
+  small: String!
 }
 
 input UpdatePictureInput {
   description: String
-  userId: Float
-  fileUrl: String
-  fileName: String
 }
 
 input CreateCommentInput {

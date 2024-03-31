@@ -8,7 +8,7 @@ export default function PostPicture({ picture }: Props) {
   return (
     <div>
       <div className="mb-1">
-        <img alt="picture" className="w-full" src={picture.fileUrl} />
+        <img alt="picture" className="w-full" src={picture.sizes.medium} />
       </div>
     </div>
   );

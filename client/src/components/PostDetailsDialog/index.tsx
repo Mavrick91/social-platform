@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';
+import ImageWithPlaceholder from '../ImageWithPlaceholder';
 
 type Props = {
   children: ReactNode;
@@ -31,7 +32,7 @@ function PostDetailsDialog({ children, picture }: Props) {
     setOpen(isOpen);
   };
 
-  const aspectRatio = useAspectRatio(picture.fileUrl || '');
+  const aspectRatio = useAspectRatio(picture.sizes.original);
 
   const isFollowingCurrentProfile = user.initiatedFollows.some(
     (follow) => follow.targetUserId === picture.user.id
@@ -54,14 +55,18 @@ function PostDetailsDialog({ children, picture }: Props) {
         <div className="flex">
           <div className="flex">
             <div className="items-center flex justify-center min-h-[500px]">
-              <img
+              {/* <img
                 alt="Photo"
                 className="overflow-hidden w-full h-auto object-contain"
-                src={picture?.fileUrl}
+                src={picture.sizes.original}
                 style={{
                   maxWidth: `${aspectRatio.naturalWidth}px`,
                   maxHeight: `${aspectRatio.naturalHeight}px`,
                 }}
+              /> */}
+              <ImageWithPlaceholder
+                largeImageUrl={picture.sizes.original}
+                placeholderImageUrl={picture.sizes.thumbnail}
               />
             </div>
             <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-bg-border flex-col">

@@ -19,7 +19,9 @@ export const COLLECTION_FRAGMENT = gql`
     pictures {
       pictureId
       picture {
-        fileUrl
+        sizes {
+          small
+        }
       }
     }
   }

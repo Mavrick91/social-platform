@@ -8,9 +8,25 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 const prisma = new PrismaClient();
 const s3Client = new S3Client({ region: process.env.AWS_REGION });
 
-async function downloadAndConvertImage(url: string, key: string) {
-  const response = await axios.get(url, { responseType: 'arraybuffer' });
-  const webpData = await sharp(response.data).toFormat('webp').toBuffer();
+async function convertAndUploadImage(
+  imageBuffer: Buffer,
+  key: string,
+  options?: { width?: number; height?: number },
+) {
+  let resizeOptions = {};
+  if (options?.width || options?.height) {
+    resizeOptions = {
+      width: options.width,
+      height: options.height,
+      fit: 'cover',
+      withoutEnlargement: true,
+    };
+  }
+
+  const webpData = await sharp(imageBuffer)
+    .resize(resizeOptions)
+    .toFormat('webp')
+    .toBuffer();
 
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -22,6 +38,41 @@ async function downloadAndConvertImage(url: string, key: string) {
   await s3Client.send(new PutObjectCommand(params));
 
   return params;
+}
+
+async function fetchAndProcessImage(url: string, baseKey: string) {
+  const response = await axios.get(url, { responseType: 'arraybuffer' });
+  const originalImageBuffer = response.data;
+
+  const originalParams = await convertAndUploadImage(
+    originalImageBuffer,
+    `${baseKey}.webp`,
+  );
+
+  const thumbnailParams = await convertAndUploadImage(
+    originalImageBuffer,
+    `${baseKey}-thumbnail.webp`,
+    { width: 300, height: 300 },
+  );
+
+  const mediumParams = await convertAndUploadImage(
+    originalImageBuffer,
+    `${baseKey}-medium.webp`,
+    { width: 512 },
+  );
+
+  const smallParams = await convertAndUploadImage(
+    originalImageBuffer,
+    `${baseKey}-small.webp`,
+    { width: 170 },
+  );
+
+  return {
+    original: `https://${originalParams.Bucket}.s3.amazonaws.com/${originalParams.Key}`,
+    thumbnail: `https://${thumbnailParams.Bucket}.s3.amazonaws.com/${thumbnailParams.Key}`,
+    medium: `https://${mediumParams.Bucket}.s3.amazonaws.com/${mediumParams.Key}`,
+    small: `https://${smallParams.Bucket}.s3.amazonaws.com/${smallParams.Key}`,
+  };
 }
 
 async function main() {
@@ -64,15 +115,15 @@ async function main() {
 
   const mockPictures = await Promise.all(
     Array.from({ length: 20 }, async (_, i) => {
-      const imageUrl = faker.image.urlLoremFlickr({ height: 800, width: 800 });
-      const key = `posts/post-${i}.webp`;
-      const params = await downloadAndConvertImage(imageUrl, key);
+      const imageUrl = 'https://loremflickr.com/1400/900';
+      const baseKey = `posts/post-${i}`;
+      const sizes = await fetchAndProcessImage(imageUrl, baseKey);
 
       return {
-        fileUrl: `https://${params.Bucket}.s3.amazonaws.com/${key}`,
         fileName: faker.system.commonFileName('webp'),
         description: faker.lorem.sentence(),
         userId: faker.helpers.arrayElement(userIds).id,
+        sizes: sizes,
       };
     }),
   );

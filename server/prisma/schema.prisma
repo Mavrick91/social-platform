@@ -50,7 +50,6 @@ model Follow {
 
 model Picture {
   id          Int                   @id @default(autoincrement())
-  fileUrl     String
   fileName    String
   description String?
   user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -60,6 +59,7 @@ model Picture {
   comments    Comment[]
   likes       Like[]
   collection  PictureOnCollection[]
+  sizes       Json
 }
 
 model PictureOnCollection {

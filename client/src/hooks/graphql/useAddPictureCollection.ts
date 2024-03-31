@@ -37,7 +37,9 @@ export default function useAddPictureCollection() {
                 __typename: 'PictureOnCollection' as const,
                 picture: {
                   __typename: 'Picture' as const,
-                  fileUrl: '',
+                  sizes: {
+                    small: '',
+                  },
                 },
               };
             });

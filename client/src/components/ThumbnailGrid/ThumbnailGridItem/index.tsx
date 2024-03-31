@@ -23,12 +23,15 @@ export default function ThumbnailGridItem({ picture }: Props) {
         <button
           key={picture.id}
           onClick={() => handleClickPicture(picture)}
-          className="h-full group relative col-span-1 aspect-square"
+          className="group relative col-span-1 aspect-square"
         >
           <img
             alt="Photo"
             className="aspect-square overflow-hidden border border-slate-200 object-cover"
-            src={picture.fileUrl}
+            src={picture.sizes.thumbnail}
+            loading="lazy"
+            width={300}
+            height={300}
           />
           <div className="hidden z-20 text-white gap-3 absolute inset-0 bg-black bg-opacity-50 group-hover:flex items-center justify-center">
             <MessageCircle fill="white" size={32} />

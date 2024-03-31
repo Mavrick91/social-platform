@@ -7,7 +7,11 @@ export const PICTURE_FRAGMENT = gql`
     description
     createdAt
     updatedAt
-    fileUrl
+    sizes {
+      thumbnail
+      original
+      medium
+    }
     user {
       ...UserFragment
     }
