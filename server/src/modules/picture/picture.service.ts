@@ -24,6 +24,7 @@ export class PictureService {
       orderBy: { createdAt: 'desc' },
       include: {
         user: true,
+        likes: true,
         _count: {
           select: {
             comments: true,

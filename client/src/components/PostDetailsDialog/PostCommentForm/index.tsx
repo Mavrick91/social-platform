@@ -71,7 +71,7 @@ function PostCommentForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="">
-      <Separator />
+      <Separator className="border-[#DBDBDB]" />
       <div className="flex items-center">
         <TextareaAutosize
           className="w-full p-2 focus:outline-none resize-none"

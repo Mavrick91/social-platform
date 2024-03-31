@@ -1,17 +1,24 @@
-import { useGetCommentsByPictureQuery } from '@/__generated__/graphql';
+import {
+  PictureFragmentFragment,
+  useGetCommentsByPictureQuery,
+} from '@/__generated__/graphql';
+import PostCTA from '@/components/PostCTA';
 import PictureCommentForm from '@/components/PostDetailsDialog/PostCommentForm';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import moment from 'moment';
 import { useEffect, useRef } from 'react';
+import PostCommentItem from '../PostCommentItem';
 
 type Props = {
-  pictureId: number;
+  picture: PictureFragmentFragment;
   setErrorMutation: (value: string | null) => void;
 };
 
-function PostCommentList({ pictureId, setErrorMutation }: Props) {
+function PostCommentList({ picture, setErrorMutation }: Props) {
+  const user = useUserInfo();
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data, loading, refetch, error } = useGetCommentsByPictureQuery({
-    variables: { pictureId },
+    variables: { pictureId: picture.id },
   });
 
   useEffect(() => {
@@ -28,29 +35,34 @@ function PostCommentList({ pictureId, setErrorMutation }: Props) {
         className="space-y-2 pr-6 p-3 h-0 grow overflow-y-auto"
         ref={commentListRef}
       >
+        <PostCommentItem
+          avatar={user.avatar}
+          content={picture.description}
+          createdAt={picture.createdAt}
+          firstName={user.firstName}
+          lastName={user.lastName}
+        />
+
         {data?.commentsByPictureId.map((comment) => {
           return (
-            <div
-              key={comment.id}
-              className="flex justify-center gap-1 flex-col"
-            >
-              <div className="flex items-center justify-between">
-                <p className="inline-flex items-center mr-3 text-base text-gray-900 dark:text-white font-semibold">
-                  {comment.user?.firstName} {comment.user?.lastName}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <time>{moment(comment.createdAt).fromNow()}</time>
-                </p>
-              </div>
-              <p className="text-gray-500 text-wrap break-all text-sm dark:text-gray-400">
-                {comment.content}
-              </p>
-            </div>
+            <PostCommentItem
+              avatar={comment.user.avatar}
+              content={comment.content}
+              createdAt={comment.createdAt}
+              firstName={comment.user.firstName}
+              lastName={comment.user.lastName}
+            />
           );
         })}
       </div>
+      <div className="border-t border-[#EFEFEF] p-3 pt-1.5">
+        <PostCTA picture={picture} />
+        <span className="text-gray-500 text-xs">
+          {moment(picture?.createdAt).fromNow()}
+        </span>
+      </div>
       <PictureCommentForm
-        pictureId={pictureId}
+        pictureId={picture.id}
         refetchCommentList={refetch}
         commentListRef={commentListRef}
         setErrorMutation={setErrorMutation}

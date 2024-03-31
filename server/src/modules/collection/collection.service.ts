@@ -61,6 +61,7 @@ export class CollectionService {
             picture: {
               include: {
                 user: true,
+                likes: true,
                 _count: true,
               },
             },

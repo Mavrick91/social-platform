@@ -6,16 +6,16 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@/components/ui/dialog.tsx';
-import { selectAuthenticatedUser } from '@/features/users/selectors';
 import useAspectRatio from '@/hooks/useAspectRaiot';
-import { useAppSelector } from '@/store/hooks';
-import moment from 'moment/moment';
+import { cn } from '@/lib/utils';
+import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
+import { useUserInfo } from '@/providers/UserInfoProvider';
+import { Ellipsis } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';
-import { Ellipsis } from 'lucide-react';
 
 type Props = {
   children: ReactNode;
@@ -24,7 +24,7 @@ type Props = {
 
 function PostDetailsDialog({ children, picture }: Props) {
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
-  const userInfo = useAppSelector(selectAuthenticatedUser);
+  const user = useUserInfo();
   const [open, setOpen] = useState(false);
 
   const handleToggleDialog = (isOpen: boolean) => {
@@ -32,6 +32,10 @@ function PostDetailsDialog({ children, picture }: Props) {
   };
 
   const aspectRatio = useAspectRatio(picture.fileUrl || '');
+
+  const isFollowingCurrentProfile = user.initiatedFollows.some(
+    (follow) => follow.targetUserId === picture.user.id
+  );
 
   if (!aspectRatio) return null;
 
@@ -62,23 +66,38 @@ function PostDetailsDialog({ children, picture }: Props) {
             </div>
             <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-bg-border flex-col">
               <div className="flex pt-3 pl-3 flex-col">
-                <div className="flex gap-3">
+                <div className="flex items-center">
                   <Link className="shrink-0" to={`/${picture?.user.username}`}>
                     <UserAvatar
                       avatar={picture?.user?.avatar}
-                      className="size-9"
+                      className="size-8"
                       alt={`${picture?.user?.firstName} ${picture?.user?.lastName}`}
                     />
                   </Link>
                   <div className="flex flex-col w-full">
                     <div className="flex justify-between items-center pr-10">
-                      <Link
-                        to={`/${picture?.user.username}`}
-                        className="font-medium text-gray-700"
-                      >
-                        {picture?.user?.firstName} {picture?.user?.lastName}
-                      </Link>
-                      {picture?.id && userInfo.id === picture.user?.id && (
+                      <div>
+                        <Link
+                          to={`/${picture?.user.username}`}
+                          className="text-[#262626] text-sm font-semibold ml-4"
+                        >
+                          {picture?.user?.firstName} {picture?.user?.lastName}
+                        </Link>
+                        {user.id !== picture.user?.id && (
+                          <>
+                            {' '}
+                            •{' '}
+                            <ButtonFollow
+                              isFollowing={isFollowingCurrentProfile}
+                              targetUserId={picture.user.id}
+                              className={cn(
+                                'bg-transparent p-0 hover:bg-transparent text-blue-400 hover:text-blue-600'
+                              )}
+                            />
+                          </>
+                        )}
+                      </div>
+                      {picture?.id && user.id === picture.user?.id && (
                         <PostAction
                           isDelete
                           pictureId={picture.id}
@@ -89,20 +108,14 @@ function PostDetailsDialog({ children, picture }: Props) {
                         </PostAction>
                       )}
                     </div>
-                    <span className="text-gray-500 text-xs">
-                      {moment(picture?.createdAt).format('MMMM Do YYYY')}
-                    </span>
                   </div>
                 </div>
-                <p className="text-sm mt-4 text-gray-600">
-                  {picture?.description || 'No description provided.'}
-                </p>
               </div>
               <Separator className="mt-4" />
 
               {picture && (
                 <PictureCommentList
-                  pictureId={picture.id}
+                  picture={picture}
                   setErrorMutation={setErrorMutation}
                 />
               )}

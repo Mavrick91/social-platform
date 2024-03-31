@@ -11,6 +11,7 @@ export const GET_COMMENTS_BY_PICTURE = gql`
         id
         firstName
         lastName
+        avatar
       }
     }
   }

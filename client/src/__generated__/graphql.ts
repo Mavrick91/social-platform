@@ -42,7 +42,7 @@ export type Comment = {
   pictureId?: Maybe<Scalars['Int']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The user who created the comment */
-  user?: Maybe<User>;
+  user: User;
   userId?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -380,7 +380,7 @@ export type RemovePictureFromCollectionMutationVariables = Exact<{
 }>;
 
 
-export type RemovePictureFromCollectionMutation = { __typename?: 'Mutation', removePictureFromCollection: { __typename?: 'PictureOnCollection', pictureId: number } };
+export type RemovePictureFromCollectionMutation = { __typename?: 'Mutation', removePictureFromCollection: { __typename?: 'PictureOnCollection', collectionId: string, pictureId: number } };
 
 export type DeleteCollectionMutationVariables = Exact<{
   collectionId: Scalars['Float']['input'];
@@ -489,7 +489,7 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 }>;
 
 
-export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user?: { __typename?: 'User', id: number, firstName: string, lastName: string } | null }> };
+export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } }> };
 
 export type PictureFragmentFragment = { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
 
@@ -697,6 +697,7 @@ export type AddPictureToCollectionMutationOptions = Apollo.BaseMutationOptions<A
 export const RemovePictureFromCollectionDocument = gql`
     mutation RemovePictureFromCollection($pictureId: Float!, $collectionId: Float!) {
   removePictureFromCollection(pictureId: $pictureId, collectionId: $collectionId) {
+    collectionId
     pictureId
   }
 }
@@ -1233,6 +1234,7 @@ export const GetCommentsByPictureDocument = gql`
       id
       firstName
       lastName
+      avatar
     }
   }
 }

@@ -42,12 +42,17 @@ async function main() {
     });
   }
 
-  const mockPictures = Array.from({ length: 20 }, () => ({
-    fileUrl: `https://picsum.photos/800/800?random=${Math.floor(Math.random() * 1000)}`,
-    fileName: faker.system.commonFileName('jpg'),
-    description: faker.lorem.sentence(),
-    userId: faker.helpers.arrayElement(userIds).id,
-  }));
+  const mockPictures = Array.from({ length: 20 }, () => {
+    const seed = faker.datatype.uuid();
+    faker.seed(parseInt(seed.substr(0, 5), 16));
+
+    return {
+      fileUrl: faker.image.imageUrl(800, 800, 'nature', true),
+      fileName: faker.system.commonFileName('jpg'),
+      description: faker.lorem.sentence(),
+      userId: faker.helpers.arrayElement(userIds).id,
+    };
+  });
 
   const createdPictures = await prisma.picture.createMany({
     data: mockPictures,

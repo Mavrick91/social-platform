@@ -36,6 +36,7 @@ export const REMOVE_PICTURE_TO_COLLECTION_MUTATION = gql`
       pictureId: $pictureId
       collectionId: $collectionId
     ) {
+      collectionId
       pictureId
     }
   }
