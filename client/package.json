@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "start-prod": "serve -l 4000 dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts"
@@ -41,6 +42,7 @@
     "react-textarea-autosize": "^8.5.3",
     "react-toastify": "^10.0.5",
     "redux-persist": "^6.0.0",
+    "serve": "^14.2.1",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",

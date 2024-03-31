@@ -10,11 +10,26 @@
     "start:client": "cd client && bun dev",
     "start:server": "cd server && npm run start:dev",
     "start": "npm run start:client & npm run start:server",
+    "start-prod:client": "(cd client && serve -l 4000 dist)",
+    "start-prod:server": "(cd server && node dist/src/main)",
+    "start-prod": "npm-run-all --parallel start-prod:client start-prod:server",
     "build:client": "cd client && bun run build",
     "build:server": "cd server && npm run build",
-    "build:all": "npm run build:client && npm run build:server",
-    "clean": "rm -rf client/dist server/dist"
+    "build:all": "npm-run-all --parallel build:client build:server",
+    "clean:build": "rm -rf client/dist server/dist",
+    "clean:database": "psql -h localhost -U postgres -tc \"SELECT 1 FROM pg_database WHERE datname = 'social_platform'\" | grep -q 1 && psql -h localhost -U postgres -c \"DROP DATABASE social_platform\" || echo 'Database does not exist'",
+    "clean:bucket": "(cd server && npm run clear-s3)",
+    "generate:database": "psql -h localhost -U postgres -c \"CREATE DATABASE social_platform;\"",
+    "prisma:migration": "(cd server && npx prisma migrate dev)",
+    "prisma:seed": "(cd server && npm run seed)",
+    "initiate:project": "npm run clean:database && npm run clean:bucket && npm run generate:database && npm run prisma:migration && npm run prisma:seed && npm run start"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
 }
