@@ -1,4 +1,5 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
+import PostCTA from '@/components/PostCTA';
 import { Separator } from '@/components/ui/separator';
 import PostAddComment from './PostAddComment';
 import PostCaption from './PostCaption';
@@ -21,6 +22,7 @@ export default function PostItem({ picture }: Props) {
         pictureId={picture.id}
       />
       <PostPicture picture={picture} />
+      <PostCTA picture={picture} />
       <PostCaption
         description={picture.description}
         firstName={picture.user?.firstName}
