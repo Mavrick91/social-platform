@@ -74,6 +74,7 @@ type Collection {
   id: ID!
   name: String!
   nameId: String!
+  isDefault: Boolean!
   createdAt: DateTime!
   userId: Int!
   user: User!
@@ -128,6 +129,7 @@ type Mutation {
   removePictureFromCollection(collectionId: Float!, pictureId: Float!): PictureOnCollection!
   createCollection(name: String!): Collection!
   deleteCollection(collectionId: Float!): Collection!
+  updateNameCollection(collectionId: Float!, newName: String!): Collection!
   deleteAllCollectionsForUser(userId: Float!): Collection!
   updateUser(username: String!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!

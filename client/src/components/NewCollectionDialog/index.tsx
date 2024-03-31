@@ -1,5 +1,5 @@
 import { CollectionFragmentFragment } from '@/__generated__/graphql';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog } from '@/components/ui/dialog';
 import useAddPictureCollection from '@/hooks/graphql/useAddPictureCollection';
 import useCreateCollection from '@/hooks/graphql/useCreateCollection';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+import CreateNewCollectionName from '@/components/CreateNewCollectionName';
 import { Button } from '../ui/button';
 import { AddPicturesStep } from './AddPicturesStep';
-import { CreateCollectionStep } from './CreateCollectionStep';
 
 const formSchema = z.object({
   collectionName: z.string().min(1, { message: 'Collection name is required' }),
@@ -87,14 +87,16 @@ export default function NewCollectionDialog({ picturesFromSaved }: Props) {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Dialog open={isOpen && currentStep === 0} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button variant="blue-link" onClick={() => setCurrentStep(0)}>
-              + New collection
-            </Button>
-          </DialogTrigger>
-          <CreateCollectionStep setCurrentStep={setCurrentStep} />
-        </Dialog>
+        <CreateNewCollectionName
+          onClickNext={() => setCurrentStep(1)}
+          open={isOpen && currentStep === 0}
+          setOpen={setIsOpen}
+          labelSubmit="Next"
+        >
+          <Button variant="blue-link" onClick={() => setCurrentStep(0)}>
+            + New collection
+          </Button>
+        </CreateNewCollectionName>
         <Dialog open={isOpen && currentStep === 1} onOpenChange={setIsOpen}>
           <AddPicturesStep
             picturesFromSaved={picturesFromSaved}

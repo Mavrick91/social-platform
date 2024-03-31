@@ -61,6 +61,15 @@ export class CollectionResolver {
   }
 
   @Mutation(() => CollectionResponse)
+  @UseGuards(GqlAuthGuard)
+  async updateNameCollection(
+    @Args('collectionId') collectionId: number,
+    @Args('newName') newName: string,
+  ): Promise<Collection> {
+    return this.collectionService.updateCollectionName(collectionId, newName);
+  }
+
+  @Mutation(() => CollectionResponse)
   async deleteAllCollectionsForUser(
     @Args('userId') userId: number,
   ): Promise<any> {

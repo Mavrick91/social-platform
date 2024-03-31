@@ -32,6 +32,7 @@ model Collection {
   id        Int                   @id @default(autoincrement())
   name      String
   nameId    String
+  isDefault Boolean
   createdAt DateTime              @default(now())
   userId    Int
   user      User                  @relation(fields: [userId], references: [id])

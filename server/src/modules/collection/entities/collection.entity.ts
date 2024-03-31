@@ -13,6 +13,9 @@ export class Collection {
   @Field()
   nameId: string;
 
+  @Field({ defaultValue: false })
+  isDefault: boolean;
+
   @Field(() => Date)
   createdAt: Date;
 

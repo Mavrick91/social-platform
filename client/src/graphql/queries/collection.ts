@@ -6,6 +6,7 @@ export const GET_COLLECTION = gql`
     getCollection(collectionName: $collectionName) {
       id
       name
+      isDefault
       pictures {
         picture {
           ...PictureFragment

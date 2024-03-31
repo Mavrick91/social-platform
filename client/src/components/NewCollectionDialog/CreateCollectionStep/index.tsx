@@ -3,13 +3,15 @@ import { FormData } from '..';
 import { DialogContent, DialogHeader } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@radix-ui/react-select';
+import { Separator } from '@/components/ui/separator';
 
 type Props = {
-  setCurrentStep: (step: number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onClickNext: (params?: any) => void;
+  labelSubmit: string;
 };
 
-export const CreateCollectionStep = ({ setCurrentStep }: Props) => {
+export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
   const {
     register,
     formState: { errors },
@@ -26,7 +28,6 @@ export const CreateCollectionStep = ({ setCurrentStep }: Props) => {
           <Input
             {...register('collectionName')}
             placeholder="Collection name"
-            autoFocus
             autoComplete="off"
             error={errors.collectionName?.message}
           />
@@ -37,9 +38,9 @@ export const CreateCollectionStep = ({ setCurrentStep }: Props) => {
             type="button"
             variant="blue-link"
             className="p-0"
-            onClick={() => setCurrentStep(1)}
+            onClick={onClickNext}
           >
-            Next
+            {labelSubmit}
           </Button>
         </div>
       </div>

@@ -22,6 +22,7 @@ export type Collection = {
   __typename?: 'Collection';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  isDefault: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   nameId: Scalars['String']['output'];
   pictures: Array<PictureOnCollection>;
@@ -115,6 +116,7 @@ export type Mutation = {
   unfollowUser: Follow;
   unlikePicture: Picture;
   updateComment: Comment;
+  updateNameCollection: Collection;
   updatePicture: Picture;
   updateUser: User;
 };
@@ -200,6 +202,12 @@ export type MutationUnlikePictureArgs = {
 
 export type MutationUpdateCommentArgs = {
   updateCommentInput: UpdateCommentInput;
+};
+
+
+export type MutationUpdateNameCollectionArgs = {
+  collectionId: Scalars['Float']['input'];
+  newName: Scalars['String']['input'];
 };
 
 
@@ -374,6 +382,21 @@ export type RemovePictureFromCollectionMutationVariables = Exact<{
 
 export type RemovePictureFromCollectionMutation = { __typename?: 'Mutation', removePictureFromCollection: { __typename?: 'PictureOnCollection', pictureId: number } };
 
+export type DeleteCollectionMutationVariables = Exact<{
+  collectionId: Scalars['Float']['input'];
+}>;
+
+
+export type DeleteCollectionMutation = { __typename?: 'Mutation', deleteCollection: { __typename?: 'Collection', id: string } };
+
+export type UpdateNameCollectionMutationVariables = Exact<{
+  collectionId: Scalars['Float']['input'];
+  newName: Scalars['String']['input'];
+}>;
+
+
+export type UpdateNameCollectionMutation = { __typename?: 'Mutation', updateNameCollection: { __typename?: 'Collection', id: string, name: string } };
+
 export type CommentPictureMutationVariables = Exact<{
   createCommentInput: CreateCommentInput;
 }>;
@@ -459,7 +482,7 @@ export type GetCollectionQueryVariables = Exact<{
 }>;
 
 
-export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
+export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, isDefault: boolean, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, fileUrl: string, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
 
 export type GetCommentsByPictureQueryVariables = Exact<{
   pictureId: Scalars['Int']['input'];
@@ -705,6 +728,74 @@ export function useRemovePictureFromCollectionMutation(baseOptions?: Apollo.Muta
 export type RemovePictureFromCollectionMutationHookResult = ReturnType<typeof useRemovePictureFromCollectionMutation>;
 export type RemovePictureFromCollectionMutationResult = Apollo.MutationResult<RemovePictureFromCollectionMutation>;
 export type RemovePictureFromCollectionMutationOptions = Apollo.BaseMutationOptions<RemovePictureFromCollectionMutation, RemovePictureFromCollectionMutationVariables>;
+export const DeleteCollectionDocument = gql`
+    mutation DeleteCollection($collectionId: Float!) {
+  deleteCollection(collectionId: $collectionId) {
+    id
+  }
+}
+    `;
+export type DeleteCollectionMutationFn = Apollo.MutationFunction<DeleteCollectionMutation, DeleteCollectionMutationVariables>;
+
+/**
+ * __useDeleteCollectionMutation__
+ *
+ * To run a mutation, you first call `useDeleteCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCollectionMutation, { data, loading, error }] = useDeleteCollectionMutation({
+ *   variables: {
+ *      collectionId: // value for 'collectionId'
+ *   },
+ * });
+ */
+export function useDeleteCollectionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCollectionMutation, DeleteCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCollectionMutation, DeleteCollectionMutationVariables>(DeleteCollectionDocument, options);
+      }
+export type DeleteCollectionMutationHookResult = ReturnType<typeof useDeleteCollectionMutation>;
+export type DeleteCollectionMutationResult = Apollo.MutationResult<DeleteCollectionMutation>;
+export type DeleteCollectionMutationOptions = Apollo.BaseMutationOptions<DeleteCollectionMutation, DeleteCollectionMutationVariables>;
+export const UpdateNameCollectionDocument = gql`
+    mutation UpdateNameCollection($collectionId: Float!, $newName: String!) {
+  updateNameCollection(collectionId: $collectionId, newName: $newName) {
+    id
+    name
+  }
+}
+    `;
+export type UpdateNameCollectionMutationFn = Apollo.MutationFunction<UpdateNameCollectionMutation, UpdateNameCollectionMutationVariables>;
+
+/**
+ * __useUpdateNameCollectionMutation__
+ *
+ * To run a mutation, you first call `useUpdateNameCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNameCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNameCollectionMutation, { data, loading, error }] = useUpdateNameCollectionMutation({
+ *   variables: {
+ *      collectionId: // value for 'collectionId'
+ *      newName: // value for 'newName'
+ *   },
+ * });
+ */
+export function useUpdateNameCollectionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNameCollectionMutation, UpdateNameCollectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNameCollectionMutation, UpdateNameCollectionMutationVariables>(UpdateNameCollectionDocument, options);
+      }
+export type UpdateNameCollectionMutationHookResult = ReturnType<typeof useUpdateNameCollectionMutation>;
+export type UpdateNameCollectionMutationResult = Apollo.MutationResult<UpdateNameCollectionMutation>;
+export type UpdateNameCollectionMutationOptions = Apollo.BaseMutationOptions<UpdateNameCollectionMutation, UpdateNameCollectionMutationVariables>;
 export const CommentPictureDocument = gql`
     mutation CommentPicture($createCommentInput: CreateCommentInput!) {
   createComment(createCommentInput: $createCommentInput) {
@@ -1089,6 +1180,7 @@ export const GetCollectionDocument = gql`
   getCollection(collectionName: $collectionName) {
     id
     name
+    isDefault
     pictures {
       picture {
         ...PictureFragment

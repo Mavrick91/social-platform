@@ -40,3 +40,20 @@ export const REMOVE_PICTURE_TO_COLLECTION_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_COLLECTION_MUTATION = gql`
+  mutation DeleteCollection($collectionId: Float!) {
+    deleteCollection(collectionId: $collectionId) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_NAME_COLLECTION_MUTATION = gql`
+  mutation UpdateNameCollection($collectionId: Float!, $newName: String!) {
+    updateNameCollection(collectionId: $collectionId, newName: $newName) {
+      id
+      name
+    }
+  }
+`;

@@ -7,6 +7,8 @@ import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
 import Profile from '@/pages/Profile';
 import Explore from '@/pages/Explore';
 import Collection from './pages/Collection';
+import UserPosts from './pages/Profile/UserProfile/UserPosts';
+import UserCollections from './pages/Profile/UserCollections';
 
 const router = createBrowserRouter([
   {
@@ -48,9 +50,23 @@ const router = createBrowserRouter([
         <Profile />
       </AuthenticatedLayout>
     ),
+    children: [
+      {
+        path: '',
+        element: <UserPosts />,
+      },
+      {
+        path: 'posts',
+        element: <UserPosts />,
+      },
+      {
+        path: 'saved',
+        element: <UserCollections />,
+      },
+    ],
   },
   {
-    path: '/:username/:collectionName',
+    path: '/:username/saved/:collectionName',
     element: (
       <AuthenticatedLayout>
         <Collection />

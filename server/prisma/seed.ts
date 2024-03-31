@@ -37,6 +37,7 @@ async function main() {
         name: 'All posts',
         nameId: 'all-posts',
         userId: user.id,
+        isDefault: true,
       },
     });
   }

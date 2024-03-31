@@ -1,13 +1,11 @@
 import NewCollectionDialog from '@/components/NewCollectionDialog';
+import useGetPicturesFromSaved from '@/hooks/useGetPicturesFromSaved';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Link } from 'react-router-dom';
 
 export default function UserCollections() {
   const user = useUserInfo();
-
-  const picturesFromSaved = [...user.collections].sort(
-    (a, b) => Number(a.id) - Number(b.id)
-  )[0];
+  const picturesFromSaved = useGetPicturesFromSaved();
 
   return (
     <div className="flex flex-col gap-3">
@@ -21,7 +19,7 @@ export default function UserCollections() {
         <div className="grid grid-cols-3 gap-1">
           {user.collections?.map((collection) => (
             <Link
-              to={`/${user.username}/${collection.nameId}`}
+              to={collection.nameId}
               key={collection.id}
               type="button"
               className="relative col-span-1 grid grid-cols-2 bg-gradient-to-t from-black/50 hover:from-black/40 to-transparent aspect-square border border-gray-200 rounded-md"

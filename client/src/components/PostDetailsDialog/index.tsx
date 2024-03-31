@@ -14,7 +14,7 @@ import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
-import PictureAction from './PostAction';
+import PostAction from './PostAction';
 import { Ellipsis } from 'lucide-react';
 
 type Props = {
@@ -79,14 +79,14 @@ function PostDetailsDialog({ children, picture }: Props) {
                         {picture?.user?.firstName} {picture?.user?.lastName}
                       </Link>
                       {picture?.id && userInfo.id === picture.user?.id && (
-                        <PictureAction
+                        <PostAction
                           isDelete
                           pictureId={picture.id}
                           isEdit
                           handleOpenUpdatePictureDialog={handleToggleDialog}
                         >
                           <Ellipsis color="gray" />
-                        </PictureAction>
+                        </PostAction>
                       )}
                     </div>
                     <span className="text-gray-500 text-xs">

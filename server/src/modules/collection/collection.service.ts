@@ -19,12 +19,14 @@ export class CollectionService {
       },
     });
 
-    if (existingPictures.length > 0) {
-      throw new Error('Some pictures are already in the collection');
-    }
+    const existingPictureIds = existingPictures.map((pic) => pic.pictureId);
+
+    const newPictureIds = pictureIds.filter(
+      (picId) => !existingPictureIds.includes(picId),
+    );
 
     const createdPictures = await Promise.all(
-      pictureIds.map((pictureId) =>
+      newPictureIds.map((pictureId) =>
         this.prisma.pictureOnCollection.create({
           data: {
             collectionId,
@@ -73,6 +75,7 @@ export class CollectionService {
       data: {
         name,
         nameId: name.toLowerCase().replace(/ /g, '-'),
+        isDefault: false,
         user: {
           connect: {
             id: userId,
@@ -89,6 +92,18 @@ export class CollectionService {
 
     return this.prisma.collection.delete({
       where: { id: collectionId },
+    });
+  }
+
+  async updateCollectionName(collectionId: number, newName: string) {
+    return this.prisma.collection.update({
+      where: {
+        id: collectionId,
+      },
+      data: {
+        name: newName,
+        nameId: newName.toLowerCase().replace(/ /g, '-'),
+      },
     });
   }
 

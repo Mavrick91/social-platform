@@ -107,7 +107,7 @@ const PostAction = ({
             <Fragment key={index}>
               <button
                 type="button"
-                className={`text-center py-4 text-sm ${action.className || ''}`}
+                className={`text-center py-3.5 text-sm ${action.className || ''}`}
                 onClick={() => handleAction(action.type)}
               >
                 <div className="flex justify-center items-center">

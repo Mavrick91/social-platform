@@ -11,7 +11,7 @@ type Props = {
   picturesFromSaved: CollectionFragmentFragment;
   selectedPictures: number[];
   handlePictureClick: (pic: number) => void;
-  setCurrentStep: (step: number) => void;
+  setCurrentStep?: (step: number) => void;
   onSubmit: (data: FormData) => void;
 };
 
@@ -26,40 +26,44 @@ export const AddPicturesStep = ({
 
   return (
     <DialogContent
-      className="p-0 rounded-lg max-w-[400px] min-h-[691px] gap-0 flex flex-col"
+      className="p-0 rounded-lg max-w-[400px] overflow-hidden min-h-[691px] gap-0 flex flex-col"
       showClose={false}
     >
-      <div className="flex justify-between py-3 px-3 items-center">
-        <button onClick={() => setCurrentStep(0)}>
-          <ArrowLeft size={18} />
-        </button>
-        <h2 className="text-lg font-semibold">Add from saved</h2>
+      <div className="flex justify-between bg-gray-100 py-2.5 px-3 items-center">
+        {setCurrentStep && (
+          <button onClick={() => setCurrentStep(0)}>
+            <ArrowLeft size={18} />
+          </button>
+        )}
+        <h2 className="font-semibold text-center w-full">Add from saved</h2>
         <div />
       </div>
       <div className="flex flex-col grow">
         <div className="grid grid-cols-3">
-          {picturesFromSaved.pictures.map((pic) => (
-            <button
-              key={pic.pictureId}
-              onClick={() => handlePictureClick(pic.pictureId)}
-              className="col-span-1 aspect-square relative"
-            >
-              <img
-                src={pic.picture.fileUrl}
-                alt="collection"
-                className="object-cover aspect-square"
-              />
-              {selectedPictures.includes(pic.pictureId) && (
-                <div
-                  className={cn(
-                    'absolute inset-0 bg-white/30 flex items-center justify-center'
-                  )}
-                >
-                  <Check color="white" />
-                </div>
-              )}
-            </button>
-          ))}
+          {picturesFromSaved.pictures.map((pic, index) => {
+            return (
+              <button
+                key={index}
+                onClick={() => handlePictureClick(pic.pictureId)}
+                className="col-span-1 aspect-square relative"
+              >
+                <img
+                  src={pic.picture.fileUrl}
+                  alt="collection"
+                  className="object-cover aspect-square"
+                />
+                {selectedPictures.includes(pic.pictureId) && (
+                  <div
+                    className={cn(
+                      'absolute inset-0 bg-white/30 flex items-center justify-center'
+                    )}
+                  >
+                    <Check color="white" />
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
       <Separator />
