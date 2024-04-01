@@ -57,6 +57,7 @@ export class PictureResolver {
     @Args('id') id: number,
     @Args('input') input: UpdatePictureInput,
   ): Promise<Picture> {
+    console.log('🚀 ~ input:', input);
     try {
       return await this.pictureService.update(id, input);
     } catch (error) {

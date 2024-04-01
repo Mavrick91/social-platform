@@ -17,6 +17,7 @@ import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';
 import ImageWithPlaceholder from '../ImageWithPlaceholder';
+import UploadPostDialog from '../UploadPostDialog';
 
 type Props = {
   children: ReactNode;
@@ -45,6 +46,7 @@ function PostDetailsDialog({ children, picture }: Props) {
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent
+        showClose={false}
         className="p-0 rounded-sm overflow-hidden border-none h-auto w-max flex-col"
         style={{
           maxHeight: 'calc(100vh - 40px)',
@@ -68,7 +70,7 @@ function PostDetailsDialog({ children, picture }: Props) {
                     />
                   </Link>
                   <div className="flex flex-col w-full">
-                    <div className="flex justify-between items-center pr-10">
+                    <div className="flex justify-between items-center pr-5">
                       <div>
                         <Link
                           to={`/${picture?.user.username}`}
@@ -91,12 +93,7 @@ function PostDetailsDialog({ children, picture }: Props) {
                         )}
                       </div>
                       {picture?.id && user.id === picture.user?.id && (
-                        <PostAction
-                          isDelete
-                          pictureId={picture.id}
-                          isEdit
-                          handleOpenUpdatePictureDialog={handleToggleDialog}
-                        >
+                        <PostAction isDelete picture={picture} isEdit>
                           <Ellipsis color="gray" />
                         </PostAction>
                       )}

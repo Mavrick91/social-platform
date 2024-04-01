@@ -47,7 +47,9 @@ export default function AdvancedSettingsExpand() {
                         {...field}
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="!bg-black"
+                        className={cn({
+                          '!bg-black': field.value,
+                        })}
                       />
                     </FormControl>
                   )}
@@ -72,7 +74,9 @@ export default function AdvancedSettingsExpand() {
                         {...field}
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="!bg-black"
+                        className={cn({
+                          '!bg-black': field.value,
+                        })}
                       />
                     </FormControl>
                   )}

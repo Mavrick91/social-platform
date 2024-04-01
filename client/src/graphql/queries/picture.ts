@@ -4,9 +4,12 @@ import { USER_FRAGMENT } from './user';
 export const PICTURE_FRAGMENT = gql`
   fragment PictureFragment on Picture {
     id
+    fileName
     description
     createdAt
     updatedAt
+    hideLikesAndViewCounts
+    disableComments
     sizes {
       thumbnail
       original

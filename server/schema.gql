@@ -54,6 +54,8 @@ type Picture {
   id: Int!
   sizes: SizeType!
   fileName: String!
+  hideLikesAndViewCounts: Boolean!
+  disableComments: Boolean!
   altText: String!
   description: String
   user: User!
@@ -186,6 +188,9 @@ input SizeInput {
 
 input UpdatePictureInput {
   description: String
+  altText: String
+  disableComments: Boolean
+  hideLikesAndViewCounts: Boolean
 }
 
 input CreateCommentInput {

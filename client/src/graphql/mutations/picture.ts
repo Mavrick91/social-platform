@@ -13,6 +13,9 @@ export const UPDATE_PICTURE_MUTATION = gql`
     updatePicture(id: $id, input: $input) {
       id
       description
+      altText
+      disableComments
+      hideLikesAndViewCounts
     }
   }
 `;

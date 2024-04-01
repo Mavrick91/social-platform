@@ -4,4 +4,13 @@ import { Field, InputType } from '@nestjs/graphql';
 export class UpdatePictureInput {
   @Field({ nullable: true })
   description?: string;
+
+  @Field({ nullable: true })
+  altText?: string;
+
+  @Field({ nullable: true })
+  disableComments?: boolean;
+
+  @Field({ nullable: true })
+  hideLikesAndViewCounts?: boolean;
 }

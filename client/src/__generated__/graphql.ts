@@ -231,7 +231,9 @@ export type Picture = {
   comments: Array<Comment>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  disableComments: Scalars['Boolean']['output'];
   fileName: Scalars['String']['output'];
+  hideLikesAndViewCounts: Scalars['Boolean']['output'];
   id: Scalars['Int']['output'];
   likes: Array<Like>;
   sizes: SizeType;
@@ -333,7 +335,10 @@ export type UpdateCommentInput = {
 };
 
 export type UpdatePictureInput = {
+  altText?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  disableComments?: InputMaybe<Scalars['Boolean']['input']>;
+  hideLikesAndViewCounts?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateUserDto = {
@@ -438,14 +443,14 @@ export type LikePictureMutationVariables = Exact<{
 }>;
 
 
-export type LikePictureMutation = { __typename?: 'Mutation', likePicture: { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
+export type LikePictureMutation = { __typename?: 'Mutation', likePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
 
 export type UnlikePictureMutationVariables = Exact<{
   likeId: Scalars['Float']['input'];
 }>;
 
 
-export type UnlikePictureMutation = { __typename?: 'Mutation', unlikePicture: { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
+export type UnlikePictureMutation = { __typename?: 'Mutation', unlikePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
 
 export type UploadPictureMutationVariables = Exact<{
   input: CreatePictureInput;
@@ -460,7 +465,7 @@ export type UpdatePictureMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePictureMutation = { __typename?: 'Mutation', updatePicture: { __typename?: 'Picture', id: number, description?: string | null } };
+export type UpdatePictureMutation = { __typename?: 'Mutation', updatePicture: { __typename?: 'Picture', id: number, description?: string | null, altText: string, disableComments: boolean, hideLikesAndViewCounts: boolean } };
 
 export type DeletePictureMutationVariables = Exact<{
   id: Scalars['Float']['input'];
@@ -497,7 +502,7 @@ export type GetCollectionQueryVariables = Exact<{
 }>;
 
 
-export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, isDefault: boolean, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
+export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, isDefault: boolean, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
 
 export type GetCommentsByPictureQueryVariables = Exact<{
   pictureId: Scalars['Int']['input'];
@@ -506,21 +511,21 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 
 export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } }> };
 
-export type PictureFragmentFragment = { __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
+export type PictureFragmentFragment = { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
 
 export type GetPictureByUsernameQueryVariables = Exact<{
   username?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPictureByUsernameQuery = { __typename?: 'Query', picturesByUsername: Array<{ __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
+export type GetPictureByUsernameQuery = { __typename?: 'Query', picturesByUsername: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
 
 export type GetPicturesFromFollowingQueryVariables = Exact<{
   userId: Array<Scalars['Float']['input']> | Scalars['Float']['input'];
 }>;
 
 
-export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFromFollowing: Array<{ __typename?: 'Picture', id: number, description?: string | null, createdAt: any, updatedAt: any, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
+export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFromFollowing: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
 
 export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
 
@@ -569,9 +574,12 @@ export const UserFragmentFragmentDoc = gql`
 export const PictureFragmentFragmentDoc = gql`
     fragment PictureFragment on Picture {
   id
+  fileName
   description
   createdAt
   updatedAt
+  hideLikesAndViewCounts
+  disableComments
   sizes {
     thumbnail
     original
@@ -1025,6 +1033,9 @@ export const UpdatePictureDocument = gql`
   updatePicture(id: $id, input: $input) {
     id
     description
+    altText
+    disableComments
+    hideLikesAndViewCounts
   }
 }
     `;

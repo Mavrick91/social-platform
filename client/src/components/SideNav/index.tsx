@@ -8,6 +8,7 @@ import { getNavigationItems } from './sideNavConfig';
 import SideNavItem from './SideNavItem';
 import { useState } from 'react';
 import UploadPostDialog from '../UploadPostDialog';
+import { ArrowLeft } from 'lucide-react';
 
 export default function SideNav() {
   const user = useUserInfo();
@@ -51,7 +52,12 @@ export default function SideNav() {
       </nav>
       {isSearchVisible && <UserSearchOverlay />}
       {openUploadPost && (
-        <UploadPostDialog onClose={() => setOpenUploadPost(false)} />
+        <UploadPostDialog
+          onClose={() => setOpenUploadPost(false)}
+          buttonSubmitText="Share"
+          title="Create new post"
+          backButton={<ArrowLeft />}
+        />
       )}
     </header>
   );

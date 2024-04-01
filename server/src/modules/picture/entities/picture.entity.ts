@@ -53,6 +53,12 @@ export class Picture {
   @Field()
   fileName: string;
 
+  @Field()
+  hideLikesAndViewCounts: boolean;
+
+  @Field()
+  disableComments: boolean;
+
   @Field({ defaultValue: '' })
   altText: string;
 

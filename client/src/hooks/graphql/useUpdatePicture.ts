@@ -12,6 +12,15 @@ export function useUpdatePicture() {
             description() {
               return picture.description ?? null;
             },
+            altText() {
+              return picture.altText ?? null;
+            },
+            disableComments() {
+              return picture.disableComments ?? null;
+            },
+            hideLikesAndViewCounts() {
+              return picture.hideLikesAndViewCounts ?? null;
+            },
           },
         });
       }

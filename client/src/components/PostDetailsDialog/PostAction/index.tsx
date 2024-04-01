@@ -1,3 +1,5 @@
+import { PictureFragmentFragment } from '@/__generated__/graphql';
+import UploadPostDialog from '@/components/UploadPostDialog';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
@@ -8,22 +10,18 @@ import { Fragment, useMemo, useState } from 'react';
 
 type CommonProps = {
   children: React.ReactNode;
-  pictureId?: number;
+  picture: PictureFragmentFragment;
   isDelete?: boolean;
   isEdit?: boolean;
-  handleOpenUpdatePictureDialog?: (isOpen: boolean) => void;
   isUnfollow?: boolean;
-  profileId?: number;
 };
 
 type Editable = {
   isEdit: true;
-  handleOpenUpdatePictureDialog?: (isOpen: boolean) => void;
 };
 
 type Unfollowable = {
   isUnfollow: true;
-  profileId: number;
 };
 
 type EditProps = CommonProps & Editable;
@@ -40,12 +38,10 @@ type Props = BaseProps | EditProps | UnfollowProps | EditAndUnfollowProps;
 
 const PostAction = ({
   children,
-  pictureId,
+  picture,
   isUnfollow,
   isEdit,
   isDelete,
-  profileId,
-  handleOpenUpdatePictureDialog,
 }: Props) => {
   const user = useUserInfo();
 
@@ -53,21 +49,20 @@ const PostAction = ({
   const [unfollow] = useUnFollow();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [openEditPostDialog, setOpenEditPostDialog] = useState(false);
 
   const handleAction = async (actionType: string) => {
     try {
       if (actionType === 'delete') {
-        if (!pictureId) throw new Error('Picture ID is required');
-        await deletePicture({ variables: { id: pictureId } });
+        await deletePicture({ variables: { id: picture.id } });
       } else if (actionType === 'unfollow') {
-        if (!profileId) throw new Error('Profile ID is required');
         await unfollow({
-          variables: { input: { userId: user.id, followingId: profileId } },
+          variables: {
+            input: { userId: user.id, followingId: picture.user.id },
+          },
         });
       } else if (actionType === 'edit') {
-        if (!handleOpenUpdatePictureDialog)
-          throw new Error('Handler is required');
-        handleOpenUpdatePictureDialog(true);
+        setOpenEditPostDialog(true);
       }
       setIsOpen(false);
     } catch (error) {
@@ -96,35 +91,47 @@ const PostAction = ({
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <button>{children}</button>
-      </DialogTrigger>
-      <DialogContent
-        className="p-0 gap-0 rounded-lg max-w-sm"
-        showClose={false}
-      >
-        {actions
-          .filter((action) => action.isActive)
-          .map((action, index) => (
-            <Fragment key={index}>
-              <button
-                type="button"
-                className={`text-center py-3.5 text-sm ${action.className || ''}`}
-                onClick={() => handleAction(action.type)}
-              >
-                <div className="flex justify-center items-center">
-                  {action.label}
-                  {loading && action.type === 'delete' && (
-                    <LoadingSpinner className="ml-2 h-4 w-4 animate-spin" />
-                  )}
-                </div>
-              </button>
-              <Separator className="last:hidden" />
-            </Fragment>
-          ))}
-      </DialogContent>
-    </Dialog>
+    <>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <button>{children}</button>
+        </DialogTrigger>
+        <DialogContent
+          className="p-0 gap-0 rounded-lg max-w-sm"
+          showClose={false}
+        >
+          {actions
+            .filter((action) => action.isActive)
+            .map((action, index) => (
+              <Fragment key={index}>
+                <button
+                  type="button"
+                  className={`text-center py-3.5 text-sm ${action.className || ''}`}
+                  onClick={() => handleAction(action.type)}
+                >
+                  <div className="flex justify-center items-center">
+                    {action.label}
+                    {loading && action.type === 'delete' && (
+                      <LoadingSpinner className="ml-2 h-4 w-4 animate-spin" />
+                    )}
+                  </div>
+                </button>
+                <Separator className="last:hidden" />
+              </Fragment>
+            ))}
+        </DialogContent>
+      </Dialog>
+
+      {openEditPostDialog && (
+        <UploadPostDialog
+          onClose={() => setOpenEditPostDialog(false)}
+          picture={picture}
+          title="Edit info"
+          buttonSubmitText="Done"
+          backButton={<span>Cancel</span>}
+        />
+      )}
+    </>
   );
 };
 
