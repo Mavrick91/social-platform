@@ -100,6 +100,7 @@ export class PictureService {
           likes: true,
         },
       });
+      console.log('🚀 ~ picture:', picture);
 
       if (!picture) {
         throw new NotFoundException('Picture not found');
