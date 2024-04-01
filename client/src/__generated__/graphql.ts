@@ -392,7 +392,7 @@ export type AddPictureToCollectionMutationVariables = Exact<{
 }>;
 
 
-export type AddPictureToCollectionMutation = { __typename?: 'Mutation', addPictureToCollection: Array<{ __typename?: 'PictureOnCollection', collectionId: string, pictureId: number }> };
+export type AddPictureToCollectionMutation = { __typename?: 'Mutation', addPictureToCollection: Array<{ __typename?: 'PictureOnCollection', collectionId: string, pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> };
 
 export type RemovePictureFromCollectionMutationVariables = Exact<{
   pictureId: Scalars['Float']['input'];
@@ -694,6 +694,11 @@ export const AddPictureToCollectionDocument = gql`
   addPictureToCollection(pictureId: $pictureId, collectionId: $collectionId) {
     collectionId
     pictureId
+    picture {
+      sizes {
+        small
+      }
+    }
   }
 }
     `;

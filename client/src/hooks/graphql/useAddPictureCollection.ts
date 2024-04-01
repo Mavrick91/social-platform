@@ -38,7 +38,7 @@ export default function useAddPictureCollection() {
                 picture: {
                   __typename: 'Picture' as const,
                   sizes: {
-                    small: '',
+                    small: picture.picture.sizes.small,
                   },
                 },
               };

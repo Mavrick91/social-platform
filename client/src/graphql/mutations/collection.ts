@@ -23,6 +23,11 @@ export const ADD_PICTURE_TO_COLLECTION_MUTATION = gql`
     addPictureToCollection(pictureId: $pictureId, collectionId: $collectionId) {
       collectionId
       pictureId
+      picture {
+        sizes {
+          small
+        }
+      }
     }
   }
 `;

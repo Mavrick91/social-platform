@@ -32,6 +32,9 @@ export class CollectionService {
             collectionId,
             pictureId,
           },
+          include: {
+            picture: true,
+          },
         }),
       ),
     );
