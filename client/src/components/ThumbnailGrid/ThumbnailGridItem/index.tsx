@@ -1,27 +1,17 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import PictureDetailsDialog from '@/components/PostDetailsDialog';
 import { MessageCircle } from 'lucide-react';
-import { useState } from 'react';
 
 type Props = {
   picture: PictureFragmentFragment;
 };
 
 export default function ThumbnailGridItem({ picture }: Props) {
-  const [selectedPicture, setSelectedPicture] =
-    useState<PictureFragmentFragment | null>(null);
-  const [editPictureDialogOpen, setEditPictureDialogOpen] = useState(false);
-
-  const handleClickPicture = (picture: PictureFragmentFragment) => {
-    setSelectedPicture(picture);
-  };
-
   return (
     <>
       <PictureDetailsDialog picture={picture}>
         <button
           key={picture.id}
-          onClick={() => handleClickPicture(picture)}
           className="group relative col-span-1 aspect-square"
         >
           <img
@@ -38,18 +28,6 @@ export default function ThumbnailGridItem({ picture }: Props) {
           </div>
         </button>
       </PictureDetailsDialog>
-
-      {/* {selectedPicture && (
-        <UploadPictureDialog
-          open={editPictureDialogOpen}
-          setOpen={setEditPictureDialogOpen}
-          defaultValues={{
-            id: selectedPicture.id,
-            fileUrl: selectedPicture.fileUrl,
-            description: selectedPicture.description ?? '',
-          }}
-        />
-      )} */}
     </>
   );
 }
