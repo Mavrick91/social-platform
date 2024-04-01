@@ -17,7 +17,6 @@ import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';
 import ImageWithPlaceholder from '../ImageWithPlaceholder';
-import UploadPostDialog from '../UploadPostDialog';
 
 type Props = {
   children: ReactNode;
