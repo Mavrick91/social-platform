@@ -40,7 +40,7 @@ export default function UploadPostDialog({ onClose }: Props) {
   const [callbackClickDiscard, setCallbackClickDiscard] =
     useState<() => void>();
 
-  const [uploadPicture, { loading }] = useUploadPicture(user.id);
+  const [uploadPicture, { loading }] = useUploadPicture(user.username);
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
