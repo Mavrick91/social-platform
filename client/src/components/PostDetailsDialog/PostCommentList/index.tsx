@@ -62,12 +62,14 @@ function PostCommentList({ picture, setErrorMutation }: Props) {
           {moment(picture?.createdAt).fromNow()}
         </span>
       </div>
-      <PictureCommentForm
-        pictureId={picture.id}
-        refetchCommentList={refetch}
-        commentListRef={commentListRef}
-        setErrorMutation={setErrorMutation}
-      />
+      {!picture.disableComments && (
+        <PictureCommentForm
+          pictureId={picture.id}
+          refetchCommentList={refetch}
+          commentListRef={commentListRef}
+          setErrorMutation={setErrorMutation}
+        />
+      )}
     </div>
   );
 }

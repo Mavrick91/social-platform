@@ -215,7 +215,10 @@ export default function UploadPostDialog({
               </div>
               {!previewPicture && <UploadPictureFromComputer />}
               {previewPicture && (
-                <AddCaptionPost previewPicture={previewPicture} />
+                <AddCaptionPost
+                  previewPicture={previewPicture}
+                  isEdit={!!picture}
+                />
               )}
             </form>
           </Form>

@@ -8,9 +8,10 @@ import AdvancedSettingsExpand from './AdvancedSettingsExpand';
 
 type Props = {
   previewPicture: string;
+  isEdit: boolean;
 };
 
-export default function AddCaptionPost({ previewPicture }: Props) {
+export default function AddCaptionPost({ previewPicture, isEdit }: Props) {
   const user = useUserInfo();
   const { register, watch } = useFormContext();
 
@@ -47,7 +48,7 @@ export default function AddCaptionPost({ previewPicture }: Props) {
           {descriptionWatch.length}/2,200
         </div>
         <AccessibilityExpand previewPicture={previewPicture} />
-        <AdvancedSettingsExpand />
+        {!isEdit && <AdvancedSettingsExpand />}
       </motion.div>
     </div>
   );
