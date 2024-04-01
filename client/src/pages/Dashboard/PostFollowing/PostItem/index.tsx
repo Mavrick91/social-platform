@@ -15,11 +15,9 @@ export default function PostItem({ picture }: Props) {
   return (
     <div className="max-w-lg mx-auto">
       <PostHeader
-        profileId={picture.user?.id}
         avatar={picture.user?.avatar}
         username={picture.user.username}
-        createdAt={picture.createdAt}
-        pictureId={picture.id}
+        picture={picture}
       />
       <PostPicture picture={picture} />
       <PostCTA picture={picture} />

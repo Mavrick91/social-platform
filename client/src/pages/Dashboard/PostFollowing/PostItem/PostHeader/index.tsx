@@ -1,3 +1,4 @@
+import { PictureFragmentFragment } from '@/__generated__/graphql';
 import PostAction from '@/components/PostDetailsDialog/PostAction';
 import UserAvatar from '@/components/UserAvatar';
 import { cn } from '@/lib/utils';
@@ -10,22 +11,14 @@ import { Link } from 'react-router-dom';
 type Props = {
   avatar?: string | null;
   username: string;
-  createdAt: string;
-  profileId: number;
-  pictureId: number;
+  picture: PictureFragmentFragment;
 };
 
-export default function PostHeader({
-  avatar,
-  username,
-  createdAt,
-  profileId,
-  pictureId,
-}: Props) {
+export default function PostHeader({ avatar, username, picture }: Props) {
   const user = useUserInfo();
 
   const isFollowingCurrentProfile = user.initiatedFollows.some(
-    (follow) => follow.targetUserId === profileId
+    (follow) => follow.targetUserId === picture.user.id
   );
 
   return (
@@ -41,13 +34,14 @@ export default function PostHeader({
             </Link>{' '}
             •{' '}
             <span className="text-sm font-medium text-zinc-500">
-              {moment(createdAt).fromNow()}
+              {moment(picture.createdAt).fromNow()}
               {!isFollowingCurrentProfile && (
                 <>
+                  {' '}
                   •{' '}
                   <ButtonFollow
                     isFollowing={isFollowingCurrentProfile}
-                    targetUserId={profileId}
+                    targetUserId={picture.user.id}
                     className={cn(
                       'bg-transparent p-0 hover:bg-transparent text-blue-400 hover:text-blue-600'
                     )}
@@ -58,7 +52,7 @@ export default function PostHeader({
           </p>
         </div>
       </div>
-      <PostAction pictureId={pictureId} isUnfollow profileId={profileId}>
+      <PostAction picture={picture} isUnfollow>
         <Ellipsis />
       </PostAction>
     </div>
