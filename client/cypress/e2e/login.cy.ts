@@ -27,14 +27,14 @@ describe('Login', () => {
       .and('contain', 'Invalid email or password');
   });
 
-  it.only('logs in with valid credentials', () => {
+  it('logs in with valid credentials', () => {
     cy.mockGraphQLMutation(
       'Login',
       'mutations/authentication/successfulLogin.json'
     );
     cy.mockGraphQLMutation('GetUserProfile', 'queries/users/validUser.json');
     cy.mockGraphQLMutation(
-      'GetPictureByAuthor',
+      'GetPicturesFromFollowing',
       'queries/pictures/validAuthor.json'
     );
 
@@ -44,8 +44,8 @@ describe('Login', () => {
 
     cy.wait('@Login');
     cy.wait('@GetUserProfile');
-    cy.wait('@GetPictureByAuthor');
+    cy.wait('@GetPicturesFromFollowing');
 
-    cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/');
   });
 });
