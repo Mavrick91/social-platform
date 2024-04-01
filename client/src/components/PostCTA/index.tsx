@@ -7,6 +7,7 @@ import { BookmarkIcon, HeartIcon, MessageCircle, SendIcon } from 'lucide-react';
 import PostDetailsDialog from '../PostDetailsDialog';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Pluralize } from '../Pluralize';
+import useGetPicturesFromSaved from '@/hooks/useGetPicturesFromSaved';
 
 type Props = {
   picture: PictureFragmentFragment;
@@ -15,7 +16,9 @@ type Props = {
 export default function PostCTA({ picture, showMessageIcon = true }: Props) {
   const user = useUserInfo();
   const likeId = picture.likes.find((like) => like.userId === user.id)?.id;
-  const pictureInCollection = user.collections[0].pictures.find(
+  const picturesFromSaved = useGetPicturesFromSaved();
+
+  const pictureInCollection = picturesFromSaved.pictures.find(
     (pic) => pic.pictureId === picture.id
   );
 
