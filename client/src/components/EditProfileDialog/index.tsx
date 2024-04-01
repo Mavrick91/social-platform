@@ -4,18 +4,13 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ACCEPTED_IMAGE_TYPES } from '@/constant/image';
 import { useUpdateUserProfile } from '@/hooks/graphql/useUpdateUserProfile';
-import uploadImage from '@/lib/uploadImage';
 import { cn } from '@/lib/utils';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UploadIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import FileUploadArea from '../UploadPictureDialog/FileUploadArea';
-import UserAvatar from '../UserAvatar';
 
 type Props = {
   children: React.ReactNode;
@@ -71,9 +66,9 @@ export default function EditProfileDialog({ children }: Props) {
 
       if (data.avatar[0]) {
         setUploadStatus(true);
-        const { fileUrl, fileKey } = await uploadImage(data.avatar[0]);
-        avatarUrl = fileUrl;
-        avatarName = fileKey;
+        // const { fileUrl, fileKey } = await uploadImage(data.avatar[0]);
+        // avatarUrl = fileUrl;
+        // avatarName = fileKey;
       }
 
       const variables: UpdateUserProfileMutationVariables = {
@@ -115,7 +110,7 @@ export default function EditProfileDialog({ children }: Props) {
                   }
                 )}
               >
-                <FileUploadArea defaultPreview={user.avatar}>
+                {/* <FileUploadArea defaultPreview={user.avatar}>
                   {(handleFileChange, _, previewUrl) => (
                     <>
                       {previewUrl ? (
@@ -144,7 +139,7 @@ export default function EditProfileDialog({ children }: Props) {
                       />
                     </>
                   )}
-                </FileUploadArea>
+                </FileUploadArea> */}
               </span>
             </Label>
           </div>
