@@ -21,10 +21,14 @@ body,
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 0, 149, 246;
+    --primary-hover: 24, 119, 242;
+    --primary-link-hover: 0, 55, 107;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --separator: 219, 219, 219;
+
+    --secondary: 115, 115, 115;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -36,7 +40,7 @@ body,
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 237, 73, 86;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;

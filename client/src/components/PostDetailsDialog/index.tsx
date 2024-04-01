@@ -55,19 +55,7 @@ function PostDetailsDialog({ children, picture }: Props) {
         <div className="flex">
           <div className="flex">
             <div className="items-center flex justify-center min-h-[500px]">
-              {/* <img
-                alt="Photo"
-                className="overflow-hidden w-full h-auto object-contain"
-                src={picture.sizes.original}
-                style={{
-                  maxWidth: `${aspectRatio.naturalWidth}px`,
-                  maxHeight: `${aspectRatio.naturalHeight}px`,
-                }}
-              /> */}
-              <ImageWithPlaceholder
-                largeImageUrl={picture.sizes.original}
-                placeholderImageUrl={picture.sizes.thumbnail}
-              />
+              <ImageWithPlaceholder picture={picture} />
             </div>
             <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-bg-border flex-col">
               <div className="flex pt-3 pl-3 flex-col">

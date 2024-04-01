@@ -43,12 +43,17 @@ module.exports = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        separator: {
+          DEFAULT: 'rgb(var(--separator))',
+        },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: 'rgb(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          hover: 'rgb(var(--primary-hover))',
+          'link-hover': 'rgb(var(--primary-link-hover))',
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
+          DEFAULT: 'rgb(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
         },
         'secondary-button': {
@@ -58,7 +63,7 @@ module.exports = {
           DEFAULT: 'hsl(var(--secondary-button-foreground))',
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
+          DEFAULT: 'rgb(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {

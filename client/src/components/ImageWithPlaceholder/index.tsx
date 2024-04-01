@@ -1,28 +1,27 @@
+import { PictureFragmentFragment } from '@/__generated__/graphql';
 import { useEffect, useState } from 'react';
 
 type Props = {
-  largeImageUrl: string;
-  placeholderImageUrl: string;
+  picture: PictureFragmentFragment;
 };
 
-const ImageWithPlaceholder = ({
-  largeImageUrl,
-  placeholderImageUrl,
-}: Props) => {
-  const [currentImageUrl, setCurrentImageUrl] = useState(placeholderImageUrl);
+const ImageWithPlaceholder = ({ picture }: Props) => {
+  const [currentImageUrl, setCurrentImageUrl] = useState(
+    picture.sizes.thumbnail
+  );
 
   useEffect(() => {
     const img = new Image();
-    img.src = largeImageUrl;
+    img.src = picture.sizes.original;
     img.onload = () => {
-      setCurrentImageUrl(largeImageUrl);
+      setCurrentImageUrl(picture.sizes.original);
     };
     img.onerror = () => {
-      console.error('Failed to load the image:', largeImageUrl);
+      console.error('Failed to load the image:', picture.sizes.original);
     };
-  }, [largeImageUrl]);
+  }, [picture.sizes.original]);
 
-  return <img src={currentImageUrl} alt="Descriptive alt text" />;
+  return <img src={currentImageUrl} alt={picture.altText} />;
 };
 
 export default ImageWithPlaceholder;

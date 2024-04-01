@@ -53,7 +53,8 @@ type SizeType {
 type Picture {
   id: Int!
   sizes: SizeType!
-  fileName: String
+  fileName: String!
+  altText: String!
   description: String
   user: User!
   likes: [Like!]!
@@ -168,10 +169,12 @@ input CreateUserDto {
 }
 
 input CreatePictureInput {
-  description: String
-  userId: Float!
   sizes: SizeInput!
   fileName: String!
+  description: String
+  altText: String
+  hideLikesAndViewCounts: Boolean! = false
+  disableComments: Boolean! = false
 }
 
 input SizeInput {

@@ -6,11 +6,16 @@ import SideNavLogo from './SideNavLogo';
 import UserSearchOverlay from './UserSearchOverlay';
 import { getNavigationItems } from './sideNavConfig';
 import SideNavItem from './SideNavItem';
+import { useState } from 'react';
+import UploadPostDialog from '../UploadPostDialog';
 
 export default function SideNav() {
   const user = useUserInfo();
   const { sideNavOpen, isSearchVisible, toggleSearch } = useSideNav();
-  const navigationItems = getNavigationItems(user, toggleSearch);
+  const [openUploadPost, setOpenUploadPost] = useState(false);
+  const navigationItems = getNavigationItems(user, toggleSearch, () =>
+    setOpenUploadPost(true)
+  );
 
   const displaySmallNav = !sideNavOpen || isSearchVisible;
 
@@ -45,6 +50,9 @@ export default function SideNav() {
         </div>
       </nav>
       {isSearchVisible && <UserSearchOverlay />}
+      {openUploadPost && (
+        <UploadPostDialog onClose={() => setOpenUploadPost(false)} />
+      )}
     </header>
   );
 }

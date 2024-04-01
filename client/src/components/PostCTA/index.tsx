@@ -10,8 +10,9 @@ import { Pluralize } from '../Pluralize';
 
 type Props = {
   picture: PictureFragmentFragment;
+  showMessageIcon?: boolean;
 };
-export default function PostCTA({ picture }: Props) {
+export default function PostCTA({ picture, showMessageIcon = true }: Props) {
   const user = useUserInfo();
   const likeId = picture.likes.find((like) => like.userId === user.id)?.id;
   const pictureInCollection = user.collections[0].pictures.find(
@@ -56,9 +57,11 @@ export default function PostCTA({ picture }: Props) {
               stroke={!likeId ? 'black' : '#ff3041'}
             />
           </button>
-          <PostDetailsDialog picture={picture}>
-            <MessageCircle className="hover:text-gray-500 cursor-pointer" />
-          </PostDetailsDialog>
+          {showMessageIcon && (
+            <PostDetailsDialog picture={picture}>
+              <MessageCircle className="hover:text-gray-500 cursor-pointer" />
+            </PostDetailsDialog>
+          )}
           <SendIcon className="hover:text-gray-500" />
         </div>
         <button onClick={handleClickAddToCollection}>

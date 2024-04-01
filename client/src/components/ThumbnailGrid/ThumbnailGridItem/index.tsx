@@ -1,6 +1,5 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import PictureDetailsDialog from '@/components/PostDetailsDialog';
-import UploadPictureDialog from '@/components/UploadPictureDialog';
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -26,7 +25,7 @@ export default function ThumbnailGridItem({ picture }: Props) {
           className="group relative col-span-1 aspect-square"
         >
           <img
-            alt="Photo"
+            alt={picture.altText}
             className="aspect-square overflow-hidden border border-slate-200 object-cover"
             src={picture.sizes.thumbnail}
             loading="lazy"
@@ -40,7 +39,7 @@ export default function ThumbnailGridItem({ picture }: Props) {
         </button>
       </PictureDetailsDialog>
 
-      {selectedPicture && (
+      {/* {selectedPicture && (
         <UploadPictureDialog
           open={editPictureDialogOpen}
           setOpen={setEditPictureDialogOpen}
@@ -50,7 +49,7 @@ export default function ThumbnailGridItem({ picture }: Props) {
             description: selectedPicture.description ?? '',
           }}
         />
-      )}
+      )} */}
     </>
   );
 }

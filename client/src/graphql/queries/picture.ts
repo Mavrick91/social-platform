@@ -12,6 +12,7 @@ export const PICTURE_FRAGMENT = gql`
       original
       medium
     }
+    altText
     user {
       ...UserFragment
     }
@@ -29,7 +30,7 @@ export const PICTURE_FRAGMENT = gql`
 `;
 
 export const GET_PICTURE_BY_USERNAME = gql`
-  query GetPictureByUser($username: String) {
+  query GetPictureByUsername($username: String) {
     picturesByUsername(username: $username) {
       ...PictureFragment
     }

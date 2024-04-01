@@ -11,11 +11,11 @@ const uploadImage = async (file: File) => {
       },
     });
 
-    const { fileUrl, fileKey } = response.data;
+    const { fileName, sizes } = response.data;
 
     return {
-      fileUrl,
-      fileKey,
+      fileName,
+      sizes,
     };
   } catch (error) {
     console.error('Error uploading file:', error);

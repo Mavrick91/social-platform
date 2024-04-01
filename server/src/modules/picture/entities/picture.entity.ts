@@ -50,8 +50,11 @@ export class Picture {
   @Field(() => SizeType)
   sizes: SizeType;
 
-  @Field({ nullable: true })
+  @Field()
   fileName: string;
+
+  @Field({ defaultValue: '' })
+  altText: string;
 
   @Field({ nullable: true })
   description?: string;

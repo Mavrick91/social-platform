@@ -60,7 +60,7 @@ export class PictureService {
     return pictures;
   }
 
-  async create(input: CreatePictureInput): Promise<Picture> {
+  async create(input: CreatePictureInput, userId: number): Promise<Picture> {
     const sizesData = {
       thumbnail: input.sizes.thumbnail,
       original: input.sizes.original,
@@ -68,10 +68,12 @@ export class PictureService {
       small: input.sizes.small,
     };
 
+    console.log('🚀 ~ file');
     return this.prisma.picture.create({
       data: {
         ...input,
         sizes: sizesData,
+        userId,
       },
     });
   }

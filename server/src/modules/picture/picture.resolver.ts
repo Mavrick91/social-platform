@@ -10,8 +10,9 @@ import { S3Service } from '../s3/s3.service';
 import { CreatePictureInput } from './dto/create-picture.input';
 import { UpdatePictureInput } from './dto/update-picture.input';
 import { PictureService } from './picture.service';
-import { Picture } from '@prisma/client';
+import { Picture, User } from '@prisma/client';
 import { Picture as PictureResponse } from './entities/picture.entity';
+import { CurrentUser } from '../auth/current-user.decorator';
 
 @Resolver(() => PictureResponse)
 export class PictureResolver {
@@ -41,9 +42,10 @@ export class PictureResolver {
   @UseGuards(GqlAuthGuard)
   async createPicture(
     @Args('input') input: CreatePictureInput,
+    @CurrentUser() user: User,
   ): Promise<Picture> {
     try {
-      return await this.pictureService.create(input);
+      return await this.pictureService.create(input, user.id);
     } catch (error) {
       throw new BadRequestException('Failed to create picture');
     }

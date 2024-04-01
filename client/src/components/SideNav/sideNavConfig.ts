@@ -18,7 +18,8 @@ export interface SideNavItem {
 
 export const getNavigationItems = (
   user: UserFragmentFragment,
-  openSearch: () => void
+  openSearch: () => void,
+  openCreate: () => void
 ): SideNavItem[] => [
   {
     name: 'Home',
@@ -51,9 +52,8 @@ export const getNavigationItems = (
   },
   {
     name: 'Create',
-    path: '/create',
     Icon: SquarePlus,
-    isActive: (path) => path === '/create',
+    onClick: openCreate,
   },
   {
     name: 'Profile',

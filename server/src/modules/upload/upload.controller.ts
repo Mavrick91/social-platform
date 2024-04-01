@@ -5,11 +5,11 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { S3Service } from '../s3/s3.service';
 import { ConfigService } from '@nestjs/config';
-import { FileUpload } from '../decorators/file-upload.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import sharp from 'sharp';
+import { convertAndUploadImage } from 'src/image-upload.util';
+import { FileUpload } from '../decorators/file-upload.decorator';
+import { S3Service } from '../s3/s3.service';
 
 @Controller('uploads')
 export class UploadController {
@@ -21,16 +21,18 @@ export class UploadController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@FileUpload() file: Express.Multer.File) {
-    const bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
     const fileKey = `${Date.now()}.${file.originalname.split('.').pop()}`;
+    const baseKey = `posts/post-${fileKey}`;
 
     try {
-      const webpData = await sharp(file.buffer).toFormat('webp').toBuffer();
-      await this.s3Service.uploadFile(webpData, bucketName, fileKey);
+      const urls = await convertAndUploadImage(file.buffer, baseKey, [
+        { name: 'original' },
+        { name: 'thumbnail', width: 300, height: 300 },
+        { name: 'medium', width: 512 },
+        { name: 'small', width: 170 },
+      ]);
 
-      const fileUrl = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
-
-      return { fileUrl, fileKey };
+      return { sizes: urls, fileName: fileKey };
     } catch (error) {
       console.error('Failed to upload file:', error);
       throw error;
