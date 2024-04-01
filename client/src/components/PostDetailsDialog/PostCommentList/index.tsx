@@ -8,6 +8,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import moment from 'moment';
 import { useEffect, useMemo, useRef } from 'react';
 import PostCommentItem from '../PostCommentItem';
+import QuerySpinner from '@/components/ui/QuerySpinner';
 
 type Props = {
   picture: PictureFragmentFragment;
@@ -33,28 +34,30 @@ function PostCommentList({ picture, setErrorMutation }: Props) {
     return data.commentsByPictureId.length > 0 || picture.description;
   }, [data, picture.description]);
 
-  if (loading) return <div>Loading comments...</div>;
-
   return (
     <div className="flex flex-col grow">
       <div
         className="space-y-2 pr-6 p-3 h-0 grow overflow-y-auto"
         ref={commentListRef}
       >
-        {!hasComments && (
+        {loading && <QuerySpinner size={50} className="mt-10" />}
+
+        {!hasComments && !loading && (
           <div className="flex flex-col items-center justify-center grow h-full">
             <span className="font-bold text-2xl">No comments yet.</span>
             <span className="text-sm mt-2">Start the conversation.</span>
           </div>
         )}
 
-        <PostCommentItem
-          avatar={user.avatar}
-          content={picture.description}
-          createdAt={picture.createdAt}
-          firstName={user.firstName}
-          lastName={user.lastName}
-        />
+        {!loading && (
+          <PostCommentItem
+            avatar={user.avatar}
+            content={picture.description}
+            createdAt={picture.createdAt}
+            firstName={user.firstName}
+            lastName={user.lastName}
+          />
+        )}
 
         {data?.commentsByPictureId.map((comment) => {
           return (
