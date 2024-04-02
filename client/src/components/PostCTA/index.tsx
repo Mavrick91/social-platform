@@ -37,7 +37,6 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
       await removePictureFromCollection({
         variables: {
           pictureId: picture.id,
-          collectionId: Number(user.collections[0].id),
         },
       });
     else

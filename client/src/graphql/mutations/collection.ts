@@ -33,16 +33,9 @@ export const ADD_PICTURE_TO_COLLECTION_MUTATION = gql`
 `;
 
 export const REMOVE_PICTURE_TO_COLLECTION_MUTATION = gql`
-  mutation RemovePictureFromCollection(
-    $pictureId: Float!
-    $collectionId: Float!
-  ) {
-    removePictureFromCollection(
-      pictureId: $pictureId
-      collectionId: $collectionId
-    ) {
-      collectionId
-      pictureId
+  mutation RemovePictureFromCollection($pictureId: Float!) {
+    removePictureFromCollection(pictureId: $pictureId) {
+      id
     }
   }
 `;

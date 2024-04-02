@@ -42,15 +42,31 @@ export class CollectionService {
     return createdPictures;
   }
 
-  async removePictureFromCollection(collectionId: number, pictureId: number) {
-    return this.prisma.pictureOnCollection.delete({
+  async removePictureFromAllUserCollections(
+    userId: number,
+    pictureId: number,
+  ): Promise<Collection[]> {
+    const collections = await this.prisma.collection.findMany({
       where: {
-        pictureId_collectionId: {
-          pictureId,
-          collectionId,
+        userId: userId,
+        pictures: {
+          some: {
+            pictureId: pictureId,
+          },
         },
       },
     });
+
+    await this.prisma.pictureOnCollection.deleteMany({
+      where: {
+        pictureId: pictureId,
+        collection: {
+          userId: userId,
+        },
+      },
+    });
+
+    return collections;
   }
 
   async getCollection(collectionName: string): Promise<Collection> {

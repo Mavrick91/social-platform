@@ -136,7 +136,7 @@ type Mutation {
   likePicture(pictureId: Float!): Picture!
   unlikePicture(likeId: Float!): Picture!
   addPictureToCollection(collectionId: Float!, pictureId: [Float!]!): [PictureOnCollection!]!
-  removePictureFromCollection(collectionId: Float!, pictureId: Float!): PictureOnCollection!
+  removePictureFromCollection(pictureId: Float!): [Collection!]!
   createCollection(name: String!): Collection!
   deleteCollection(collectionId: Float!): Collection!
   updateNameCollection(collectionId: Float!, newName: String!): Collection!

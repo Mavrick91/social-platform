@@ -14,7 +14,6 @@ export default function useRemovePictureCollection() {
       try {
         if (!data?.removePictureFromCollection || !variables) return;
 
-        const { pictureId } = data.removePictureFromCollection;
         const userId = `User:${user.id}`;
         const currentUser = cache.readFragment<UserProfileFragment>({
           id: userId,
@@ -25,14 +24,11 @@ export default function useRemovePictureCollection() {
         if (!currentUser) return;
 
         const updatedCollections = currentUser.collections.map((collection) => {
-          if (Number(collection.id) !== variables.collectionId)
-            return collection;
-
           return {
             ...collection,
-            pictures: collection.pictures.filter(
-              (pic) => pic.pictureId !== pictureId
-            ),
+            pictures: collection.pictures.filter((pic) => {
+              return pic.pictureId !== variables.pictureId;
+            }),
           };
         });
 

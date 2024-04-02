@@ -114,7 +114,7 @@ export type Mutation = {
   likePicture: Picture;
   login: LoginResponse;
   removeComment: Comment;
-  removePictureFromCollection: PictureOnCollection;
+  removePictureFromCollection: Array<Collection>;
   unfollowUser: Follow;
   unlikePicture: Picture;
   updateComment: Comment;
@@ -187,7 +187,6 @@ export type MutationRemoveCommentArgs = {
 
 
 export type MutationRemovePictureFromCollectionArgs = {
-  collectionId: Scalars['Float']['input'];
   pictureId: Scalars['Float']['input'];
 };
 
@@ -396,11 +395,10 @@ export type AddPictureToCollectionMutation = { __typename?: 'Mutation', addPictu
 
 export type RemovePictureFromCollectionMutationVariables = Exact<{
   pictureId: Scalars['Float']['input'];
-  collectionId: Scalars['Float']['input'];
 }>;
 
 
-export type RemovePictureFromCollectionMutation = { __typename?: 'Mutation', removePictureFromCollection: { __typename?: 'PictureOnCollection', collectionId: string, pictureId: number } };
+export type RemovePictureFromCollectionMutation = { __typename?: 'Mutation', removePictureFromCollection: Array<{ __typename?: 'Collection', id: string }> };
 
 export type DeleteCollectionMutationVariables = Exact<{
   collectionId: Scalars['Float']['input'];
@@ -730,10 +728,9 @@ export type AddPictureToCollectionMutationHookResult = ReturnType<typeof useAddP
 export type AddPictureToCollectionMutationResult = Apollo.MutationResult<AddPictureToCollectionMutation>;
 export type AddPictureToCollectionMutationOptions = Apollo.BaseMutationOptions<AddPictureToCollectionMutation, AddPictureToCollectionMutationVariables>;
 export const RemovePictureFromCollectionDocument = gql`
-    mutation RemovePictureFromCollection($pictureId: Float!, $collectionId: Float!) {
-  removePictureFromCollection(pictureId: $pictureId, collectionId: $collectionId) {
-    collectionId
-    pictureId
+    mutation RemovePictureFromCollection($pictureId: Float!) {
+  removePictureFromCollection(pictureId: $pictureId) {
+    id
   }
 }
     `;
@@ -753,7 +750,6 @@ export type RemovePictureFromCollectionMutationFn = Apollo.MutationFunction<Remo
  * const [removePictureFromCollectionMutation, { data, loading, error }] = useRemovePictureFromCollectionMutation({
  *   variables: {
  *      pictureId: // value for 'pictureId'
- *      collectionId: // value for 'collectionId'
  *   },
  * });
  */

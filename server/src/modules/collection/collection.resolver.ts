@@ -23,14 +23,14 @@ export class CollectionResolver {
     );
   }
 
-  @Mutation(() => PictureOnResponse)
+  @Mutation(() => [CollectionResponse])
   @UseGuards(GqlAuthGuard)
   async removePictureFromCollection(
-    @Args('collectionId') collectionId: number,
     @Args('pictureId') pictureId: number,
-  ): Promise<PictureOnCollection> {
-    return this.collectionService.removePictureFromCollection(
-      collectionId,
+    @CurrentUser() user: User,
+  ): Promise<Collection[]> {
+    return this.collectionService.removePictureFromAllUserCollections(
+      user.id,
       pictureId,
     );
   }
