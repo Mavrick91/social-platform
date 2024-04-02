@@ -1,7 +1,6 @@
 import { Separator } from '@/components/ui/separator';
-import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
 import { useCreateComment } from '@/hooks/graphql/useCreateComment';
-import { useAppSelector } from '@/store/hooks.ts';
+import { useUserInfo } from '@/providers/UserInfoProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
 import { RefObject, useEffect } from 'react';
@@ -31,7 +30,7 @@ function PostCommentForm({
   commentListRef,
   setErrorMutation,
 }: Props) {
-  const userInfo = useAppSelector(selectAuthenticatedUser);
+  const user = useUserInfo();
 
   const [commentPicture, { error: commentPictureError }] = useCreateComment();
 
@@ -53,7 +52,7 @@ function PostCommentForm({
         variables: {
           createCommentInput: {
             content: data.content,
-            userId: userInfo.id,
+            userId: user.id,
             pictureId,
           },
         },

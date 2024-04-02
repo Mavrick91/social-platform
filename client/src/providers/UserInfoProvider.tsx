@@ -1,12 +1,10 @@
-import React, { createContext, useContext, useMemo } from 'react';
-import { selectAuthenticatedUser } from '@/features/users/selectors.ts';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   UserProfileFragment,
   useGetUserProfileQuery,
 } from '@/__generated__/graphql';
+import { clearStorage, getUser } from '@/lib/storage';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '@/features/users/userSlice';
 
 const UserInfoContext = createContext<UserProfileFragment | undefined>(
   undefined
@@ -19,12 +17,11 @@ type UserInfoProviderProps = {
 export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
   children,
 }) => {
-  const userInfo = useAppSelector(selectAuthenticatedUser);
-  const dispatch = useAppDispatch();
+  const localUser = getUser();
   const navigate = useNavigate();
 
   const { data, loading, error } = useGetUserProfileQuery({
-    variables: { username: userInfo.username },
+    variables: { username: localUser.username },
   });
 
   const value = useMemo(() => data, [data]);
@@ -34,7 +31,7 @@ export const UserInfoProvider: React.FC<UserInfoProviderProps> = ({
   }
 
   if (!data || error) {
-    dispatch(logout());
+    clearStorage();
     navigate('/login');
 
     return null;

@@ -1,11 +1,11 @@
 import Footer from '@/components/Footer';
 import SideNav from '@/components/SideNav';
+import { clearStorage, getTokens, getUser } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 import { SideNavProvider, useSideNav } from '@/providers/SideNavProvider';
 import { UserInfoProvider } from '@/providers/UserInfoProvider';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../store/hooks';
 
 type Props = {
   children: React.ReactNode;
@@ -32,16 +32,18 @@ const MainContent = ({ children }: Props) => {
 
 const AuthenticatedLayout = ({ children }: Props) => {
   const navigate = useNavigate();
-  const accessToken = useAppSelector((state) => state.user.accessToken);
+  const tokens = getTokens();
+  const localUser = getUser();
   const [isValidatingToken, setIsValidatingToken] = useState(true);
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!tokens || !tokens.accessToken || !localUser) {
+      clearStorage();
       navigate('/login');
     } else {
       setIsValidatingToken(false);
     }
-  }, [accessToken, navigate]);
+  }, [localUser, navigate, tokens]);
 
   if (isValidatingToken) {
     return null;

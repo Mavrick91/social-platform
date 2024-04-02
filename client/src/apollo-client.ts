@@ -7,23 +7,22 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { updateTokens } from '@/features/users/userSlice.ts';
-import { RootState, store } from '@/store';
 import axios from './axios';
+import { getTokens, updateAccessToken } from './lib/storage';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql',
 });
 
-async function refreshAccessToken(state: RootState) {
+async function refreshAccessToken(refreshToken: string) {
   try {
     const response = await axios.post('/auth/refresh_token', {
-      refreshToken: state.user.refreshToken,
+      refreshToken: refreshToken,
     });
 
     const { accessToken } = response.data;
 
-    store.dispatch(updateTokens({ accessToken }));
+    updateAccessToken(accessToken);
 
     return accessToken;
   } catch (error) {
@@ -38,8 +37,14 @@ const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
     graphQLErrors.some((err) => err.message === 'UNAUTHENTICATED')
   ) {
     return new Observable((observer) => {
-      const state = store.getState();
-      refreshAccessToken(state)
+      const tokens = getTokens();
+
+      if (!tokens) {
+        observer.error('No refresh token found');
+        return;
+      }
+
+      refreshAccessToken(tokens.refreshToken)
         .then((accessToken) => {
           operation.setContext(({ headers = {} }) => ({
             headers: {
@@ -62,14 +67,12 @@ const refreshLink = onError(({ forward, operation, graphQLErrors }) => {
 });
 
 const authLink = setContext((_, { headers }) => {
-  const state = store.getState();
-  const accessToken =
-    localStorage.getItem('accessToken') || state.user.accessToken;
+  const tokens = getTokens();
 
   return {
     headers: {
       ...headers,
-      authorization: accessToken ? `Bearer ${accessToken}` : '',
+      authorization: tokens ? `Bearer ${tokens.accessToken}` : '',
     },
   };
 });

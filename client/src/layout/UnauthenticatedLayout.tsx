@@ -1,6 +1,6 @@
+import { getTokens } from '@/lib/storage';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '@/store/hooks.ts';
 
 type Props = {
   children: React.ReactNode;
@@ -8,16 +8,16 @@ type Props = {
 
 export default function UnauthenticatedLayout({ children }: Props) {
   const navigate = useNavigate();
-  const accessToken = useAppSelector((state) => state.user.accessToken);
+  const tokens = getTokens();
   const [isValidatingToken, setIsValidatingToken] = useState(true);
 
   useEffect(() => {
-    if (accessToken) {
+    if (tokens && tokens.accessToken) {
       navigate('/');
     } else {
       setIsValidatingToken(false);
     }
-  }, [accessToken, navigate]);
+  }, [navigate, tokens]);
 
   if (isValidatingToken) {
     return null;

@@ -87,7 +87,6 @@ export default function UploadPostDialog({
   });
 
   const pictureWatch = methods.watch('picture');
-  console.log('🚀 ~ pictureWatch:', pictureWatch);
 
   const handleDiscardChanges = () => {
     onClose();

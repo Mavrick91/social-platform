@@ -1,17 +1,16 @@
 import { useLoginMutation } from '@/__generated__/graphql';
 import { Alert } from '@/components/ui/alert.tsx';
 import { Button } from '@/components/ui/button';
-import { loginAction, setUserInfo } from '@/features/users/userSlice.ts';
-import { useAppDispatch } from '@/store/hooks.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { jwtDecode } from 'jwt-decode';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import LoginForm from './LoginForm';
 import LoginMode from './LoginMode';
 import MockedForm from './MockedForm';
+import { saveTokens, saveUser } from '@/lib/storage';
 
 const loginSchema = z.object({
   email: z
@@ -24,9 +23,9 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const dispatch = useAppDispatch();
   const [loginChoice, setLoginChoice] = useState<'custom' | 'mocked'>('custom');
   const [login, { loading, error }] = useLoginMutation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -42,11 +41,10 @@ export default function Login() {
       const response = await login({ variables: data });
 
       if (response.data?.login) {
-        localStorage.setItem('accessToken', response.data.login.accessToken);
-        localStorage.setItem('refreshToken', response.data.login.refreshToken);
-
-        dispatch(loginAction(response.data.login));
-        dispatch(setUserInfo(jwtDecode(response.data.login.accessToken)));
+        const { accessToken, refreshToken } = response.data.login;
+        saveTokens(accessToken, refreshToken);
+        saveUser(jwtDecode(accessToken));
+        navigate('/');
       }
     } catch (error) {
       console.error(error);

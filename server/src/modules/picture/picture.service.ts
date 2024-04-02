@@ -68,7 +68,6 @@ export class PictureService {
       small: input.sizes.small,
     };
 
-    console.log('🚀 ~ file');
     return this.prisma.picture.create({
       data: {
         ...input,
@@ -100,7 +99,6 @@ export class PictureService {
           likes: true,
         },
       });
-      console.log('🚀 ~ picture:', picture);
 
       if (!picture) {
         throw new NotFoundException('Picture not found');

@@ -5,10 +5,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { logout } from '@/features/users/userSlice';
+import { clearStorage } from '@/lib/storage';
 import { cn } from '@/lib/utils';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { useAppDispatch } from '@/store/hooks';
 import { motion } from 'framer-motion';
 import {
   AlignJustify,
@@ -27,11 +26,10 @@ type Props = {
 
 export default function DropdownMore({ displaySmallNav }: Props) {
   const user = useUserInfo();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logout());
+    clearStorage();
     navigate('/login');
   };
 
