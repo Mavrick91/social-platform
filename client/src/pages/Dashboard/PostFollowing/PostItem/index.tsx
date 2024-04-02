@@ -21,12 +21,19 @@ export default function PostItem({ picture }: Props) {
       />
       <PostPicture picture={picture} />
       <PostCTA picture={picture} />
-      <PostCaption
-        description={picture.description}
-        username={picture.user.username}
-      />
-      <PostComments commentCount={picture._count.comments} picture={picture} />
-      <PostAddComment pictureId={picture.id} />
+      {!picture.disableComments && (
+        <>
+          <PostCaption
+            description={picture.description}
+            username={picture.user.username}
+          />
+          <PostComments
+            commentCount={picture._count.comments}
+            picture={picture}
+          />
+          <PostAddComment pictureId={picture.id} />
+        </>
+      )}
       <Separator className="mt-4 mb-5 last:border-red-500" />
     </div>
   );

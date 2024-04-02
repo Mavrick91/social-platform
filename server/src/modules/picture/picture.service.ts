@@ -24,7 +24,11 @@ export class PictureService {
       orderBy: { createdAt: 'desc' },
       include: {
         user: true,
-        likes: true,
+        likes: {
+          include: {
+            user: true,
+          },
+        },
         _count: {
           select: {
             comments: true,
@@ -47,7 +51,11 @@ export class PictureService {
       orderBy: { createdAt: 'desc' },
       include: {
         user: true,
-        likes: true,
+        likes: {
+          include: {
+            user: true,
+          },
+        },
         _count: {
           select: {
             comments: true,

@@ -19,7 +19,11 @@ export class LikeService {
       },
       include: {
         user: true,
-        likes: true,
+        likes: {
+          include: {
+            user: true,
+          },
+        },
         _count: {
           select: {
             likes: true,
@@ -45,7 +49,11 @@ export class LikeService {
       },
       include: {
         user: true,
-        likes: true,
+        likes: {
+          include: {
+            user: true,
+          },
+        },
         _count: {
           select: {
             likes: true,

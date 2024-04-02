@@ -13,15 +13,14 @@ type Props = {
   picture: PictureFragmentFragment;
   showMessageIcon?: boolean;
 };
+
 export default function PostCTA({ picture, showMessageIcon = true }: Props) {
   const user = useUserInfo();
   const likeId = picture.likes.find((like) => like.userId === user.id)?.id;
   const picturesFromSaved = useGetPicturesFromSaved();
-
   const pictureInCollection = picturesFromSaved.pictures.find(
     (pic) => pic.pictureId === picture.id
   );
-
   const [likePicture] = useLikePicture(picture.id);
   const [unlikePicture] = useUnLikePicture(likeId!);
   const [addPictureToCollection] = useAddPictureCollection();
@@ -35,9 +34,7 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
   const handleClickAddToCollection = async () => {
     if (pictureInCollection)
       await removePictureFromCollection({
-        variables: {
-          pictureId: picture.id,
-        },
+        variables: { pictureId: picture.id },
       });
     else
       await addPictureToCollection({
@@ -46,6 +43,54 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
           collectionId: Number(user.collections[0].id),
         },
       });
+  };
+
+  const renderLikeCount = () => {
+    if (picture.hideLikesAndViewCounts) {
+      if (picture.likes.some((like) => like.userId === user.id)) {
+        return (
+          <p className="text-sm">
+            Liked by <b>{picture.user.username}</b> and{' '}
+            {picture.likes.length > 1 ? <b>others</b> : null}
+          </p>
+        );
+      }
+
+      if (picture.likes.length > 0) {
+        const firstLiker = picture.likes[0].user;
+        return (
+          <p className="text-sm">
+            Liked by <b>{firstLiker.username}</b>
+            {picture.likes.length > 1 ? ' and others' : null}
+          </p>
+        );
+      }
+
+      return null;
+    }
+
+    if (picture._count?.likes) {
+      return (
+        <p className="font-semibold text-sm">
+          <Pluralize count={picture._count.likes} singular="like" />
+        </p>
+      );
+    }
+
+    return (
+      <p className="text-sm">
+        Be the first one to{' '}
+        <b>
+          <button
+            onClick={handleClickLikePicture}
+            type="button"
+            className="hover:text-secondary"
+          >
+            like this
+          </button>
+        </b>
+      </p>
+    );
   };
 
   return (
@@ -77,24 +122,7 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
           />
         </button>
       </div>
-      {picture._count?.likes ? (
-        <p className="font-semibold text-sm">
-          <Pluralize count={picture._count.likes} singular="like" />
-        </p>
-      ) : (
-        <p className="text-sm">
-          Be the first one to{' '}
-          <b>
-            <button
-              onClick={handleClickLikePicture}
-              type="button"
-              className="hover:text-secondary"
-            >
-              like this
-            </button>
-          </b>
-        </p>
-      )}
+      {renderLikeCount()}
     </>
   );
 }

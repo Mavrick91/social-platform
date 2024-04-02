@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import UploadPostDialog from '@/components/UploadPostDialog';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -5,126 +6,140 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { useDeletePicture } from '@/hooks/graphql/useDeletePicture';
 import useUnFollow from '@/hooks/graphql/useUnFollow';
+import { useUpdatePicture } from '@/hooks/graphql/useUpdatePicture';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { Fragment, useMemo, useState } from 'react';
 
-type CommonProps = {
-  children: React.ReactNode;
+type PostActionProps = {
   picture: PictureFragmentFragment;
-  isDelete?: boolean;
-  isEdit?: boolean;
-  isUnfollow?: boolean;
+  children: React.ReactNode;
 };
 
-type Editable = {
-  isEdit: true;
-};
-
-type Unfollowable = {
-  isUnfollow: true;
-};
-
-type EditProps = CommonProps & Editable;
-type UnfollowProps = CommonProps & Unfollowable;
-
-type BaseProps = CommonProps & {
-  isEdit?: false;
-  isUnfollow?: false;
-};
-
-type EditAndUnfollowProps = CommonProps & Editable & Unfollowable;
-
-type Props = BaseProps | EditProps | UnfollowProps | EditAndUnfollowProps;
-
-const PostAction = ({
-  children,
-  picture,
-  isUnfollow,
-  isEdit,
-  isDelete,
-}: Props) => {
+const PostAction = ({ picture, children }: PostActionProps) => {
   const user = useUserInfo();
-
-  const [deletePicture, { loading }] = useDeletePicture();
+  const [deletePicture] = useDeletePicture();
+  const [updatePicture] = useUpdatePicture();
   const [unfollow] = useUnFollow();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditPostDialogOpen, setIsEditPostDialogOpen] = useState(false);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [openEditPostDialog, setOpenEditPostDialog] = useState(false);
-
-  const handleAction = async (actionType: string) => {
-    try {
-      if (actionType === 'delete') {
-        await deletePicture({ variables: { id: picture.id } });
-      } else if (actionType === 'unfollow') {
-        await unfollow({
-          variables: {
-            input: { userId: user.id, followingId: picture.user.id },
-          },
-        });
-      } else if (actionType === 'edit') {
-        setOpenEditPostDialog(true);
-      }
-      setIsOpen(false);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleDeletePicture = async () => {
+    await deletePicture({ variables: { id: picture.id } });
+    setIsDialogOpen(false);
   };
 
-  const actions = useMemo(
-    () => [
-      {
-        type: 'delete',
-        label: 'Delete',
-        isActive: isDelete,
-        className: 'text-red-500 font-bold',
+  const handleUnfollow = async () => {
+    await unfollow({
+      variables: {
+        input: { userId: user.id, followingId: picture.user.id },
       },
-      {
-        type: 'unfollow',
-        label: 'Unfollow',
-        isActive: isUnfollow,
-        className: 'text-red-500 font-bold',
+    });
+    setIsDialogOpen(false);
+  };
+
+  const handleToggleLikeCount = async () => {
+    await updatePicture({
+      variables: {
+        id: picture.id,
+        input: {
+          hideLikesAndViewCounts: !picture.hideLikesAndViewCounts,
+        },
       },
-      { type: 'edit', label: 'Edit', isActive: isEdit },
-      { type: 'cancel', label: 'Cancel', isActive: true },
-    ],
-    [isUnfollow, isEdit, isDelete]
-  );
+    });
+    setIsDialogOpen(false);
+  };
+
+  const handleToggleComments = async () => {
+    await updatePicture({
+      variables: {
+        id: picture.id,
+        input: {
+          disableComments: !picture.disableComments,
+        },
+      },
+    });
+    setIsDialogOpen(false);
+  };
+
+  const getActionButtons = () => {
+    const actionButtons = [];
+
+    if (user.id === picture.user.id) {
+      actionButtons.push(
+        <ActionButton
+          key="delete"
+          label="Delete"
+          onClick={handleDeletePicture}
+          className="text-red-500 font-bold"
+        />,
+        <ActionButton
+          key="edit"
+          label="Edit"
+          onClick={() => setIsEditPostDialogOpen(true)}
+        />,
+        <ActionButton
+          key="toggle-like-count"
+          label={
+            picture.hideLikesAndViewCounts
+              ? 'Unhide like count to others'
+              : 'Hide like count to others'
+          }
+          onClick={handleToggleLikeCount}
+        />,
+        <ActionButton
+          key="toggle-comments"
+          label={
+            picture.disableComments
+              ? 'Turn on commenting'
+              : 'Turn off commenting'
+          }
+          onClick={handleToggleComments}
+        />
+      );
+    } else {
+      actionButtons.push(
+        <ActionButton
+          key="unfollow"
+          label="Unfollow"
+          onClick={handleUnfollow}
+          className="text-red-500 font-bold"
+        />
+      );
+    }
+
+    actionButtons.push(
+      <ActionButton
+        key="cancel"
+        label="Cancel"
+        onClick={() => setIsDialogOpen(false)}
+      />
+    );
+
+    return actionButtons;
+  };
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <button>{children}</button>
         </DialogTrigger>
+
         <DialogContent
           className="p-0 gap-0 rounded-lg max-w-sm"
           showClose={false}
         >
-          {actions
-            .filter((action) => action.isActive)
-            .map((action, index) => (
-              <Fragment key={index}>
-                <button
-                  type="button"
-                  className={`text-center py-3.5 text-sm ${action.className || ''}`}
-                  onClick={() => handleAction(action.type)}
-                >
-                  <div className="flex justify-center items-center">
-                    {action.label}
-                    {loading && action.type === 'delete' && (
-                      <LoadingSpinner className="ml-2 h-4 w-4 animate-spin" />
-                    )}
-                  </div>
-                </button>
-                <Separator className="last:hidden" />
-              </Fragment>
-            ))}
+          {getActionButtons().map((button, index) => (
+            <div key={index}>
+              {button}
+              {index !== getActionButtons().length - 1 && <Separator />}
+            </div>
+          ))}
         </DialogContent>
       </Dialog>
 
-      {openEditPostDialog && (
+      {isEditPostDialogOpen && (
         <UploadPostDialog
-          onClose={() => setOpenEditPostDialog(false)}
+          onClose={() => setIsEditPostDialogOpen(false)}
           picture={picture}
           title="Edit info"
           buttonSubmitText="Done"
@@ -134,5 +149,21 @@ const PostAction = ({
     </>
   );
 };
+
+type ActionButtonProps = {
+  label: string;
+  onClick: () => void;
+  className?: string;
+};
+
+const ActionButton = ({ label, onClick, className }: ActionButtonProps) => (
+  <button
+    type="button"
+    className={`text-center w-full py-3.5 text-sm ${className || ''}`}
+    onClick={onClick}
+  >
+    {label}
+  </button>
+);
 
 export default PostAction;

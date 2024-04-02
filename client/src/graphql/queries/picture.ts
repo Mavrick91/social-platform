@@ -23,6 +23,10 @@ export const PICTURE_FRAGMENT = gql`
       id
       userId
       pictureId
+      user {
+        id
+        username
+      }
     }
     _count {
       comments
