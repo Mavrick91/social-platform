@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { useCreateComment } from '@/hooks/graphql/useCreateComment';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -50,12 +51,9 @@ export default function PostAddComment({ pictureId }: Props) {
       />
 
       {watchComment && (
-        <button
-          type="submit"
-          className="absolute text-blue-500 font-bold text-sm top-1/2 right-0 transform -translate-y-1/2"
-        >
+        <Button variant="ghost" type="submit">
           Post
-        </button>
+        </Button>
       )}
     </form>
   );

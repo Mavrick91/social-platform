@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCreateComment } from '@/hooks/graphql/useCreateComment';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -71,18 +72,21 @@ function PostCommentForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Separator />
-      <div className="flex items-center">
+      <div className="flex items-center h-14 pr-4 pl-2">
         <TextareaAutosize
           className="w-full p-2 placeholder:text-secondary text-sm focus:outline-none resize-none"
           placeholder="Add a comment..."
           {...register('content')}
           maxRows={4}
         />
-        <button
+        <Button
           className="size-12 flex justify-center items-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
+          variant="ghost"
           disabled={!content}
-        ></button>
+        >
+          Post
+        </Button>
       </div>
     </form>
   );
