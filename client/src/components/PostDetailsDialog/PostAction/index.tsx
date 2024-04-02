@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import UploadPostDialog from '@/components/UploadPostDialog';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -16,7 +16,7 @@ type PostActionProps = {
 
 const PostAction = ({ picture, children }: PostActionProps) => {
   const user = useUserInfo();
-  const [deletePicture] = useDeletePicture();
+  const [deletePicture, { loading: isDeleting }] = useDeletePicture();
   const [updatePicture] = useUpdatePicture();
   const [unfollow] = useUnFollow();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -67,7 +67,16 @@ const PostAction = ({ picture, children }: PostActionProps) => {
       actionButtons.push(
         <ActionButton
           key="delete"
-          label="Delete"
+          label={
+            isDeleting ? (
+              <div className="flex justify-center items-center">
+                Deleting...{' '}
+                <LoadingSpinner className="ml-2 h-4 w-4 animate-spin" />
+              </div>
+            ) : (
+              'Delete'
+            )
+          }
           onClick={handleDeletePicture}
           className="text-red-500 font-bold"
         />,
@@ -151,7 +160,7 @@ const PostAction = ({ picture, children }: PostActionProps) => {
 };
 
 type ActionButtonProps = {
-  label: string;
+  label: string | ReactNode;
   onClick: () => void;
   className?: string;
 };

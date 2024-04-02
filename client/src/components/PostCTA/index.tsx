@@ -50,8 +50,13 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
       if (picture.likes.some((like) => like.userId === user.id)) {
         return (
           <p className="text-sm">
-            Liked by <b>{picture.user.username}</b> and{' '}
-            {picture.likes.length > 1 ? <b>others</b> : null}
+            Liked by <b>{picture.user.username}</b>
+            {picture.likes.length > 1 ? (
+              <span>
+                {' '}
+                and <b>others</b>
+              </span>
+            ) : null}
           </p>
         );
       }

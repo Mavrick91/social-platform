@@ -7,16 +7,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog.tsx';
 import useAspectRatio from '@/hooks/useAspectRaiot';
-import { cn } from '@/lib/utils';
 import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Ellipsis } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ImageWithPlaceholder from '../ImageWithPlaceholder';
 import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';
-import ImageWithPlaceholder from '../ImageWithPlaceholder';
 
 type Props = {
   children: ReactNode;
@@ -85,14 +84,14 @@ function PostDetailsDialog({ children, picture }: Props) {
                               isFollowing={isFollowingCurrentProfile}
                               targetUserId={picture.user.id}
                               buttonProps={{
-                                variant: 'link',
+                                variant: 'ghost',
                               }}
                             />
                           </>
                         )}
                       </div>
                       {picture?.id && user.id === picture.user?.id && (
-                        <PostAction isDelete picture={picture} isEdit>
+                        <PostAction picture={picture}>
                           <Ellipsis color="gray" />
                         </PostAction>
                       )}

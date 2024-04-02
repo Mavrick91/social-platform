@@ -1,15 +1,14 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
-import Dashboard from '@/pages/Dashboard';
 import AuthenticatedLayout from '@/layout/AuthenticatedLayout.tsx';
+import Dashboard from '@/pages/Dashboard';
+import Explore from '@/pages/Explore';
 import Profile from '@/pages/Profile';
-import Explore, { loader as loaderExplore } from '@/pages/Explore';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import UnauthenticatedLayout from './layout/UnauthenticatedLayout';
 import Collection from './pages/Collection';
-import UserPosts from './pages/Profile/UserProfile/UserPosts';
+import Login from './pages/Login';
 import UserCollections from './pages/Profile/UserCollections';
-import client from './apollo-client';
+import UserPosts from './pages/Profile/UserProfile/UserPosts';
+import Register from './pages/Register';
 
 const router = createBrowserRouter([
   {
@@ -38,7 +37,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/explore',
-    loader: () => loaderExplore(client),
     element: (
       <AuthenticatedLayout>
         <Explore />
