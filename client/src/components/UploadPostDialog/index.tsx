@@ -95,7 +95,7 @@ export default function UploadPostDialog({
 
   const handleCloseModal = () => {
     if (pictureWatch?.name) {
-      setCallbackClickDiscard(handleDiscardChanges);
+      setCallbackClickDiscard(() => handleDiscardChanges);
       setShowExitDialog(true);
     } else {
       handleDiscardChanges();
@@ -111,7 +111,7 @@ export default function UploadPostDialog({
   const handleClickArrowLeft = () => {
     if (picture) handleDiscardChanges();
     else {
-      setCallbackClickDiscard(handleGoBackPreviousStep);
+      setCallbackClickDiscard(() => handleGoBackPreviousStep);
       setShowExitDialog(true);
     }
   };

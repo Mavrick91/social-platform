@@ -58,7 +58,7 @@ function PostDetailsDialog({ children, picture }: Props) {
             <div className="items-center flex justify-center min-h-[500px]">
               <ImageWithPlaceholder picture={picture} />
             </div>
-            <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-bg-border flex-col">
+            <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-separator-post flex-col">
               <div className="flex pt-3 pl-3 flex-col">
                 <div className="flex items-center">
                   <Link className="shrink-0" to={`/${picture?.user.username}`}>
@@ -73,7 +73,7 @@ function PostDetailsDialog({ children, picture }: Props) {
                       <div>
                         <Link
                           to={`/${picture?.user.username}`}
-                          className="text-[#262626] text-sm font-semibold ml-4"
+                          className="text-secondary-button text-sm font-semibold ml-4"
                         >
                           {picture?.user?.firstName} {picture?.user?.lastName}
                         </Link>
@@ -84,9 +84,9 @@ function PostDetailsDialog({ children, picture }: Props) {
                             <ButtonFollow
                               isFollowing={isFollowingCurrentProfile}
                               targetUserId={picture.user.id}
-                              className={cn(
-                                'bg-transparent p-0 hover:bg-transparent text-blue-400 hover:text-blue-600'
-                              )}
+                              buttonProps={{
+                                variant: 'link',
+                              }}
                             />
                           </>
                         )}
@@ -100,7 +100,7 @@ function PostDetailsDialog({ children, picture }: Props) {
                   </div>
                 </div>
               </div>
-              <Separator className="mt-4" />
+              <Separator className="mt-4" isPost />
 
               {picture && (
                 <PictureCommentList

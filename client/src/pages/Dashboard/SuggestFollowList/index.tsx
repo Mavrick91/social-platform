@@ -46,7 +46,10 @@ export default function SuggestFollowList() {
               <ButtonFollow
                 isFollowing={isFollowing}
                 targetUserId={suggestUser.id}
-                className="bg-blue-500 hover:bg-blue-600"
+                buttonProps={{
+                  variant: 'blue',
+                  size: 'xs',
+                }}
               />
             </div>
           );

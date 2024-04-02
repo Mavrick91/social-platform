@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import useFollow from '@/hooks/graphql/useFollow';
 import useUnFollow from '@/hooks/graphql/useUnFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
@@ -9,13 +9,14 @@ type Props = {
   targetUserId: number;
   callback?: () => void;
   className?: string;
+  buttonProps?: Omit<ButtonProps, 'onClick'>;
 };
 
 const ButtonFollow: React.FC<Props> = ({
   isFollowing,
   targetUserId,
   callback,
-  className,
+  buttonProps,
 }) => {
   const [follow] = useFollow();
   const [unfollow] = useUnFollow();
@@ -44,11 +45,10 @@ const ButtonFollow: React.FC<Props> = ({
 
   return (
     <Button
-      size="xs"
-      className={className}
       onClick={isFollowing ? handleUnfollow : handleFollow}
+      {...buttonProps}
     >
-      {isFollowing ? `Unfollow` : `Follow`}
+      {isFollowing ? `Following` : `Follow`}
     </Button>
   );
 };

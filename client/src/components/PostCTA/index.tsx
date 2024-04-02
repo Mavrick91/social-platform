@@ -52,22 +52,26 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
     <>
       <div className="flex justify-between items-center">
         <div className="flex space-x-4 py-2">
-          <button type="button" onClick={handleClickLikePicture}>
+          <button
+            className="hover:!text-secondary"
+            type="button"
+            onClick={handleClickLikePicture}
+          >
             <HeartIcon
-              className="hover:text-gray-500"
               fill={!likeId ? 'none' : '#ff3041'}
               stroke={!likeId ? 'black' : '#ff3041'}
             />
           </button>
           {showMessageIcon && (
             <PostDetailsDialog picture={picture}>
-              <MessageCircle className="hover:text-gray-500 cursor-pointer" />
+              <MessageCircle className="hover:text-secondary cursor-pointer" />
             </PostDetailsDialog>
           )}
-          <SendIcon className="hover:text-gray-500" />
+          <SendIcon className="hover:text-secondary" />
         </div>
         <button onClick={handleClickAddToCollection}>
           <BookmarkIcon
+            className="hover:text-secondary"
             fill={!pictureInCollection ? 'none' : 'black'}
             stroke={!pictureInCollection ? 'black' : 'none'}
           />
@@ -77,7 +81,20 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
         <p className="font-semibold text-sm">
           <Pluralize count={picture._count.likes} singular="like" />
         </p>
-      ) : null}
+      ) : (
+        <p className="text-sm">
+          Be the first one to{' '}
+          <b>
+            <button
+              onClick={handleClickLikePicture}
+              type="button"
+              className="hover:text-secondary"
+            >
+              like this
+            </button>
+          </b>
+        </p>
+      )}
     </>
   );
 }

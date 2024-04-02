@@ -44,7 +44,7 @@ export default function AddCaptionPost({ previewPicture, isEdit }: Props) {
             maxRows={7}
           />
         </div>
-        <div className="text-xs justify-end h-11 border-b border-[#DBDBDB] px-4 items-center flex">
+        <div className="text-xs justify-end h-11 border-b border-separator px-4 items-center flex">
           {descriptionWatch.length}/2,200
         </div>
         <AccessibilityExpand previewPicture={previewPicture} />

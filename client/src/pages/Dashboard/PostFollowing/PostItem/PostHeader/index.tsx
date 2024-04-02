@@ -21,6 +21,8 @@ export default function PostHeader({ avatar, username, picture }: Props) {
     (follow) => follow.targetUserId === picture.user.id
   );
 
+  const isMyPost = user.id === picture.user.id;
+
   return (
     <div className="flex justify-between items-center mb-3 ml-1">
       <div className="flex items-center">
@@ -52,7 +54,12 @@ export default function PostHeader({ avatar, username, picture }: Props) {
           </p>
         </div>
       </div>
-      <PostAction picture={picture} isUnfollow>
+      <PostAction
+        picture={picture}
+        isUnfollow={!isMyPost}
+        isEdit={isMyPost}
+        isDelete={isMyPost}
+      >
         <Ellipsis />
       </PostAction>
     </div>

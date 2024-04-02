@@ -3,7 +3,12 @@ import {
   ReceivedFollowsFragment,
   UserFragmentFragment,
 } from '@/__generated__/graphql';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import FollowersDialogItem from './FollowersDialogItem';
 
 type Props = {
@@ -21,8 +26,19 @@ export default function FollowersDialog({
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
 
-      <DialogContent className="px-0">
-        <div className="pt-6 space-y-5">
+      <DialogContent
+        className="p-0 gap-0 flex flex-col max-h-[400px] w-[400px] min-h-[200px]"
+        style={{
+          maxWidth: 'calc(100vw - 88px)',
+        }}
+      >
+        <DialogHeader className="justify-center">
+          <h3 className="font-bold">
+            {isFollowers ? 'Followers' : 'Followings'}
+          </h3>
+        </DialogHeader>
+
+        <div>
           {!followers || followers.length >= 1 ? (
             followers.map((follower) => {
               let user: UserFragmentFragment | undefined | null;
@@ -38,7 +54,7 @@ export default function FollowersDialog({
               return <FollowersDialogItem follower={user} key={user.id} />;
             })
           ) : (
-            <p className="text-center text-gray-500">
+            <p className="text-center pt-6 text-secondary">
               {isFollowers ? 'No followers' : 'No followings'}
             </p>
           )}

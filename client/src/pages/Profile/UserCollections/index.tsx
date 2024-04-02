@@ -22,7 +22,7 @@ export default function UserCollections() {
               to={collection.nameId}
               key={collection.id}
               type="button"
-              className="relative col-span-1 grid grid-cols-2 bg-gradient-to-t from-black/50 hover:from-black/40 to-transparent aspect-square border border-gray-200 rounded-md"
+              className="relative col-span-1 grid grid-cols-2 bg-gradient-to-t from-black/50 hover:from-black/40 to-transparent aspect-square border border-separator rounded-md"
             >
               {collection.pictures.slice(0, 4).map((pic) => (
                 <img

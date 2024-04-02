@@ -17,9 +17,10 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'bg-transparent text-primary hover:text-primary-link-hover',
-        link: 'text-primary underline-offset-4 hover:underline',
-        gray: 'bg-secondary-button hover:bg-secondary-button-hover text-primary',
+        link: 'text-primary underline-offset-4 hover:underline !h-auto !p-0',
+        gray: 'bg-secondary-button-background hover:bg-secondary-button-hover font-semibold text-primary-text',
         'blue-link': 'text-ig-blue hover:text-ig-blue-dark',
+        blue: 'bg-primary-button text-white hover:bg-primary-hover',
       },
       size: {
         default: 'h-10 px-4 py-2',

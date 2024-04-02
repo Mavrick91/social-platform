@@ -3,12 +3,24 @@ import * as SeparatorPrimitive from '@radix-ui/react-separator';
 
 import { cn } from '@/lib/utils';
 
+type SeparatorProps = React.ComponentPropsWithoutRef<
+  typeof SeparatorPrimitive.Root
+> & {
+  isPost?: boolean;
+};
+
 const Separator = React.forwardRef<
   React.ElementRef<typeof SeparatorPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
+  SeparatorProps
 >(
   (
-    { className, orientation = 'horizontal', decorative = true, ...props },
+    {
+      className,
+      orientation = 'horizontal',
+      isPost,
+      decorative = true,
+      ...props
+    },
     ref
   ) => (
     <SeparatorPrimitive.Root
@@ -16,9 +28,13 @@ const Separator = React.forwardRef<
       decorative={decorative}
       orientation={orientation}
       className={cn(
-        'shrink-0 bg-[#DBDBDB]',
+        'shrink-0',
         orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
-        className
+        className,
+        {
+          'bg-separator': !isPost,
+          'bg-separator-post': isPost,
+        }
       )}
       {...props}
     />

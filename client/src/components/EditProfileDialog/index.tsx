@@ -104,7 +104,7 @@ export default function EditProfileDialog({ children }: Props) {
             <Label className="w-24 h-24 m-0 cursor-pointer" htmlFor="avatar">
               <span
                 className={cn(
-                  'flex w-full h-full relative items-center group justify-center border-2 rounded-full text-gray-500',
+                  'flex w-full h-full relative items-center group justify-center border-2 rounded-full text-secondary',
                   {
                     'border-dashed border-gray-300': !user.avatar,
                   }
@@ -173,7 +173,7 @@ export default function EditProfileDialog({ children }: Props) {
                 placeholder="Enter your bio"
                 error={errors.bio?.message}
               />
-              <span className="text-sm text-gray-800">
+              <span className="text-sm text-secondary">
                 {bioWatch?.length} / 150 characters
               </span>
             </div>

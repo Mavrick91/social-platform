@@ -73,18 +73,18 @@ const PostAction = ({
   const actions = useMemo(
     () => [
       {
+        type: 'delete',
+        label: 'Delete',
+        isActive: isDelete,
+        className: 'text-red-500 font-bold',
+      },
+      {
         type: 'unfollow',
         label: 'Unfollow',
         isActive: isUnfollow,
         className: 'text-red-500 font-bold',
       },
       { type: 'edit', label: 'Edit', isActive: isEdit },
-      {
-        type: 'delete',
-        label: 'Delete',
-        isActive: isDelete,
-        className: 'text-red-500 font-bold',
-      },
       { type: 'cancel', label: 'Cancel', isActive: true },
     ],
     [isUnfollow, isEdit, isDelete]

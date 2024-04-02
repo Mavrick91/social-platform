@@ -72,9 +72,9 @@ function PostCommentList({ picture, setErrorMutation }: Props) {
           );
         })}
       </div>
-      <div className="border-t border-[#EFEFEF] p-3 pt-1.5">
+      <div className="border-t border-separator-post p-3 pt-1.5">
         <PostCTA picture={picture} showMessageIcon={false} />
-        <span className="text-gray-500 text-xs">
+        <span className="text-secondary text-xs">
           {moment(picture?.createdAt).fromNow()}
         </span>
       </div>

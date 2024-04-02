@@ -5,6 +5,8 @@ import UserAvatar from '@/components/UserAvatar';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import ButtonFollow from './ButtonFollow';
 import OwnProfile from './OwnProfile';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type Props = {
   currentProfile: UserProfileFragment;
@@ -39,7 +41,10 @@ function UserProfile({ currentProfile }: Props) {
                 <ButtonFollow
                   isFollowing={isFollowingCurrentProfile}
                   targetUserId={currentProfile.id}
-                  className="bg-blue-500 hover:bg-blue-600"
+                  buttonProps={{
+                    variant: isFollowingCurrentProfile ? 'gray' : 'blue',
+                    size: 'xs',
+                  }}
                 />
               )}
             </div>
@@ -75,7 +80,7 @@ function UserProfile({ currentProfile }: Props) {
               {currentProfile.firstName} {currentProfile.lastName}
             </span>
             {currentProfile.bio && (
-              <p className="text-gray-800 max-w-xl">{currentProfile.bio}</p>
+              <p className="text-primary-text max-w-xl">{currentProfile.bio}</p>
             )}
           </div>
         </div>

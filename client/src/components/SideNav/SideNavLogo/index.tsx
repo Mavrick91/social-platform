@@ -18,7 +18,7 @@ export default function SideNavLogo({ displaySmallNav }: Props) {
         animate={{ opacity: displaySmallNav ? 1 : 0 }}
         transition={{ delay: 0.2 }}
         className={cn({
-          'p-3 w-full text-black flex items-center hover:bg-secondary-button rounded-md hover:scale-[1.1] transition-all':
+          'p-3 w-full text-black flex items-center hover:bg-secondary-button-background rounded-md hover:scale-[1.1] transition-all':
             displaySmallNav,
         })}
         exit={{ display: 'none' }}

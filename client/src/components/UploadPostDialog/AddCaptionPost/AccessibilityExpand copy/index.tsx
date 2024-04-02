@@ -14,7 +14,7 @@ export default function AccessibilityExpand({ previewPicture }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-[#DBDBDB]">
+    <div className="border-b border-separator">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="px-3 py-4 w-full flex justify-between items-center"

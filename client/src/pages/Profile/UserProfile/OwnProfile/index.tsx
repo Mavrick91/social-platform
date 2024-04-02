@@ -6,7 +6,7 @@ export default function OwnProfile() {
     <div className="flex">
       <EditProfileDialog>
         <Button variant="gray" size="xs">
-          <b>Edit Profile</b>
+          Edit Profile
         </Button>
       </EditProfileDialog>
     </div>

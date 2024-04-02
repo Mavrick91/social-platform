@@ -23,8 +23,7 @@ export default function PostItem({ picture }: Props) {
       <PostCTA picture={picture} />
       <PostCaption
         description={picture.description}
-        firstName={picture.user?.firstName}
-        lastName={picture.user?.lastName}
+        username={picture.user.username}
       />
       <PostComments commentCount={picture._count.comments} picture={picture} />
       <PostAddComment pictureId={picture.id} />

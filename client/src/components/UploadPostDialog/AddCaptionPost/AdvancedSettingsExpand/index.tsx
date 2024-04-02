@@ -11,7 +11,7 @@ export default function AdvancedSettingsExpand() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div>
+    <div className="border-b border-separator">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}

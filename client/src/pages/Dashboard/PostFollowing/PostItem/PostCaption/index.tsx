@@ -1,17 +1,13 @@
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 type Props = {
-  firstName: string;
-  lastName: string;
+  username: string;
   description?: string | null;
 };
 
-export default function PostCaption({
-  firstName,
-  lastName,
-  description,
-}: Props) {
+export default function PostCaption({ username, description }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
 
@@ -38,7 +34,7 @@ export default function PostCaption({
   return (
     <div className="mt-2 text-sm">
       <div className="font-semibold whitespace-nowrap float-left mr-1">
-        {firstName} {lastName}
+        <Link to={`/${username}`}>{username}</Link>
       </div>
       <p
         ref={descriptionRef}

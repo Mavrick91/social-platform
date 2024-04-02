@@ -64,7 +64,7 @@ export default function SideNavItem({
     >
       <Icon
         className={cn(
-          'w-6 h-6 transition-transform duration-200 ease-out',
+          'w-6 h-6 transition-transform ease-out group-hover:scale-[1.1]',
           {
             'scale-110': isActiveItem && sideNavOpen,
             'mx-auto': isSmall,
@@ -94,7 +94,7 @@ export default function SideNavItem({
 
   const linkOrButtonProps: LinkOrButtonProps = {
     className: cn(
-      'flex items-center my-1 p-3 rounded-md transition-colors duration-200 ease-out hover:bg-[#0000000D]',
+      'flex items-center group my-1 p-3 rounded-md transition-colors duration-200 ease-out hover:bg-secondary-button-background',
       {
         relative: onClick === toggleSearch,
       }

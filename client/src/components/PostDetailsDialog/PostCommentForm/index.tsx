@@ -69,12 +69,12 @@ function PostCommentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
-      <Separator className="border-[#DBDBDB]" />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Separator />
       <div className="flex items-center">
         <TextareaAutosize
-          className="w-full p-2 focus:outline-none resize-none"
-          placeholder="Write your comment here..."
+          className="w-full p-2 placeholder:text-secondary text-sm focus:outline-none resize-none"
+          placeholder="Add a comment..."
           {...register('content')}
           maxRows={4}
         />
@@ -82,9 +82,7 @@ function PostCommentForm({
           className="size-12 flex justify-center items-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
           disabled={!content}
-        >
-          <Send size={16} />
-        </button>
+        ></button>
       </div>
     </form>
   );

@@ -24,7 +24,7 @@ export default function SideNav() {
     <header className="z-50 bg-white shrink-0 h-screen flex-col flex">
       <nav
         className={cn(
-          `bg-white h-full z-20 absolute py-2.5 transition-all px-3 border-r border-[#DBDBDB]`,
+          `bg-white h-full z-20 absolute py-2.5 transition-all px-3 border-r border-separator`,
           {
             'w-small-sidenav': displaySmallNav,
             'w-medium-sidenav': !displaySmallNav,
