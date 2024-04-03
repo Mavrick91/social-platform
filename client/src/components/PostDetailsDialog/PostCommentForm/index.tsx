@@ -3,7 +3,6 @@ import { Separator } from '@/components/ui/separator';
 import { useCreateComment } from '@/hooks/graphql/useCreateComment';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Send } from 'lucide-react';
 import { RefObject, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import TextareaAutosize from 'react-textarea-autosize';

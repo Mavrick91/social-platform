@@ -80,7 +80,11 @@ export class CollectionService {
             picture: {
               include: {
                 user: true,
-                likes: true,
+                likes: {
+                  include: {
+                    user: true,
+                  },
+                },
                 _count: true,
               },
             },

@@ -1,9 +1,13 @@
+import { PubSubEngine } from 'graphql-subscriptions';
 import { PrismaService } from '../prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LikeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject('PUB_SUB') private pubSub: PubSubEngine,
+  ) {}
 
   async likePicture(userId: number, pictureId: number) {
     await this.prisma.like.create({
@@ -13,7 +17,7 @@ export class LikeService {
       },
     });
 
-    return this.prisma.picture.findUnique({
+    const picture = await this.prisma.picture.findUnique({
       where: {
         id: pictureId,
       },
@@ -32,6 +36,23 @@ export class LikeService {
         },
       },
     });
+
+    if (picture.userId !== userId) {
+      const notification = await this.prisma.notification.create({
+        data: {
+          type: 'LIKE',
+          senderId: userId,
+          receiverId: picture.userId,
+          pictureId: pictureId,
+        },
+      });
+
+      this.pubSub.publish('notificationAdded', {
+        notificationAdded: notification,
+      });
+    }
+
+    return picture;
   }
 
   async unlikePicture(likeId: number) {

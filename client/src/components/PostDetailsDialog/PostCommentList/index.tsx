@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useRef } from 'react';
-import moment from 'moment';
 import {
   PictureFragmentFragment,
   useGetCommentsByPictureQuery,
 } from '@/__generated__/graphql';
-import { useUserInfo } from '@/providers/UserInfoProvider';
 import PostCTA from '@/components/PostCTA';
 import PictureCommentForm from '@/components/PostDetailsDialog/PostCommentForm';
-import PostCommentItem from '../PostCommentItem';
 import QuerySpinner from '@/components/ui/QuerySpinner';
+import moment from 'moment';
+import { useEffect, useMemo, useRef } from 'react';
+import PostCommentItem from '../PostCommentItem';
 
 type Props = {
   picture: PictureFragmentFragment;
@@ -16,7 +15,6 @@ type Props = {
 };
 
 const PostCommentList = ({ picture, setErrorMutation }: Props) => {
-  const user = useUserInfo();
   const commentListRef = useRef<HTMLDivElement>(null);
   const { data, loading, refetch, error } = useGetCommentsByPictureQuery({
     variables: { pictureId: picture.id },

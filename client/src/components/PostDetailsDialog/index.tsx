@@ -12,7 +12,6 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Ellipsis } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ImageWithPlaceholder from '../ImageWithPlaceholder';
 import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';

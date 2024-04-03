@@ -7,25 +7,53 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Notification {
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  type       NotificationType
+  sender     User             @relation("SentNotifications", fields: [senderId], references: [id])
+  senderId   Int
+  receiver   User             @relation("ReceivedNotifications", fields: [receiverId], references: [id])
+  receiverId Int
+  picture    Picture?         @relation(fields: [pictureId], references: [id])
+  pictureId  Int?
+  comment    Comment?         @relation(fields: [commentId], references: [id])
+  commentId  Int?
+
+  read Boolean @default(false)
+}
+
+enum NotificationType {
+  LIKE
+  COMMENT
+  FOLLOW
+  MENTION
+  MESSAGE
+  // Add more notification types as needed
+}
+
 model User {
-  id               Int          @id @default(autoincrement())
-  email            String       @unique
-  username         String       @unique
-  password         String
-  firstName        String
-  lastName         String
-  bio              String?
-  avatar           String?
-  avatarName       String?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  pictures         Picture[]
-  comments         Comment[]
-  isMock           Boolean      @default(false)
-  initiatedFollows Follow[]     @relation("FollowedBy")
-  receivedFollows  Follow[]     @relation("Following")
-  likes            Like[]
-  collections      Collection[]
+  id                    Int            @id @default(autoincrement())
+  email                 String         @unique
+  username              String         @unique
+  password              String
+  firstName             String
+  lastName              String
+  bio                   String?
+  avatar                String?
+  avatarName            String?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  pictures              Picture[]
+  comments              Comment[]
+  isMock                Boolean        @default(false)
+  initiatedFollows      Follow[]       @relation("FollowedBy")
+  receivedFollows       Follow[]       @relation("Following")
+  likes                 Like[]
+  collections           Collection[]
+  sentNotifications     Notification[] @relation("SentNotifications")
+  receivedNotifications Notification[] @relation("ReceivedNotifications")
 }
 
 model Collection {
@@ -63,6 +91,7 @@ model Picture {
   likes                  Like[]
   collection             PictureOnCollection[]
   sizes                  Json
+  notifications          Notification[]
 }
 
 model PictureOnCollection {
@@ -75,14 +104,15 @@ model PictureOnCollection {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
-  picture   Picture  @relation(fields: [pictureId], references: [id], onDelete: Cascade)
-  pictureId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  content       String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  picture       Picture        @relation(fields: [pictureId], references: [id], onDelete: Cascade)
+  pictureId     Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  notifications Notification[]
 }
 
 model Like {

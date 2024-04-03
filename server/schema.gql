@@ -91,6 +91,27 @@ type Collection {
   pictures: [PictureOnCollection!]!
 }
 
+type Notification {
+  id: Int!
+  type: String!
+  sender: User!
+  senderId: Int!
+  receiver: User!
+  receiverId: Int!
+  picture: Picture
+  pictureId: Int
+  comment: Comment
+  commentId: Int
+  read: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type NotificationUser {
+  id: Int!
+  type: String!
+}
+
 type UserCount {
   pictures: Int!
   initiatedFollows: Int!
@@ -117,10 +138,14 @@ type User {
   collections: [Collection!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  sentNotifications: [Notification!]!
+  receivedNotifications: [Notification!]!
+  unreadNotifications: [NotificationUser!]!
 }
 
 type Query {
   getCollection(collectionName: String!): Collection!
+  notifications: [Notification!]!
   users: [User!]!
   usersByUsername(username: String!): [User!]!
   user(username: String!): User!
@@ -141,6 +166,7 @@ type Mutation {
   deleteCollection(collectionId: Float!): Collection!
   updateNameCollection(collectionId: Float!, newName: String!): Collection!
   deleteAllCollectionsForUser(userId: Float!): Collection!
+  markNotificationsAsRead(notificationIds: [Int!]!): [Notification!]!
   updateUser(username: String!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!
   login(email: String!, password: String!): LoginResponse!
@@ -224,4 +250,9 @@ input FollowDto {
 input UnfollowDto {
   userId: Float!
   followingId: Float!
+}
+
+type Subscription {
+  notificationAdded(userId: Int!): Notification!
+  commentAdded(pictureId: Int!): Comment!
 }

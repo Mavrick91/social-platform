@@ -43,6 +43,7 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        badge: 'rgb(var(--badge))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         white: 'rgb(var(--web-always-white))',
@@ -61,6 +62,7 @@ module.exports = {
         secondary: {
           DEFAULT: 'rgb(var(--secondary))',
           button: 'rgb(var(--secondary-button))',
+          background: 'rgb(var(--secondary-background))',
           foreground: 'hsl(var(--secondary-foreground))',
           'button-background': 'rgb(var(--secondary-button-background))',
         },

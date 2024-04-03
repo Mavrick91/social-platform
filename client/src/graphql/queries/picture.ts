@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { USER_FRAGMENT } from './user';
 
 export const PICTURE_FRAGMENT = gql`
   fragment PictureFragment on Picture {
@@ -17,7 +16,12 @@ export const PICTURE_FRAGMENT = gql`
     }
     altText
     user {
-      ...UserFragment
+      id
+      firstName
+      lastName
+      username
+      avatar
+      bio
     }
     likes {
       id
@@ -33,7 +37,6 @@ export const PICTURE_FRAGMENT = gql`
       likes
     }
   }
-  ${USER_FRAGMENT}
 `;
 
 export const GET_PICTURE_BY_USERNAME = gql`

@@ -20,7 +20,7 @@ export default function PostCommentItem({
 
   return (
     <div className="flex">
-      <div className="mr-4">
+      <div className="mr-4 shrink-0">
         <UserAvatar avatar={avatar} className="size-8" />
       </div>
       <div className="text-sm">

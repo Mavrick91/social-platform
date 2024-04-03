@@ -8,6 +8,10 @@ export const USER_FRAGMENT = gql`
     username
     avatar
     bio
+    unreadNotifications {
+      id
+      type
+    }
   }
 `;
 

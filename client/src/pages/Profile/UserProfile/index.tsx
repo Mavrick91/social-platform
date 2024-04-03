@@ -5,8 +5,6 @@ import UserAvatar from '@/components/UserAvatar';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import ButtonFollow from './ButtonFollow';
 import OwnProfile from './OwnProfile';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 type Props = {
   currentProfile: UserProfileFragment;

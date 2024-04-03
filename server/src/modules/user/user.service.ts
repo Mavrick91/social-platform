@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { NotificationUser } from '../notification/entities/notification-user.entity';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -67,7 +68,9 @@ export class UserService {
     });
   }
 
-  async findOne(username: string): Promise<User> {
+  async findOne(
+    username: string,
+  ): Promise<User & { unreadNotifications: NotificationUser[] }> {
     const user = await this.prisma.user.findUnique({
       where: { username },
       include: {
@@ -98,10 +101,18 @@ export class UserService {
             },
           },
         },
+        receivedNotifications: true,
       },
     });
 
-    return user;
+    const unreadNotifications = user.receivedNotifications.filter(
+      (notification) => !notification.read,
+    );
+
+    return {
+      ...user,
+      unreadNotifications,
+    };
   }
 
   async update(username: string, data: UpdateUserDto): Promise<User> {

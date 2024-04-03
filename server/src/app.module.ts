@@ -17,6 +17,9 @@ import { LikeResolver } from './modules/like/like.resolver';
 import { LikeModule } from './modules/like/like.module';
 import { CollectionResolver } from './modules/collection/collection.resolver';
 import { CollectionModule } from './modules/collection/collection.module';
+import { PubSubModule } from './modules/pubsub/PubSub.module';
+import { NotificationResolver } from './modules/notification/notification.resolver';
+import { NotificationModule } from './modules/notification/notification.module';
 import GraphQLJSON from './scalars';
 
 @Module({
@@ -30,6 +33,7 @@ import GraphQLJSON from './scalars';
       buildSchemaOptions: {
         scalarsMap: [{ type: GraphQLJSON, scalar: GraphQLJSON() }],
       },
+      installSubscriptionHandlers: true,
     }),
     UserModule,
     AuthModule,
@@ -40,6 +44,8 @@ import GraphQLJSON from './scalars';
     FollowModule,
     LikeModule,
     CollectionModule,
+    PubSubModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [
@@ -48,6 +54,7 @@ import GraphQLJSON from './scalars';
     UserService,
     LikeResolver,
     CollectionResolver,
+    NotificationResolver,
   ],
 })
 export class AppModule {}

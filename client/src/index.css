@@ -32,6 +32,7 @@ body,
     --separator-post: 239, 239, 239;
 
     --secondary: 115, 115, 115;
+    --secondary-background: 250, 250, 250;
     --secondary-button: 38, 38, 38;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --secondary-button-background: 239, 239, 239;
@@ -53,6 +54,7 @@ body,
 
     --radius: 0.5rem;
     --web-always-white: 255, 255, 255;
+    --badge: 255, 48, 64;
   }
 
   .dark {

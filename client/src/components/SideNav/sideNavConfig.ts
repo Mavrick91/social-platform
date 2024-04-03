@@ -19,7 +19,8 @@ export interface SideNavItem {
 export const getNavigationItems = (
   user: UserFragmentFragment,
   openSearch: () => void,
-  openCreate: () => void
+  openCreate: () => void,
+  toggleNotification: () => void
 ): SideNavItem[] => [
   {
     name: 'Home',
@@ -46,9 +47,8 @@ export const getNavigationItems = (
   },
   {
     name: 'Notifications',
-    path: '/notifications',
     Icon: Heart,
-    isActive: (path) => path === '/notifications',
+    onClick: toggleNotification,
   },
   {
     name: 'Create',

@@ -113,6 +113,7 @@ export type Mutation = {
   followUser: Follow;
   likePicture: Picture;
   login: LoginResponse;
+  markNotificationsAsRead: Array<Notification>;
   removeComment: Comment;
   removePictureFromCollection: Array<Collection>;
   unfollowUser: Follow;
@@ -181,6 +182,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationMarkNotificationsAsReadArgs = {
+  notificationIds: Array<Scalars['Int']['input']>;
+};
+
+
 export type MutationRemoveCommentArgs = {
   id: Scalars['Int']['input'];
 };
@@ -223,6 +229,29 @@ export type MutationUpdateUserArgs = {
   username: Scalars['String']['input'];
 };
 
+export type Notification = {
+  __typename?: 'Notification';
+  comment?: Maybe<Comment>;
+  commentId?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  picture?: Maybe<Picture>;
+  pictureId?: Maybe<Scalars['Int']['output']>;
+  read: Scalars['Boolean']['output'];
+  receiver: User;
+  receiverId: Scalars['Int']['output'];
+  sender: User;
+  senderId: Scalars['Int']['output'];
+  type: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type NotificationUser = {
+  __typename?: 'NotificationUser';
+  id: Scalars['Int']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type Picture = {
   __typename?: 'Picture';
   _count: PictureCount;
@@ -261,6 +290,7 @@ export type Query = {
   commentsByPictureId: Array<Comment>;
   getCollection: Collection;
   mockedUser: Array<User>;
+  notifications: Array<Notification>;
   picturesByUsername: Array<Picture>;
   picturesFromFollowing: Array<Picture>;
   user: User;
@@ -318,6 +348,22 @@ export type SizeType = {
   thumbnail: Scalars['String']['output'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  commentAdded: Comment;
+  notificationAdded: Notification;
+};
+
+
+export type SubscriptionCommentAddedArgs = {
+  pictureId: Scalars['Int']['input'];
+};
+
+
+export type SubscriptionNotificationAddedArgs = {
+  userId: Scalars['Int']['input'];
+};
+
 export type UnfollowDto = {
   followingId: Scalars['Float']['input'];
   userId: Scalars['Float']['input'];
@@ -367,6 +413,9 @@ export type User = {
   password: Scalars['String']['output'];
   pictures: Array<Picture>;
   receivedFollows: Array<Follow>;
+  receivedNotifications: Array<Notification>;
+  sentNotifications: Array<Notification>;
+  unreadNotifications: Array<NotificationUser>;
   updatedAt: Scalars['DateTime']['output'];
   username: Scalars['String']['output'];
 };
@@ -450,6 +499,13 @@ export type UnlikePictureMutationVariables = Exact<{
 
 export type UnlikePictureMutation = { __typename?: 'Mutation', unlikePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
 
+export type MarkNotificationsAsReadMutationVariables = Exact<{
+  notificationIds: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+}>;
+
+
+export type MarkNotificationsAsReadMutation = { __typename?: 'Mutation', markNotificationsAsRead: Array<{ __typename?: 'Notification', id: number, read: boolean }> };
+
 export type UploadPictureMutationVariables = Exact<{
   input: CreatePictureInput;
 }>;
@@ -509,6 +565,13 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 
 export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } }> };
 
+export type NotificationFragmentFragment = { __typename?: 'Notification', id: number, type: string, pictureId?: number | null, commentId?: number | null, read: boolean, createdAt: any, updatedAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null };
+
+export type GetNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: number, type: string, pictureId?: number | null, commentId?: number | null, read: boolean, createdAt: any, updatedAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null }> };
+
 export type PictureFragmentFragment = { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
 
 export type GetPictureByUsernameQueryVariables = Exact<{
@@ -525,48 +588,63 @@ export type GetPicturesFromFollowingQueryVariables = Exact<{
 
 export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFromFollowing: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
 
-export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
+export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> };
 
 export type CollectionFragmentFragment = { __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> };
 
-export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
+export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null };
 
-export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
+export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
+export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number }, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> };
 
 export type GetUserProfileQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number }, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
+export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> }> };
 
 export type GetUsersByUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUsersByUsernameQuery = { __typename?: 'Query', usersByUsername: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
+export type GetUsersByUsernameQuery = { __typename?: 'Query', usersByUsername: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> }> };
 
 export type GetMockedUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMockedUserQuery = { __typename?: 'Query', mockedUser: Array<{ __typename?: 'User', id: number, email: string }> };
 
-export const UserFragmentFragmentDoc = gql`
-    fragment UserFragment on User {
+export const NotificationFragmentFragmentDoc = gql`
+    fragment NotificationFragment on Notification {
   id
-  firstName
-  lastName
-  username
-  avatar
-  bio
+  type
+  sender {
+    id
+    username
+    avatar
+  }
+  picture {
+    altText
+    sizes {
+      small
+    }
+  }
+  comment {
+    content
+  }
+  pictureId
+  commentId
+  read
+  createdAt
+  updatedAt
 }
     `;
 export const PictureFragmentFragmentDoc = gql`
@@ -585,7 +663,12 @@ export const PictureFragmentFragmentDoc = gql`
   }
   altText
   user {
-    ...UserFragment
+    id
+    firstName
+    lastName
+    username
+    avatar
+    bio
   }
   likes {
     id
@@ -601,7 +684,21 @@ export const PictureFragmentFragmentDoc = gql`
     likes
   }
 }
-    ${UserFragmentFragmentDoc}`;
+    `;
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  id
+  firstName
+  lastName
+  username
+  avatar
+  bio
+  unreadNotifications {
+    id
+    type
+  }
+}
+    `;
 export const InitiatedFollowsFragmentDoc = gql`
     fragment InitiatedFollows on Follow {
   targetUserId
@@ -1000,6 +1097,40 @@ export function useUnlikePictureMutation(baseOptions?: Apollo.MutationHookOption
 export type UnlikePictureMutationHookResult = ReturnType<typeof useUnlikePictureMutation>;
 export type UnlikePictureMutationResult = Apollo.MutationResult<UnlikePictureMutation>;
 export type UnlikePictureMutationOptions = Apollo.BaseMutationOptions<UnlikePictureMutation, UnlikePictureMutationVariables>;
+export const MarkNotificationsAsReadDocument = gql`
+    mutation MarkNotificationsAsRead($notificationIds: [Int!]!) {
+  markNotificationsAsRead(notificationIds: $notificationIds) {
+    id
+    read
+  }
+}
+    `;
+export type MarkNotificationsAsReadMutationFn = Apollo.MutationFunction<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>;
+
+/**
+ * __useMarkNotificationsAsReadMutation__
+ *
+ * To run a mutation, you first call `useMarkNotificationsAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkNotificationsAsReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markNotificationsAsReadMutation, { data, loading, error }] = useMarkNotificationsAsReadMutation({
+ *   variables: {
+ *      notificationIds: // value for 'notificationIds'
+ *   },
+ * });
+ */
+export function useMarkNotificationsAsReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>(MarkNotificationsAsReadDocument, options);
+      }
+export type MarkNotificationsAsReadMutationHookResult = ReturnType<typeof useMarkNotificationsAsReadMutation>;
+export type MarkNotificationsAsReadMutationResult = Apollo.MutationResult<MarkNotificationsAsReadMutation>;
+export type MarkNotificationsAsReadMutationOptions = Apollo.BaseMutationOptions<MarkNotificationsAsReadMutation, MarkNotificationsAsReadMutationVariables>;
 export const UploadPictureDocument = gql`
     mutation UploadPicture($input: CreatePictureInput!) {
   createPicture(input: $input) {
@@ -1310,6 +1441,45 @@ export type GetCommentsByPictureQueryHookResult = ReturnType<typeof useGetCommen
 export type GetCommentsByPictureLazyQueryHookResult = ReturnType<typeof useGetCommentsByPictureLazyQuery>;
 export type GetCommentsByPictureSuspenseQueryHookResult = ReturnType<typeof useGetCommentsByPictureSuspenseQuery>;
 export type GetCommentsByPictureQueryResult = Apollo.QueryResult<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>;
+export const GetNotificationsDocument = gql`
+    query GetNotifications {
+  notifications {
+    ...NotificationFragment
+  }
+}
+    ${NotificationFragmentFragmentDoc}`;
+
+/**
+ * __useGetNotificationsQuery__
+ *
+ * To run a query within a React component, call `useGetNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetNotificationsQuery(baseOptions?: Apollo.QueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+      }
+export function useGetNotificationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+        }
+export function useGetNotificationsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+        }
+export type GetNotificationsQueryHookResult = ReturnType<typeof useGetNotificationsQuery>;
+export type GetNotificationsLazyQueryHookResult = ReturnType<typeof useGetNotificationsLazyQuery>;
+export type GetNotificationsSuspenseQueryHookResult = ReturnType<typeof useGetNotificationsSuspenseQuery>;
+export type GetNotificationsQueryResult = Apollo.QueryResult<GetNotificationsQuery, GetNotificationsQueryVariables>;
 export const GetPictureByUsernameDocument = gql`
     query GetPictureByUsername($username: String) {
   picturesByUsername(username: $username) {

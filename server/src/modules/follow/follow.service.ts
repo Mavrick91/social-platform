@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { PubSubEngine } from 'graphql-subscriptions';
 
 @Injectable()
 export class FollowService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject('PUB_SUB') private pubSub: PubSubEngine,
+  ) {}
 
   async followUser(initiatorId: number, targetUserId: number) {
-    return this.prisma.follow.create({
+    const follow = await this.prisma.follow.create({
       data: {
         initiator: {
           connect: { id: targetUserId },
@@ -16,6 +20,22 @@ export class FollowService {
         },
       },
     });
+
+    if (initiatorId !== targetUserId) {
+      const notification = await this.prisma.notification.create({
+        data: {
+          type: 'FOLLOW',
+          senderId: targetUserId,
+          receiverId: initiatorId,
+        },
+      });
+
+      this.pubSub.publish('notificationAdded', {
+        notificationAdded: notification,
+      });
+    }
+
+    return follow;
   }
 
   async unfollowUser(initiatorId: number, targetUserId: number) {

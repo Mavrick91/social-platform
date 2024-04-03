@@ -1,19 +1,20 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginResponse } from './dto/login-response.dto';
 import {
   BadRequestException,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { S3Service } from '../s3/s3.service';
 import { ConfigService } from '@nestjs/config';
-import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
-import { User as UserResponse } from './entities/user.entity';
 import { CurrentUser } from '../auth/current-user.decorator';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { NotificationUser } from '../notification/entities/notification-user.entity';
+import { S3Service } from '../s3/s3.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginResponse } from './dto/login-response.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User as UserResponse } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Resolver(() => UserResponse)
 export class UserResolver {
@@ -40,7 +41,9 @@ export class UserResolver {
 
   @Query(() => UserResponse)
   @UseGuards(GqlAuthGuard)
-  async user(@Args('username') username: string): Promise<User> {
+  async user(
+    @Args('username') username: string,
+  ): Promise<User & { unreadNotifications: NotificationUser[] }> {
     try {
       return await this.userService.findOne(username);
     } catch (error) {

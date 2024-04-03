@@ -1,9 +1,12 @@
+import NotificationBadge, {
+  NotificationCountProps,
+} from '@/components/NotificationBadge';
+import { cn } from '@/lib/utils';
+import { useSideNav } from '@/providers/SideNavProvider';
+import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { SideNavItem as SideNavItemType } from '../sideNavConfig';
-import { useSideNav } from '@/providers/SideNavProvider';
-import { cn } from '@/lib/utils';
 
 interface LinkOrButtonProps {
   to?: string;
@@ -39,12 +42,18 @@ interface SideNavItemProps {
   item: SideNavItemType;
   isSmall: boolean;
   isSearchVisible: boolean;
+  isNotificationVisible: boolean;
+  hasNotifications: boolean;
+  notificationsCount: NotificationCountProps[];
 }
 
 export default function SideNavItem({
   item,
   isSmall,
   isSearchVisible,
+  isNotificationVisible,
+  hasNotifications,
+  notificationsCount,
 }: SideNavItemProps) {
   const { sideNavOpen, toggleSearch } = useSideNav();
   const { pathname } = useLocation();
@@ -62,23 +71,32 @@ export default function SideNavItem({
         'items-center': !isSmall,
       })}
     >
-      <Icon
-        className={cn(
-          'w-6 h-6 transition-transform ease-out group-hover:scale-[1.1]',
-          {
-            'scale-110': isActiveItem && sideNavOpen,
-            'mx-auto': isSmall,
-          },
-          userAvatarProps?.className
+      <div className="relative">
+        <Icon
+          className={cn(
+            'w-6 h-6 transition-transform ease-out group-hover:scale-[1.1]',
+            {
+              'scale-110': isActiveItem && sideNavOpen,
+              'mx-auto': isSmall,
+            },
+            userAvatarProps?.className
+          )}
+          strokeWidth={
+            (isActiveItem && !isSearchVisible && !isNotificationVisible) ||
+            (name === 'Search' && isSearchVisible) ||
+            (name === 'Notifications' && isNotificationVisible)
+              ? 2.3
+              : 1.5
+          }
+          {...userAvatarProps}
+        />
+        {name === 'Notifications' && hasNotifications && (
+          <NotificationBadge
+            isSmall={isSmall}
+            notificationsCount={notificationsCount}
+          />
         )}
-        strokeWidth={
-          (isActiveItem && !isSearchVisible) ||
-          (name === 'Search' && isSearchVisible)
-            ? 2.3
-            : 1.5
-        }
-        {...userAvatarProps}
-      />
+      </div>
       {!isSmall && (
         <motion.span
           className={cn('transition-colors duration-200 ml-4 ease-out')}

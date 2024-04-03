@@ -13,6 +13,10 @@ type SideNavContextType = {
   toggleSideNav: () => void;
   toggleSearch: () => void;
   isSearchVisible: boolean;
+  isNotificationVisible: boolean;
+  toggleNotification: () => void;
+  isNewPostVisible: boolean;
+  toggleNewPost: () => void;
 };
 
 const SideNavContext = createContext<SideNavContextType | undefined>(undefined);
@@ -27,6 +31,8 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
   const windowWidth = useWindowWidth();
   const [sideNavOpen, setSideNavOpen] = useState(windowWidth < 1264);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+  const [isNewPostVisible, setIsNewPostVisible] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -43,6 +49,16 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
     setIsSearchVisible((prevIsSearchVisible) => !prevIsSearchVisible);
   }, []);
 
+  const toggleNotification = useCallback(() => {
+    setIsNotificationVisible(
+      (prevIsNotificationVisible) => !prevIsNotificationVisible
+    );
+  }, []);
+
+  const toggleNewPost = useCallback(() => {
+    setIsNewPostVisible((prevIsNewPostVisible) => !prevIsNewPostVisible);
+  }, []);
+
   const closeSearch = useCallback(() => {
     setIsSearchVisible(false);
   }, []);
@@ -56,6 +72,10 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
     toggleSideNav,
     toggleSearch,
     isSearchVisible,
+    isNotificationVisible,
+    toggleNotification,
+    isNewPostVisible,
+    toggleNewPost,
   };
 
   return (

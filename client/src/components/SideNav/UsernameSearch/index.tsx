@@ -1,22 +1,13 @@
 import { useGetUsersByUsernameQuery } from '@/__generated__/graphql';
 import UserAvatar from '@/components/UserAvatar';
-import useClickOutside from '@/hooks/useOnClickOutside';
-import { useSideNav } from '@/providers/SideNavProvider';
-import { motion } from 'framer-motion';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function UserSearchOverlay() {
+const UsernameSearch: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
-  const { toggleSearch } = useSideNav();
   const [debouncedInputValue, setDebouncedInputValue] = useState('');
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const ref = useRef(null);
-
-  useClickOutside(ref, () => {
-    toggleSearch();
-  });
 
   const { data } = useGetUsersByUsernameQuery({
     variables: {
@@ -38,13 +29,7 @@ export default function UserSearchOverlay() {
   }, [inputValue]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ left: '-400px' }}
-      animate={{ left: '77px' }}
-      transition={{ duration: 0.3 }}
-      className="bg-white z-10 shadow-2xl border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-[#DBDBDB] py-2"
-    >
+    <>
       <div className="text-2xl font-semibold pt-3 pl-6 pb-9">Search</div>
       <div className="px-4 mb-6 relative">
         <input
@@ -66,7 +51,7 @@ export default function UserSearchOverlay() {
         (data.usersByUsername && data.usersByUsername.length === 0)) && (
         <div className="border-b border-[#DBDBDB]" />
       )}
-      {/* Render search results */}
+
       {data?.usersByUsername.map((user) => (
         <Link
           to={`/${user.username}`}
@@ -82,6 +67,8 @@ export default function UserSearchOverlay() {
           </div>
         </Link>
       ))}
-    </motion.div>
+    </>
   );
-}
+};
+
+export default UsernameSearch;

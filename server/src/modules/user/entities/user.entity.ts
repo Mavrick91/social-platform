@@ -3,8 +3,9 @@ import { Picture } from '../../picture/entities/picture.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 import { Follow } from '../../follow/entities/follow.entity';
 import { Like } from '../../like/entities/like.entity';
-import { PictureOnCollection } from '@prisma/client';
-import { Collection } from 'src/modules/collection/entities/collection.entity';
+import { Collection } from '../../collection/entities/collection.entity';
+import { Notification } from '../../notification/entities/notification.entity';
+import { NotificationUser } from 'src/modules/notification/entities/notification-user.entity';
 
 @ObjectType()
 class UserCount {
@@ -76,4 +77,13 @@ export class User {
 
   @Field(() => Date)
   updatedAt?: Date;
+
+  @Field(() => [Notification], { defaultValue: [] })
+  sentNotifications?: Notification[];
+
+  @Field(() => [Notification], { defaultValue: [] })
+  receivedNotifications: Notification[];
+
+  @Field(() => [NotificationUser], { defaultValue: [] })
+  unreadNotifications: NotificationUser[];
 }

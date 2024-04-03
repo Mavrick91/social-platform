@@ -59,9 +59,9 @@ async function main() {
   }
 
   const mockPictures = await Promise.all(
-    Array.from({ length: 10 }, async () => {
-      const imageUrl = 'https://loremflickr.com/1400/900';
-      const baseKey = `posts/post`;
+    Array.from({ length: 15 }, async () => {
+      const imageUrl = `https://picsum.photos/1400/1400?random=${Math.floor(Math.random() * 1000)}`;
+      const baseKey = `posts/post-${faker.string.uuid()}`;
       const sizes = await fetchAndProcessImage(imageUrl, baseKey);
 
       return {

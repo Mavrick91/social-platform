@@ -4,15 +4,43 @@ import {
   from,
   InMemoryCache,
   Observable,
+  split,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import axios from './axios';
 import { getTokens, updateAccessToken } from './lib/storage';
+import { createClient } from 'graphql-ws';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql',
 });
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: 'ws://localhost:3000/subscriptions',
+    connectionParams: () => {
+      const tokens = getTokens();
+      return {
+        authorization: tokens ? `Bearer ${tokens.accessToken}` : '',
+      };
+    },
+  })
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink
+);
 
 async function refreshAccessToken(refreshToken: string) {
   try {
@@ -78,7 +106,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: from([refreshLink, authLink, httpLink]),
+  link: from([refreshLink, authLink, splitLink]),
   cache: new InMemoryCache(),
 });
 
