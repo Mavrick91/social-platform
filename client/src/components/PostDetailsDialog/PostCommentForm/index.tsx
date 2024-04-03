@@ -72,7 +72,7 @@ function PostCommentForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Separator />
-      <div className="flex items-center h-14 pr-4 pl-2">
+      <div className="flex items-center min-h-12 pr-4 pl-2 py-2">
         <TextareaAutosize
           className="w-full p-2 placeholder:text-secondary text-sm focus:outline-none resize-none"
           placeholder="Add a comment..."

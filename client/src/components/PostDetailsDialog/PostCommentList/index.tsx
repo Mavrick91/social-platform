@@ -52,11 +52,11 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
       <>
         {picture.description && (
           <PostCommentItem
-            avatar={user.avatar}
+            avatar={picture.user.avatar}
             content={picture.description}
             createdAt={picture.createdAt}
-            firstName={user.firstName}
-            lastName={user.lastName}
+            firstName={picture.user.firstName}
+            lastName={picture.user.lastName}
           />
         )}
         {data?.commentsByPictureId.map((comment) => (
