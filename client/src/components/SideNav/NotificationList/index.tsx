@@ -84,7 +84,7 @@ export default function NotificationList() {
         <div className="text-2xl font-semibold pt-3 pl-6 pb-6">
           Notifications
         </div>
-        <div className="mb-6 relative">
+        <div className="relative">
           {categorizedNotifications.map(({ label, items }) => {
             if (!items.length) return null;
 
