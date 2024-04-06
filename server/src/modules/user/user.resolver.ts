@@ -8,7 +8,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '@prisma/client';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
-import { NotificationUser } from '../notification/entities/notification-user.entity';
 import { S3Service } from '../s3/s3.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginResponse } from './dto/login-response.dto';
@@ -41,9 +40,7 @@ export class UserResolver {
 
   @Query(() => UserResponse)
   @UseGuards(GqlAuthGuard)
-  async user(
-    @Args('username') username: string,
-  ): Promise<User & { unreadNotifications: NotificationUser[] }> {
+  async user(@Args('username') username: string): Promise<User> {
     try {
       return await this.userService.findOne(username);
     } catch (error) {

@@ -28,6 +28,12 @@ export class FollowService {
           senderId: targetUserId,
           receiverId: initiatorId,
         },
+        include: {
+          sender: true,
+          receiver: true,
+          comment: true,
+          picture: true,
+        },
       });
 
       this.pubSub.publish('notificationAdded', {

@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@/components/ui/dialog.tsx';
-import useAspectRatio from '@/hooks/useAspectRaiot';
+import useAspectRatio from '@/hooks/useAspectRatio';
 import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Ellipsis } from 'lucide-react';

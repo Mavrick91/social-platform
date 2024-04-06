@@ -5,7 +5,6 @@ import { Follow } from '../../follow/entities/follow.entity';
 import { Like } from '../../like/entities/like.entity';
 import { Collection } from '../../collection/entities/collection.entity';
 import { Notification } from '../../notification/entities/notification.entity';
-import { NotificationUser } from 'src/modules/notification/entities/notification-user.entity';
 
 @ObjectType()
 class UserCount {
@@ -83,7 +82,4 @@ export class User {
 
   @Field(() => [Notification], { defaultValue: [] })
   receivedNotifications: Notification[];
-
-  @Field(() => [NotificationUser], { defaultValue: [] })
-  unreadNotifications: NotificationUser[];
 }

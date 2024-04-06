@@ -45,6 +45,12 @@ export class LikeService {
           receiverId: picture.userId,
           pictureId: pictureId,
         },
+        include: {
+          sender: true,
+          receiver: true,
+          comment: true,
+          picture: true,
+        },
       });
 
       this.pubSub.publish('notificationAdded', {

@@ -18,17 +18,33 @@ export class NotificationService {
     }
   }
 
-  async findAllForUser(userId: number) {
+  async findAllForUser(userId: number, page: number, limit: number = 20) {
     try {
-      return await this.prisma.notification.findMany({
-        where: { receiverId: userId },
-        orderBy: { createdAt: 'desc' },
-        include: {
-          sender: true,
-          picture: true,
-          comment: true,
-        },
-      });
+      const skip = (page - 1) * limit;
+
+      const [notifications, totalCount] = await Promise.all([
+        this.prisma.notification.findMany({
+          where: { receiverId: userId },
+          orderBy: { createdAt: 'desc' },
+          include: {
+            sender: true,
+            picture: true,
+            comment: true,
+          },
+          skip,
+          take: limit,
+        }),
+        this.prisma.notification.count({
+          where: { receiverId: userId },
+        }),
+      ]);
+
+      return {
+        notifications,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        currentPage: page,
+      };
     } catch (error) {
       throw new Error('Failed to fetch notifications');
     }

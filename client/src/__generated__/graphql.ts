@@ -246,10 +246,12 @@ export type Notification = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-export type NotificationUser = {
-  __typename?: 'NotificationUser';
-  id: Scalars['Float']['output'];
-  type: Scalars['String']['output'];
+export type PaginatedNotifications = {
+  __typename?: 'PaginatedNotifications';
+  currentPage: Scalars['Int']['output'];
+  notifications: Array<Notification>;
+  totalCount: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 export type Picture = {
@@ -290,7 +292,7 @@ export type Query = {
   commentsByPictureId: Array<Comment>;
   getCollection: Collection;
   mockedUser: Array<User>;
-  notifications: Array<Notification>;
+  notifications: PaginatedNotifications;
   picturesByUsername: Array<Picture>;
   picturesFromFollowing: Array<Picture>;
   user: User;
@@ -311,6 +313,12 @@ export type QueryCommentsByPictureIdArgs = {
 
 export type QueryGetCollectionArgs = {
   collectionName: Scalars['String']['input'];
+};
+
+
+export type QueryNotificationsArgs = {
+  limit?: Scalars['Int']['input'];
+  page?: Scalars['Int']['input'];
 };
 
 
@@ -350,7 +358,7 @@ export type SizeType = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  notificationAdded: NotificationUser;
+  notificationAdded: Notification;
 };
 
 
@@ -409,7 +417,6 @@ export type User = {
   receivedFollows: Array<Follow>;
   receivedNotifications: Array<Notification>;
   sentNotifications: Array<Notification>;
-  unreadNotifications: Array<NotificationUser>;
   updatedAt: Scalars['DateTime']['output'];
   username: Scalars['String']['output'];
 };
@@ -559,12 +566,15 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 
 export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } }> };
 
-export type NotificationFragmentFragment = { __typename?: 'Notification', id: number, type: string, pictureId?: number | null, commentId?: number | null, read: boolean, createdAt: any, updatedAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null };
+export type NotificationFragmentFragment = { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null };
 
-export type GetNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetNotificationsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
 
 
-export type GetNotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'Notification', id: number, type: string, pictureId?: number | null, commentId?: number | null, read: boolean, createdAt: any, updatedAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null }> };
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'PaginatedNotifications', totalCount: number, totalPages: number, currentPage: number, notifications: Array<{ __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null }> } };
 
 export type PictureFragmentFragment = { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
 
@@ -582,34 +592,34 @@ export type GetPicturesFromFollowingQueryVariables = Exact<{
 
 export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFromFollowing: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
 
-export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> };
+export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
 
 export type CollectionFragmentFragment = { __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> };
 
-export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null };
+export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null };
+export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number }, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> };
+export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
 
 export type GetUserProfileQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number }, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> }> };
+export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
 
 export type GetUsersByUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUsersByUsernameQuery = { __typename?: 'Query', usersByUsername: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, unreadNotifications: Array<{ __typename?: 'NotificationUser', id: number, type: string }> }> };
+export type GetUsersByUsernameQuery = { __typename?: 'Query', usersByUsername: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
 
 export type GetMockedUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -621,7 +631,7 @@ export type NotificationAddedSubscriptionVariables = Exact<{
 }>;
 
 
-export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'NotificationUser', id: number, type: string } };
+export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null } };
 
 export const NotificationFragmentFragmentDoc = gql`
     fragment NotificationFragment on Notification {
@@ -641,11 +651,8 @@ export const NotificationFragmentFragmentDoc = gql`
   comment {
     content
   }
-  pictureId
-  commentId
   read
   createdAt
-  updatedAt
 }
     `;
 export const PictureFragmentFragmentDoc = gql`
@@ -694,10 +701,6 @@ export const UserFragmentFragmentDoc = gql`
   username
   avatar
   bio
-  unreadNotifications {
-    id
-    type
-  }
 }
     `;
 export const InitiatedFollowsFragmentDoc = gql`
@@ -1443,9 +1446,14 @@ export type GetCommentsByPictureLazyQueryHookResult = ReturnType<typeof useGetCo
 export type GetCommentsByPictureSuspenseQueryHookResult = ReturnType<typeof useGetCommentsByPictureSuspenseQuery>;
 export type GetCommentsByPictureQueryResult = Apollo.QueryResult<GetCommentsByPictureQuery, GetCommentsByPictureQueryVariables>;
 export const GetNotificationsDocument = gql`
-    query GetNotifications {
-  notifications {
-    ...NotificationFragment
+    query GetNotifications($page: Int!, $limit: Int!) {
+  notifications(page: $page, limit: $limit) {
+    notifications {
+      ...NotificationFragment
+    }
+    totalCount
+    totalPages
+    currentPage
   }
 }
     ${NotificationFragmentFragmentDoc}`;
@@ -1462,10 +1470,12 @@ export const GetNotificationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetNotificationsQuery({
  *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useGetNotificationsQuery(baseOptions?: Apollo.QueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+export function useGetNotificationsQuery(baseOptions: Apollo.QueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables> & ({ variables: GetNotificationsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
       }
@@ -1723,11 +1733,10 @@ export type GetMockedUserQueryResult = Apollo.QueryResult<GetMockedUserQuery, Ge
 export const NotificationAddedDocument = gql`
     subscription NotificationAdded($userId: Int!) {
   notificationAdded(userId: $userId) {
-    id
-    type
+    ...NotificationFragment
   }
 }
-    `;
+    ${NotificationFragmentFragmentDoc}`;
 
 /**
  * __useNotificationAddedSubscription__

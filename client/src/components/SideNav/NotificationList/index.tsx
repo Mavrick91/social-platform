@@ -1,8 +1,4 @@
-import {
-  NotificationFragmentFragment,
-  useGetNotificationsQuery,
-} from '@/__generated__/graphql';
-import QuerySpinner from '@/components/ui/QuerySpinner';
+import { NotificationFragmentFragment } from '@/__generated__/graphql';
 import moment from 'moment';
 import NotificationItem from './NotificationItem';
 
@@ -56,17 +52,32 @@ const categorizeNotifications = (
   return categorizedNotifications.filter(({ items }) => items.length > 0);
 };
 
-export default function NotificationList() {
-  const { data, loading, error } = useGetNotificationsQuery();
+type Props = {
+  notifications: NotificationFragmentFragment[];
+  hasNextPage: number | boolean;
+  fetchNextPage: () => void;
+};
 
-  if (loading) return <QuerySpinner />;
-  if (error || !data) return <div>Error fetching notifications</div>;
+export default function NotificationList({
+  notifications,
+  hasNextPage,
+  fetchNextPage,
+}: Props) {
+  const categorizedNotifications = categorizeNotifications(notifications);
 
-  const categorizedNotifications = categorizeNotifications(data.notifications);
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    if (scrollTop + clientHeight >= scrollHeight - 20 && hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <div className="flex flex-col">
-      <div className="min-h-0 overflow-y-auto grow max-h-screen">
+      <div
+        className="min-h-0 overflow-y-auto grow max-h-screen"
+        onScroll={handleScroll}
+      >
         <div className="text-2xl font-semibold pt-3 pl-6 pb-6">
           Notifications
         </div>

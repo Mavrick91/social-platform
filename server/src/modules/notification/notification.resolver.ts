@@ -13,7 +13,7 @@ import { CurrentUser } from '../auth/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { Notification } from './entities/notification.entity';
 import { NotificationService } from './notification.service';
-import { NotificationUser } from './entities/notification-user.entity';
+import { PaginatedNotifications } from './entities/notification-pagination.entity';
 
 @Resolver(() => Notification)
 export class NotificationResolver {
@@ -22,10 +22,14 @@ export class NotificationResolver {
     @Inject('PUB_SUB') private pubSub: PubSubEngine,
   ) {}
 
-  @Query(() => [Notification], { name: 'notifications' })
+  @Query(() => PaginatedNotifications, { name: 'notifications' })
   @UseGuards(GqlAuthGuard)
-  async findAllNotificationForUser(@CurrentUser() user: User) {
-    return this.notificationService.findAllForUser(user.id);
+  async findAllNotificationForUser(
+    @CurrentUser() user: User,
+    @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
+    @Args('limit', { type: () => Int, defaultValue: 20 }) limit: number,
+  ) {
+    return this.notificationService.findAllForUser(user.id, page, limit);
   }
 
   @Mutation(() => [Notification])
@@ -36,20 +40,16 @@ export class NotificationResolver {
     return this.notificationService.markAsRead(notificationIds);
   }
 
-  @Subscription(() => NotificationUser, {
+  @Subscription(() => Notification, {
     filter: (payload, variables) => {
       return payload.notificationAdded.receiverId === variables.userId;
     },
     resolve: (payload) => {
-      return {
-        id: payload.notificationAdded.id,
-        type: payload.notificationAdded.type,
-      };
+      return payload.notificationAdded;
     },
     name: 'notificationAdded',
   })
   async notificationAdded(@Args('userId', { type: () => Int }) userId: number) {
-    console.log('🚀 ~ notificationAdded:');
     return this.pubSub.asyncIterator('notificationAdded');
   }
 }

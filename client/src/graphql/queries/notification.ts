@@ -18,19 +18,22 @@ export const NOTIFICATION_FRAGMENT = gql`
     comment {
       content
     }
-    pictureId
-    commentId
     read
     createdAt
-    updatedAt
   }
 `;
 
 export const GET_NOTIFICATIONS = gql`
-  query GetNotifications {
-    notifications {
-      ...NotificationFragment
+  query GetNotifications($page: Int!, $limit: Int!) {
+    notifications(page: $page, limit: $limit) {
+      notifications {
+        ...NotificationFragment
+      }
+      totalCount
+      totalPages
+      currentPage
     }
   }
+
   ${NOTIFICATION_FRAGMENT}
 `;

@@ -107,11 +107,6 @@ type Notification {
   updatedAt: DateTime!
 }
 
-type NotificationUser {
-  id: Float!
-  type: String!
-}
-
 type UserCount {
   pictures: Int!
   initiatedFollows: Int!
@@ -140,12 +135,18 @@ type User {
   updatedAt: DateTime!
   sentNotifications: [Notification!]!
   receivedNotifications: [Notification!]!
-  unreadNotifications: [NotificationUser!]!
+}
+
+type PaginatedNotifications {
+  notifications: [Notification!]!
+  totalCount: Int!
+  totalPages: Int!
+  currentPage: Int!
 }
 
 type Query {
   getCollection(collectionName: String!): Collection!
-  notifications: [Notification!]!
+  notifications(page: Int! = 1, limit: Int! = 20): PaginatedNotifications!
   users: [User!]!
   usersByUsername(username: String!): [User!]!
   user(username: String!): User!
@@ -253,5 +254,5 @@ input UnfollowDto {
 }
 
 type Subscription {
-  notificationAdded(userId: Int!): NotificationUser!
+  notificationAdded(userId: Int!): Notification!
 }

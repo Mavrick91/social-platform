@@ -1,14 +1,11 @@
-import {
-  NotificationUser,
-  useNotificationAddedSubscription,
-} from '@/__generated__/graphql';
+import { useInfiniteNotifications } from '@/hooks/graphql/useInfiniteNotifications';
 import useMarkNotificationsAsRead from '@/hooks/graphql/useMarkNotificationsAsRead';
+import useNotificationAdded from '@/hooks/graphql/useNotificationAdded';
 import { cn } from '@/lib/utils';
 import { useSideNav } from '@/providers/SideNavProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { NotificationCountProps } from '../NotificationBadge';
 import UploadPostDialog from '../UploadPostDialog';
 import DropdownMore from './DropdownMore';
@@ -30,10 +27,14 @@ export default function SideNav() {
     isNewPostVisible,
     toggleNewPost,
   } = useSideNav();
-  const [markNotifAsRead] = useMarkNotificationsAsRead();
-  const [userUnreadNotifications, setUserUnreadNotifications] = useState<
-    NotificationUser[]
-  >(user.unreadNotifications);
+
+  const { notifications, fetchNextPage, hasNextPage, setAllNotifications } =
+    useInfiniteNotifications();
+  console.log('🚀 ~ notifications:', notifications);
+
+  useNotificationAdded(user.id, setAllNotifications);
+
+  const [markNotifAsRead] = useMarkNotificationsAsRead(setAllNotifications);
 
   const navigationItems = getNavigationItems(
     user,
@@ -41,41 +42,29 @@ export default function SideNav() {
     toggleNewPost,
     toggleNotification
   );
-  const { data: subscriptionData } = useNotificationAddedSubscription({
-    variables: { userId: user.id },
-  });
 
   const displaySmallNav =
     !sideNavOpen || isSearchVisible || isNotificationVisible;
 
-  useEffect(() => {
-    if (subscriptionData) {
-      const newNotification = subscriptionData.notificationAdded;
-      setUserUnreadNotifications((prevState) => [
-        ...prevState,
-        newNotification,
-      ]);
-    }
-  }, [subscriptionData, user]);
+  const notificationsCount: NotificationCountProps[] = notifications.reduce(
+    (acc, currentValue) => {
+      if (currentValue.read) return acc;
 
-  const notificationsCount: NotificationCountProps[] =
-    userUnreadNotifications.reduce(
-      (acc, currentValue) => {
-        if (currentValue.type === 'LIKE') {
-          acc[0].count.push(currentValue.id);
-        } else if (currentValue.type === 'COMMENT') {
-          acc[1].count.push(currentValue.id);
-        } else if (currentValue.type === 'FOLLOW') {
-          acc[2].count.push(currentValue.id);
-        }
-        return acc;
-      },
-      [
-        { id: 'like', count: [] as number[] },
-        { id: 'comment', count: [] as number[] },
-        { id: 'follow', count: [] as number[] },
-      ]
-    );
+      if (currentValue.type === 'LIKE') {
+        acc[0].count.push(currentValue.id);
+      } else if (currentValue.type === 'COMMENT') {
+        acc[1].count.push(currentValue.id);
+      } else if (currentValue.type === 'FOLLOW') {
+        acc[2].count.push(currentValue.id);
+      }
+      return acc;
+    },
+    [
+      { id: 'like', count: [] as number[] },
+      { id: 'comment', count: [] as number[] },
+      { id: 'follow', count: [] as number[] },
+    ]
+  );
 
   const handleToggleNotification = () => {
     const newNotifications = notificationsCount.flatMap((item) => item.count);
@@ -84,7 +73,6 @@ export default function SideNav() {
       markNotifAsRead({
         variables: { notificationIds: newNotifications },
       });
-    setUserUnreadNotifications([]);
 
     toggleNotification();
   };
@@ -130,7 +118,11 @@ export default function SideNav() {
         )}
         {isNotificationVisible && (
           <SideNavOverlay toggle={handleToggleNotification}>
-            <NotificationList />
+            <NotificationList
+              notifications={notifications}
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+            />
           </SideNavOverlay>
         )}
       </AnimatePresence>
