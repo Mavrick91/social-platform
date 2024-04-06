@@ -21,7 +21,7 @@ export default function SideNavOverlay({ children, toggle }: Props) {
       animate={{ left: '77px' }}
       exit={{ left: '-400px' }}
       transition={{ duration: 0.5 }}
-      className="bg-white z-10 shadow-2xl border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-[#DBDBDB] py-2"
+      className="bg-white z-10 overflow-hidden shadow-2xl border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-separator py-2"
     >
       {children}
     </motion.div>

@@ -108,7 +108,7 @@ type Notification {
 }
 
 type NotificationUser {
-  id: Int!
+  id: Float!
   type: String!
 }
 
@@ -253,6 +253,5 @@ input UnfollowDto {
 }
 
 type Subscription {
-  notificationAdded(userId: Int!): Notification!
-  commentAdded(pictureId: Int!): Comment!
+  notificationAdded(userId: Int!): NotificationUser!
 }

@@ -13,6 +13,7 @@ import { CurrentUser } from '../auth/current-user.decorator';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { Notification } from './entities/notification.entity';
 import { NotificationService } from './notification.service';
+import { NotificationUser } from './entities/notification-user.entity';
 
 @Resolver(() => Notification)
 export class NotificationResolver {
@@ -35,12 +36,20 @@ export class NotificationResolver {
     return this.notificationService.markAsRead(notificationIds);
   }
 
-  @Subscription(() => Notification, {
-    filter: (payload, variables) =>
-      payload.notificationAdded.receiverId === variables.userId,
-    resolve: (payload) => payload.notificationAdded,
+  @Subscription(() => NotificationUser, {
+    filter: (payload, variables) => {
+      return payload.notificationAdded.receiverId === variables.userId;
+    },
+    resolve: (payload) => {
+      return {
+        id: payload.notificationAdded.id,
+        type: payload.notificationAdded.type,
+      };
+    },
+    name: 'notificationAdded',
   })
-  notificationAdded(@Args('userId', { type: () => Int }) userId: number) {
+  async notificationAdded(@Args('userId', { type: () => Int }) userId: number) {
+    console.log('🚀 ~ notificationAdded:');
     return this.pubSub.asyncIterator('notificationAdded');
   }
 }

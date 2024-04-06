@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://localhost:3000/subscriptions',
+    url: 'ws://localhost:3000/graphql',
     connectionParams: () => {
       const tokens = getTokens();
       return {

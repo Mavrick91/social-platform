@@ -1,18 +1,11 @@
-import {
-  Args,
-  Int,
-  Mutation,
-  Query,
-  Resolver,
-  Subscription,
-} from '@nestjs/graphql';
+import { BadRequestException, Inject, UseGuards } from '@nestjs/common';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { PubSubEngine } from 'graphql-subscriptions';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CommentService } from './comment.service';
-import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
-import { BadRequestException, Inject, UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
-import { PubSubEngine } from 'graphql-subscriptions';
+import { Comment } from './entities/comment.entity';
 
 @Resolver(() => Comment)
 export class CommentResolver {
@@ -22,26 +15,15 @@ export class CommentResolver {
   ) {}
 
   @Mutation(() => Comment)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   async createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
     try {
-      const comment = await this.commentService.create(createCommentInput);
-      this.pubSub.publish('commentAdded', { commentAdded: comment });
-      return comment;
+      return this.commentService.create(createCommentInput);
     } catch (error) {
       throw new Error(error.message);
     }
-  }
-
-  @Subscription(() => Comment, {
-    filter: (payload, variables) =>
-      payload.commentAdded.pictureId === variables.pictureId,
-    resolve: (payload) => payload.commentAdded,
-  })
-  commentAdded(@Args('pictureId', { type: () => Int }) pictureId: number) {
-    return this.pubSub.asyncIterator('commentAdded');
   }
 
   @Query(() => [Comment], { name: 'commentsByPictureId' })

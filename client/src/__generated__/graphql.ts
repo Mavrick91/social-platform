@@ -248,7 +248,7 @@ export type Notification = {
 
 export type NotificationUser = {
   __typename?: 'NotificationUser';
-  id: Scalars['Int']['output'];
+  id: Scalars['Float']['output'];
   type: Scalars['String']['output'];
 };
 
@@ -350,13 +350,7 @@ export type SizeType = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  commentAdded: Comment;
-  notificationAdded: Notification;
-};
-
-
-export type SubscriptionCommentAddedArgs = {
-  pictureId: Scalars['Int']['input'];
+  notificationAdded: NotificationUser;
 };
 
 
@@ -621,6 +615,13 @@ export type GetMockedUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMockedUserQuery = { __typename?: 'Query', mockedUser: Array<{ __typename?: 'User', id: number, email: string }> };
+
+export type NotificationAddedSubscriptionVariables = Exact<{
+  userId: Scalars['Int']['input'];
+}>;
+
+
+export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'NotificationUser', id: number, type: string } };
 
 export const NotificationFragmentFragmentDoc = gql`
     fragment NotificationFragment on Notification {
@@ -1719,3 +1720,34 @@ export type GetMockedUserQueryHookResult = ReturnType<typeof useGetMockedUserQue
 export type GetMockedUserLazyQueryHookResult = ReturnType<typeof useGetMockedUserLazyQuery>;
 export type GetMockedUserSuspenseQueryHookResult = ReturnType<typeof useGetMockedUserSuspenseQuery>;
 export type GetMockedUserQueryResult = Apollo.QueryResult<GetMockedUserQuery, GetMockedUserQueryVariables>;
+export const NotificationAddedDocument = gql`
+    subscription NotificationAdded($userId: Int!) {
+  notificationAdded(userId: $userId) {
+    id
+    type
+  }
+}
+    `;
+
+/**
+ * __useNotificationAddedSubscription__
+ *
+ * To run a query within a React component, call `useNotificationAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNotificationAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNotificationAddedSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNotificationAddedSubscription(baseOptions: Apollo.SubscriptionHookOptions<NotificationAddedSubscription, NotificationAddedSubscriptionVariables> & ({ variables: NotificationAddedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NotificationAddedSubscription, NotificationAddedSubscriptionVariables>(NotificationAddedDocument, options);
+      }
+export type NotificationAddedSubscriptionHookResult = ReturnType<typeof useNotificationAddedSubscription>;
+export type NotificationAddedSubscriptionResult = Apollo.SubscriptionResult<NotificationAddedSubscription>;

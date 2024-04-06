@@ -43,7 +43,6 @@ interface SideNavItemProps {
   isSmall: boolean;
   isSearchVisible: boolean;
   isNotificationVisible: boolean;
-  hasNotifications: boolean;
   notificationsCount: NotificationCountProps[];
 }
 
@@ -52,7 +51,6 @@ export default function SideNavItem({
   isSmall,
   isSearchVisible,
   isNotificationVisible,
-  hasNotifications,
   notificationsCount,
 }: SideNavItemProps) {
   const { sideNavOpen, toggleSearch } = useSideNav();
@@ -63,6 +61,10 @@ export default function SideNavItem({
   if (isActive) {
     isActiveItem = isActive(pathname);
   }
+
+  const hasNotifications = notificationsCount.some(
+    ({ count }) => count.length > 0
+  );
 
   const renderContent = () => (
     <div

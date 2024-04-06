@@ -38,6 +38,7 @@ const UsernameSearch: React.FC = () => {
             setInputValue(e.target.value);
           }}
           placeholder="Search"
+          autoFocus
           className="bg-zinc-200/80 px-4 py-1 rounded-md w-full h-10 focus:outline-none"
         />
         <button

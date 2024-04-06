@@ -21,6 +21,7 @@ import { PubSubModule } from './modules/pubsub/PubSub.module';
 import { NotificationResolver } from './modules/notification/notification.resolver';
 import { NotificationModule } from './modules/notification/notification.module';
 import GraphQLJSON from './scalars';
+import { PubSub } from 'graphql-subscriptions';
 
 @Module({
   imports: [
@@ -33,8 +34,34 @@ import GraphQLJSON from './scalars';
       buildSchemaOptions: {
         scalarsMap: [{ type: GraphQLJSON, scalar: GraphQLJSON() }],
       },
-      installSubscriptionHandlers: true,
+      playground: {
+        subscriptionEndpoint: '/graphql',
+      },
+      subscriptions: {
+        'graphql-ws': true,
+
+        // 'subscriptions-transport-ws': {
+        //   onConnect: (connectionParams, webSocket, context) => {
+        //     console.log('WebSocket connected');
+        //     console.log('Connection Parameters:', connectionParams);
+        //   },
+        //   onDisconnect: (webSocket, context) => {
+        //     console.log('WebSocket disconnected');
+        //     if (context.code) {
+        //       console.error(
+        //         'WebSocket disconnected with error code:',
+        //         context.code,
+        //       );
+        //     } else {
+        //       console.error('WebSocket disconnected with no error code');
+        //       console.error('Last known state:', context.lastEventId);
+        //       console.error('Disconnect reason:', context.reason);
+        //     }
+        //   },
+        // },
+      },
     }),
+    // PubSubModule,
     UserModule,
     AuthModule,
     PictureModule,
@@ -44,11 +71,14 @@ import GraphQLJSON from './scalars';
     FollowModule,
     LikeModule,
     CollectionModule,
-    PubSubModule,
     NotificationModule,
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: 'PUB_SUB',
+      useValue: new PubSub(),
+    },
     AppService,
     PrismaService,
     UserService,

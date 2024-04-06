@@ -1,11 +1,9 @@
 import {
   NotificationFragmentFragment,
   useGetNotificationsQuery,
-  useMarkNotificationsAsReadMutation,
 } from '@/__generated__/graphql';
 import QuerySpinner from '@/components/ui/QuerySpinner';
 import moment from 'moment';
-import { useEffect } from 'react';
 import NotificationItem from './NotificationItem';
 
 const NOTIFICATION_CATEGORIES = [
@@ -60,18 +58,6 @@ const categorizeNotifications = (
 
 export default function NotificationList() {
   const { data, loading, error } = useGetNotificationsQuery();
-  const [markNotifAsRead] = useMarkNotificationsAsReadMutation();
-
-  useEffect(() => {
-    const newNotifications = data?.notifications.filter(
-      (notification) => !notification.read
-    );
-    if (newNotifications?.length) {
-      markNotifAsRead({
-        variables: { notificationIds: newNotifications.map((n) => n.id) },
-      });
-    }
-  }, [data, markNotifAsRead]);
 
   if (loading) return <QuerySpinner />;
   if (error || !data) return <div>Error fetching notifications</div>;

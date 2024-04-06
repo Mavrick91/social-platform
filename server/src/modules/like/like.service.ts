@@ -1,6 +1,6 @@
-import { PubSubEngine } from 'graphql-subscriptions';
-import { PrismaService } from '../prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { PubSubEngine } from 'graphql-subscriptions';
 
 @Injectable()
 export class LikeService {

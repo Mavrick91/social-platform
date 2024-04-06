@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export interface NotificationCountProps {
   id: string;
-  count: number;
+  count: number[];
 }
 
 export interface NotificationBadgeProps {
@@ -17,25 +17,24 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
   notificationsCount,
   isSmall,
 }) => {
-  const hasNotifications = notificationsCount.some(({ count }) => count > 0);
-  const [isVisible, setIsVisible] = useState(!hasNotifications);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const notificationIds = notificationsCount.flatMap((item) => item.count);
 
   useEffect(() => {
-    if (hasNotifications) {
-      const displayTimer = setTimeout(() => {
-        setIsVisible(true);
-      }, 1000);
+    const displayTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
 
-      const hideTimer = setTimeout(() => {
-        setIsVisible(false);
-      }, 4000);
+    const hideTimer = setTimeout(() => {
+      setIsVisible(false);
+    }, 4000);
 
-      return () => {
-        clearTimeout(displayTimer);
-        clearTimeout(hideTimer);
-      };
-    }
-  }, [hasNotifications]);
+    return () => {
+      clearTimeout(displayTimer);
+      clearTimeout(hideTimer);
+    };
+  }, [notificationIds.length]);
 
   return (
     <>
@@ -57,7 +56,7 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
           >
             <div className="flex space-x-3">
               {notificationsCount.map(({ id, count }, index) => {
-                if (!count) return null;
+                if (!count.length) return null;
 
                 return (
                   <div key={index} className={`flex text-white items-center`}>
@@ -68,7 +67,7 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = ({
                     ) : (
                       <UserRound fill="white" stroke="none" size={20} />
                     )}
-                    <span className="ml-1">{count}</span>
+                    <span className="ml-1">{count.length}</span>
                   </div>
                 );
               })}

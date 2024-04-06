@@ -1,8 +1,14 @@
+import {
+  NotificationUser,
+  useNotificationAddedSubscription,
+} from '@/__generated__/graphql';
+import useMarkNotificationsAsRead from '@/hooks/graphql/useMarkNotificationsAsRead';
 import { cn } from '@/lib/utils';
 import { useSideNav } from '@/providers/SideNavProvider';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { NotificationCountProps } from '../NotificationBadge';
 import UploadPostDialog from '../UploadPostDialog';
 import DropdownMore from './DropdownMore';
@@ -24,37 +30,64 @@ export default function SideNav() {
     isNewPostVisible,
     toggleNewPost,
   } = useSideNav();
+  const [markNotifAsRead] = useMarkNotificationsAsRead();
+  const [userUnreadNotifications, setUserUnreadNotifications] = useState<
+    NotificationUser[]
+  >(user.unreadNotifications);
+
   const navigationItems = getNavigationItems(
     user,
     toggleSearch,
     toggleNewPost,
     toggleNotification
   );
+  const { data: subscriptionData } = useNotificationAddedSubscription({
+    variables: { userId: user.id },
+  });
 
   const displaySmallNav =
     !sideNavOpen || isSearchVisible || isNotificationVisible;
 
+  useEffect(() => {
+    if (subscriptionData) {
+      const newNotification = subscriptionData.notificationAdded;
+      setUserUnreadNotifications((prevState) => [
+        ...prevState,
+        newNotification,
+      ]);
+    }
+  }, [subscriptionData, user]);
+
   const notificationsCount: NotificationCountProps[] =
-    user.unreadNotifications.reduce(
+    userUnreadNotifications.reduce(
       (acc, currentValue) => {
         if (currentValue.type === 'LIKE') {
-          acc[0].count += 1;
+          acc[0].count.push(currentValue.id);
         } else if (currentValue.type === 'COMMENT') {
-          acc[1].count += 1;
+          acc[1].count.push(currentValue.id);
         } else if (currentValue.type === 'FOLLOW') {
-          acc[2].count += 1;
+          acc[2].count.push(currentValue.id);
         }
         return acc;
       },
       [
-        { id: 'like', count: 0 },
-        { id: 'comment', count: 0 },
-        { id: 'follow', count: 0 },
+        { id: 'like', count: [] as number[] },
+        { id: 'comment', count: [] as number[] },
+        { id: 'follow', count: [] as number[] },
       ]
     );
-  // console.log('🚀 ~ user.unreadNotifications:', user.unreadNotifications);
-  // console.log('🚀 ~ user.username:', user.username);
-  // console.log('🚀 ~ notificationsCount:', notificationsCount);
+
+  const handleToggleNotification = () => {
+    const newNotifications = notificationsCount.flatMap((item) => item.count);
+
+    if (newNotifications?.length)
+      markNotifAsRead({
+        variables: { notificationIds: newNotifications },
+      });
+    setUserUnreadNotifications([]);
+
+    toggleNotification();
+  };
 
   return (
     <header className="z-50 bg-white shrink-0 h-screen flex-col flex">
@@ -80,7 +113,6 @@ export default function SideNav() {
                   isSearchVisible={isSearchVisible}
                   isNotificationVisible={isNotificationVisible}
                   notificationsCount={notificationsCount}
-                  hasNotifications={user.unreadNotifications.length > 0}
                 />
               ))}
             </ul>
@@ -97,7 +129,7 @@ export default function SideNav() {
           </SideNavOverlay>
         )}
         {isNotificationVisible && (
-          <SideNavOverlay toggle={toggleNotification}>
+          <SideNavOverlay toggle={handleToggleNotification}>
             <NotificationList />
           </SideNavOverlay>
         )}

@@ -1,23 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { PubSubEngine } from 'graphql-subscriptions';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateNotificationInput } from './dto/create-notification';
 
 @Injectable()
 export class NotificationService {
-  constructor(
-    private readonly prisma: PrismaService,
-    @Inject('PUB_SUB') private pubSub: PubSubEngine,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createNotificationInput: CreateNotificationInput) {
     try {
       const notification = await this.prisma.notification.create({
         data: createNotificationInput,
-      });
-
-      this.pubSub.publish('notificationAdded', {
-        notificationAdded: notification,
       });
 
       return notification;
@@ -43,9 +35,15 @@ export class NotificationService {
   }
 
   async markAsRead(notificationIds: number[]) {
-    return this.prisma.notification.updateMany({
+    await this.prisma.notification.updateMany({
       where: { id: { in: notificationIds } },
       data: { read: true },
     });
+
+    const updatedNotifications = await this.prisma.notification.findMany({
+      where: { id: { in: notificationIds } },
+    });
+
+    return updatedNotifications;
   }
 }
