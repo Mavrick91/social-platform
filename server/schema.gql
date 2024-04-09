@@ -107,6 +107,21 @@ type Notification {
   updatedAt: DateTime!
 }
 
+type Thought {
+  """The unique identifier of the thought"""
+  id: Int!
+  content: String!
+  user: User!
+  visibility: Visibility!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum Visibility {
+  FOLLOWERS
+  CLOSE_FRIENDS
+}
+
 type UserCount {
   pictures: Int!
   initiatedFollows: Int!
@@ -135,6 +150,7 @@ type User {
   updatedAt: DateTime!
   sentNotifications: [Notification!]!
   receivedNotifications: [Notification!]!
+  thought: Thought
 }
 
 type PaginatedNotifications {
@@ -147,6 +163,7 @@ type PaginatedNotifications {
 type Query {
   getCollection(collectionName: String!): Collection!
   notifications(page: Int! = 1, limit: Int! = 20): PaginatedNotifications!
+  thoughts(userId: Float!): [Thought!]!
   users: [User!]!
   usersByUsername(username: String!): [User!]!
   user(username: String!): User!
@@ -168,6 +185,9 @@ type Mutation {
   updateNameCollection(collectionId: Float!, newName: String!): Collection!
   deleteAllCollectionsForUser(userId: Float!): Collection!
   markNotificationsAsRead(notificationIds: [Int!]!): [Notification!]!
+  createThought(createThoughtInput: CreateThoughtInput!): Thought!
+  updateThought(updateThoughtInput: UpdateThoughtInput!): Thought!
+  deleteThought(id: Float!): Thought!
   updateUser(username: String!, updateUserInput: UpdateUserDto!): User!
   createUser(createUserInput: CreateUserDto!): User!
   login(email: String!, password: String!): LoginResponse!
@@ -179,6 +199,18 @@ type Mutation {
   removeComment(id: Int!): Comment!
   followUser(input: FollowDto!): Follow!
   unfollowUser(input: UnfollowDto!): Follow!
+}
+
+input CreateThoughtInput {
+  content: String!
+  userId: Float!
+  visibility: Visibility!
+}
+
+input UpdateThoughtInput {
+  id: Float!
+  content: String!
+  visibility: Visibility!
 }
 
 input UpdateUserDto {

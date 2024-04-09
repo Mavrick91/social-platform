@@ -12,19 +12,19 @@ type Props = {
 };
 
 const MainContent = ({ children }: Props) => {
-  const { sideNavOpen } = useSideNav();
+  const { sideNavOpen, isConversationPage } = useSideNav();
 
   return (
     <div className="flex h-full">
       <SideNav />
       <div
         className={cn('overflow-y-auto h-full w-full', {
-          'ml-small-sidenav': !sideNavOpen,
-          'ml-medium-sidenav': sideNavOpen,
+          'ml-small-sidenav': !sideNavOpen || isConversationPage,
+          'ml-medium-sidenav': sideNavOpen || !isConversationPage,
         })}
       >
         {children}
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

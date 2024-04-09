@@ -28,6 +28,9 @@ module.exports = {
       lg: '1264px',
     },
     extend: {
+      boxShadow: {
+        ig: '0 4px 12px rgba(var(--web-always-black),.15)',
+      },
       margin: {
         ...sidenavSizes,
       },
@@ -47,6 +50,7 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         white: 'rgb(var(--web-always-white))',
+        black: 'rgb(var(--web-always-black))',
         separator: {
           DEFAULT: 'rgb(var(--separator))',
           post: 'rgb(var(--separator-post))',

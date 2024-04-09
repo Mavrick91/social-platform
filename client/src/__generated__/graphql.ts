@@ -64,6 +64,12 @@ export type CreatePictureInput = {
   sizes: SizeInput;
 };
 
+export type CreateThoughtInput = {
+  content: Scalars['String']['input'];
+  userId: Scalars['Float']['input'];
+  visibility: Visibility;
+};
+
 export type CreateUserDto = {
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
@@ -106,10 +112,12 @@ export type Mutation = {
   createCollection: Collection;
   createComment: Comment;
   createPicture: Picture;
+  createThought: Thought;
   createUser: User;
   deleteAllCollectionsForUser: Collection;
   deleteCollection: Collection;
   deletePicture: Picture;
+  deleteThought: Thought;
   followUser: Follow;
   likePicture: Picture;
   login: LoginResponse;
@@ -121,6 +129,7 @@ export type Mutation = {
   updateComment: Comment;
   updateNameCollection: Collection;
   updatePicture: Picture;
+  updateThought: Thought;
   updateUser: User;
 };
 
@@ -146,6 +155,11 @@ export type MutationCreatePictureArgs = {
 };
 
 
+export type MutationCreateThoughtArgs = {
+  createThoughtInput: CreateThoughtInput;
+};
+
+
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserDto;
 };
@@ -162,6 +176,11 @@ export type MutationDeleteCollectionArgs = {
 
 
 export type MutationDeletePictureArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type MutationDeleteThoughtArgs = {
   id: Scalars['Float']['input'];
 };
 
@@ -221,6 +240,11 @@ export type MutationUpdateNameCollectionArgs = {
 export type MutationUpdatePictureArgs = {
   id: Scalars['Float']['input'];
   input: UpdatePictureInput;
+};
+
+
+export type MutationUpdateThoughtArgs = {
+  updateThoughtInput: UpdateThoughtInput;
 };
 
 
@@ -295,6 +319,7 @@ export type Query = {
   notifications: PaginatedNotifications;
   picturesByUsername: Array<Picture>;
   picturesFromFollowing: Array<Picture>;
+  thoughts: Array<Thought>;
   user: User;
   users: Array<User>;
   usersByUsername: Array<User>;
@@ -332,6 +357,11 @@ export type QueryPicturesFromFollowingArgs = {
 };
 
 
+export type QueryThoughtsArgs = {
+  userId: Scalars['Float']['input'];
+};
+
+
 export type QueryUserArgs = {
   username: Scalars['String']['input'];
 };
@@ -366,6 +396,17 @@ export type SubscriptionNotificationAddedArgs = {
   userId: Scalars['Int']['input'];
 };
 
+export type Thought = {
+  __typename?: 'Thought';
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  /** The unique identifier of the thought */
+  id: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: User;
+  visibility: Visibility;
+};
+
 export type UnfollowDto = {
   followingId: Scalars['Float']['input'];
   userId: Scalars['Float']['input'];
@@ -386,6 +427,12 @@ export type UpdatePictureInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   disableComments?: InputMaybe<Scalars['Boolean']['input']>;
   hideLikesAndViewCounts?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type UpdateThoughtInput = {
+  content: Scalars['String']['input'];
+  id: Scalars['Float']['input'];
+  visibility: Visibility;
 };
 
 export type UpdateUserDto = {
@@ -417,6 +464,7 @@ export type User = {
   receivedFollows: Array<Follow>;
   receivedNotifications: Array<Notification>;
   sentNotifications: Array<Notification>;
+  thought?: Maybe<Thought>;
   updatedAt: Scalars['DateTime']['output'];
   username: Scalars['String']['output'];
 };
@@ -427,6 +475,11 @@ export type UserCount = {
   pictures: Scalars['Int']['output'];
   receivedFollows: Scalars['Int']['output'];
 };
+
+export enum Visibility {
+  CloseFriends = 'CLOSE_FRIENDS',
+  Followers = 'FOLLOWERS'
+}
 
 export type CreateCollectionMutationVariables = Exact<{
   name: Scalars['String']['input'];
@@ -529,6 +582,27 @@ export type DeletePictureMutationVariables = Exact<{
 
 export type DeletePictureMutation = { __typename?: 'Mutation', deletePicture: { __typename?: 'Picture', id: number } };
 
+export type CreateThoughtMutationVariables = Exact<{
+  createThoughtInput: CreateThoughtInput;
+}>;
+
+
+export type CreateThoughtMutation = { __typename?: 'Mutation', createThought: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any, user: { __typename?: 'User', id: number, username: string } } };
+
+export type DeleteThoughtMutationVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+
+export type DeleteThoughtMutation = { __typename?: 'Mutation', deleteThought: { __typename?: 'Thought', id: number } };
+
+export type UpdateThoughtMutationVariables = Exact<{
+  updateThoughtInput: UpdateThoughtInput;
+}>;
+
+
+export type UpdateThoughtMutation = { __typename?: 'Mutation', updateThought: { __typename?: 'Thought', id: number, content: string } };
+
 export type RegisterUserMutationVariables = Exact<{
   createUserInput: CreateUserDto;
 }>;
@@ -600,14 +674,14 @@ export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: n
 
 export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
+export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, thought?: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any } | null, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
 
 export type GetUserProfileQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, thought?: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any } | null, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -744,6 +818,12 @@ export const UserProfileFragmentDoc = gql`
   }
   collections {
     ...CollectionFragment
+  }
+  thought {
+    id
+    content
+    visibility
+    createdAt
   }
   _count {
     pictures
@@ -1239,6 +1319,113 @@ export function useDeletePictureMutation(baseOptions?: Apollo.MutationHookOption
 export type DeletePictureMutationHookResult = ReturnType<typeof useDeletePictureMutation>;
 export type DeletePictureMutationResult = Apollo.MutationResult<DeletePictureMutation>;
 export type DeletePictureMutationOptions = Apollo.BaseMutationOptions<DeletePictureMutation, DeletePictureMutationVariables>;
+export const CreateThoughtDocument = gql`
+    mutation CreateThought($createThoughtInput: CreateThoughtInput!) {
+  createThought(createThoughtInput: $createThoughtInput) {
+    id
+    content
+    visibility
+    createdAt
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+export type CreateThoughtMutationFn = Apollo.MutationFunction<CreateThoughtMutation, CreateThoughtMutationVariables>;
+
+/**
+ * __useCreateThoughtMutation__
+ *
+ * To run a mutation, you first call `useCreateThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createThoughtMutation, { data, loading, error }] = useCreateThoughtMutation({
+ *   variables: {
+ *      createThoughtInput: // value for 'createThoughtInput'
+ *   },
+ * });
+ */
+export function useCreateThoughtMutation(baseOptions?: Apollo.MutationHookOptions<CreateThoughtMutation, CreateThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateThoughtMutation, CreateThoughtMutationVariables>(CreateThoughtDocument, options);
+      }
+export type CreateThoughtMutationHookResult = ReturnType<typeof useCreateThoughtMutation>;
+export type CreateThoughtMutationResult = Apollo.MutationResult<CreateThoughtMutation>;
+export type CreateThoughtMutationOptions = Apollo.BaseMutationOptions<CreateThoughtMutation, CreateThoughtMutationVariables>;
+export const DeleteThoughtDocument = gql`
+    mutation DeleteThought($id: Float!) {
+  deleteThought(id: $id) {
+    id
+  }
+}
+    `;
+export type DeleteThoughtMutationFn = Apollo.MutationFunction<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
+
+/**
+ * __useDeleteThoughtMutation__
+ *
+ * To run a mutation, you first call `useDeleteThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThoughtMutation, { data, loading, error }] = useDeleteThoughtMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteThoughtMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteThoughtMutation, DeleteThoughtMutationVariables>(DeleteThoughtDocument, options);
+      }
+export type DeleteThoughtMutationHookResult = ReturnType<typeof useDeleteThoughtMutation>;
+export type DeleteThoughtMutationResult = Apollo.MutationResult<DeleteThoughtMutation>;
+export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
+export const UpdateThoughtDocument = gql`
+    mutation UpdateThought($updateThoughtInput: UpdateThoughtInput!) {
+  updateThought(updateThoughtInput: $updateThoughtInput) {
+    id
+    content
+  }
+}
+    `;
+export type UpdateThoughtMutationFn = Apollo.MutationFunction<UpdateThoughtMutation, UpdateThoughtMutationVariables>;
+
+/**
+ * __useUpdateThoughtMutation__
+ *
+ * To run a mutation, you first call `useUpdateThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateThoughtMutation, { data, loading, error }] = useUpdateThoughtMutation({
+ *   variables: {
+ *      updateThoughtInput: // value for 'updateThoughtInput'
+ *   },
+ * });
+ */
+export function useUpdateThoughtMutation(baseOptions?: Apollo.MutationHookOptions<UpdateThoughtMutation, UpdateThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateThoughtMutation, UpdateThoughtMutationVariables>(UpdateThoughtDocument, options);
+      }
+export type UpdateThoughtMutationHookResult = ReturnType<typeof useUpdateThoughtMutation>;
+export type UpdateThoughtMutationResult = Apollo.MutationResult<UpdateThoughtMutation>;
+export type UpdateThoughtMutationOptions = Apollo.BaseMutationOptions<UpdateThoughtMutation, UpdateThoughtMutationVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($createUserInput: CreateUserDto!) {
   createUser(createUserInput: $createUserInput) {

@@ -22,6 +22,9 @@ import { NotificationResolver } from './modules/notification/notification.resolv
 import { NotificationModule } from './modules/notification/notification.module';
 import GraphQLJSON from './scalars';
 import { PubSub } from 'graphql-subscriptions';
+import { ThoughtResolver } from './modules/thought/thought.resolver';
+import { ThoughtModule } from './modules/thought/thought.module';
+import { ThoughtService } from './modules/thought/thought.service';
 
 @Module({
   imports: [
@@ -39,29 +42,9 @@ import { PubSub } from 'graphql-subscriptions';
       },
       subscriptions: {
         'graphql-ws': true,
-
-        // 'subscriptions-transport-ws': {
-        //   onConnect: (connectionParams, webSocket, context) => {
-        //     console.log('WebSocket connected');
-        //     console.log('Connection Parameters:', connectionParams);
-        //   },
-        //   onDisconnect: (webSocket, context) => {
-        //     console.log('WebSocket disconnected');
-        //     if (context.code) {
-        //       console.error(
-        //         'WebSocket disconnected with error code:',
-        //         context.code,
-        //       );
-        //     } else {
-        //       console.error('WebSocket disconnected with no error code');
-        //       console.error('Last known state:', context.lastEventId);
-        //       console.error('Disconnect reason:', context.reason);
-        //     }
-        //   },
-        // },
       },
     }),
-    // PubSubModule,
+    PubSubModule,
     UserModule,
     AuthModule,
     PictureModule,
@@ -72,19 +55,18 @@ import { PubSub } from 'graphql-subscriptions';
     LikeModule,
     CollectionModule,
     NotificationModule,
+    ThoughtModule,
   ],
   controllers: [AppController],
   providers: [
-    {
-      provide: 'PUB_SUB',
-      useValue: new PubSub(),
-    },
     AppService,
     PrismaService,
     UserService,
     LikeResolver,
     CollectionResolver,
     NotificationResolver,
+    ThoughtResolver,
+    ThoughtService,
   ],
 })
 export class AppModule {}

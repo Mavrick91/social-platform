@@ -41,9 +41,9 @@ export const getNavigationItems = (
   },
   {
     name: 'Messages',
-    path: '/direct',
+    path: '/direct/inbox',
     Icon: Send,
-    isActive: (path) => path === '/direct',
+    isActive: (path) => path === '/direct/inbox',
   },
   {
     name: 'Notifications',

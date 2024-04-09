@@ -203,7 +203,6 @@ export default function UploadPostDialog({
                 {currentStep === 1 && (
                   <Button
                     variant="ghost"
-                    size="none"
                     type="submit"
                     className="font-semibold"
                     loading={uploadStatus || uploadLoading || updateLoading}

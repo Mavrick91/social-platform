@@ -50,10 +50,28 @@ model User {
   isMock                Boolean        @default(false)
   initiatedFollows      Follow[]       @relation("FollowedBy")
   receivedFollows       Follow[]       @relation("Following")
+  closeFriends          User[]         @relation("CloseFriends")
+  closeFriendsOf        User[]         @relation("CloseFriends")
   likes                 Like[]
   collections           Collection[]
   sentNotifications     Notification[] @relation("SentNotifications")
   receivedNotifications Notification[] @relation("ReceivedNotifications")
+  thought               Thought?
+}
+
+model Thought {
+  id         Int        @id @default(autoincrement())
+  content    String
+  user       User       @relation(fields: [userId], references: [id])
+  userId     Int        @unique
+  visibility Visibility @default(FOLLOWERS)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+enum Visibility {
+  FOLLOWERS
+  CLOSE_FRIENDS
 }
 
 model Collection {

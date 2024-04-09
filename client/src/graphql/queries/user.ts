@@ -58,13 +58,19 @@ export const USER_PROFILE_FRAGMENT = gql`
     collections {
       ...CollectionFragment
     }
-
+    thought {
+      id
+      content
+      visibility
+      createdAt
+    }
     _count {
       pictures
       initiatedFollows
       receivedFollows
     }
   }
+
   ${INITIATED_FOLLOWS_FRAGMENT}
   ${RECEIVED_FOLLOWS_FRAGMENT}
   ${COLLECTION_FRAGMENT}

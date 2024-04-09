@@ -5,6 +5,7 @@ import { Follow } from '../../follow/entities/follow.entity';
 import { Like } from '../../like/entities/like.entity';
 import { Collection } from '../../collection/entities/collection.entity';
 import { Notification } from '../../notification/entities/notification.entity';
+import { Thought } from 'src/modules/thought/entities/thought.entity';
 
 @ObjectType()
 class UserCount {
@@ -82,4 +83,7 @@ export class User {
 
   @Field(() => [Notification], { defaultValue: [] })
   receivedNotifications: Notification[];
+
+  @Field(() => Thought, { nullable: true })
+  thought?: Thought;
 }

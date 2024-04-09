@@ -98,6 +98,7 @@ export class UserService {
             },
           },
         },
+        thought: true,
       },
     });
   }
@@ -126,7 +127,10 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const user = await this.prisma.user.create({
-      data: { ...data, password: hashedPassword },
+      data: {
+        ...data,
+        password: hashedPassword,
+      },
     });
 
     await this.prisma.collection.create({

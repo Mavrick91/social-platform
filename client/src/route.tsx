@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import UserCollections from './pages/Profile/UserCollections';
 import UserPosts from './pages/Profile/UserProfile/UserPosts';
 import Register from './pages/Register';
+import Conversation from './pages/Conversation';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,28 @@ const router = createBrowserRouter([
         <Explore />
       </AuthenticatedLayout>
     ),
+  },
+  {
+    path: '/direct',
+    element: (
+      <AuthenticatedLayout>
+        <Conversation />
+      </AuthenticatedLayout>
+    ),
+    children: [
+      {
+        path: '',
+        element: <UserPosts />,
+      },
+      {
+        path: 'inbox',
+        element: <UserPosts />,
+      },
+      {
+        path: 'saved',
+        element: <UserCollections />,
+      },
+    ],
   },
   {
     path: '/:username',

@@ -54,6 +54,7 @@ body,
 
     --radius: 0.5rem;
     --web-always-white: 255, 255, 255;
+    --web-always-black: 0, 0, 0;
     --badge: 255, 48, 64;
   }
 

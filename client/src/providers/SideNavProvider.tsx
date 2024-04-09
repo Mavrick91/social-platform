@@ -17,6 +17,8 @@ type SideNavContextType = {
   toggleNotification: () => void;
   isNewPostVisible: boolean;
   toggleNewPost: () => void;
+  displaySmallNav: boolean;
+  isConversationPage: boolean;
 };
 
 const SideNavContext = createContext<SideNavContextType | undefined>(undefined);
@@ -67,6 +69,14 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
     closeSearch();
   }, [pathname, closeSearch]);
 
+  const isConversationPage = pathname.startsWith('/direct');
+
+  const displaySmallNav =
+    !sideNavOpen ||
+    isSearchVisible ||
+    isNotificationVisible ||
+    isConversationPage;
+
   const value = {
     sideNavOpen,
     toggleSideNav,
@@ -76,6 +86,8 @@ export const SideNavProvider: React.FC<SideNavProviderProps> = ({
     toggleNotification,
     isNewPostVisible,
     toggleNewPost,
+    displaySmallNav,
+    isConversationPage,
   };
 
   return (

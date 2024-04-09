@@ -19,18 +19,17 @@ import { getNavigationItems } from './sideNavConfig';
 export default function SideNav() {
   const user = useUserInfo();
   const {
-    sideNavOpen,
     isSearchVisible,
     toggleSearch,
     isNotificationVisible,
     toggleNotification,
     isNewPostVisible,
     toggleNewPost,
+    displaySmallNav,
   } = useSideNav();
 
   const { notifications, fetchNextPage, hasNextPage, setAllNotifications } =
     useInfiniteNotifications();
-  console.log('🚀 ~ notifications:', notifications);
 
   useNotificationAdded(user.id, setAllNotifications);
 
@@ -42,9 +41,6 @@ export default function SideNav() {
     toggleNewPost,
     toggleNotification
   );
-
-  const displaySmallNav =
-    !sideNavOpen || isSearchVisible || isNotificationVisible;
 
   const notificationsCount: NotificationCountProps[] = notifications.reduce(
     (acc, currentValue) => {
