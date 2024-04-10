@@ -82,7 +82,7 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
       <div className="border-t border-separator-post p-3 pt-1.5">
         <PostCTA picture={picture} showMessageIcon={false} />
         <span className="text-secondary text-xs">
-          {moment(picture?.createdAt).fromNow()}
+          {moment(picture?.createdAt).format('D MMMM YYYY')}
         </span>
       </div>
       {!picture.disableComments && (
