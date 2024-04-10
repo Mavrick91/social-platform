@@ -4,6 +4,7 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 import { ChevronLeft, Ellipsis } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import CollectionAction from './CollectionAction';
+import { useEffect } from 'react';
 
 export default function Collection() {
   const user = useUserInfo();
@@ -16,10 +17,13 @@ export default function Collection() {
     },
   });
 
-  if (error || !data) {
-    navigate(`/${user.username}/saved`);
-    return null;
-  }
+  useEffect(() => {
+    if (error) {
+      navigate(`/${user.username}/saved`);
+    }
+  }, [error, navigate, user.username]);
+
+  if (error || !data) return null;
 
   const currentPictures = data.getCollection.pictures.map(
     (picture) => picture.picture
