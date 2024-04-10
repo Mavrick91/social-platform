@@ -72,7 +72,7 @@ export default function NewCollectionDialog({ picturesFromSaved }: Props) {
       if (data.selectedPictures.length > 0)
         await addPictureToCollection({
           variables: {
-            collectionId: Number(newCollection.id),
+            collectionId: newCollection.id,
             pictureId: data.selectedPictures,
           },
         });

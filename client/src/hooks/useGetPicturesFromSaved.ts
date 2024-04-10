@@ -3,9 +3,5 @@ import { useUserInfo } from '@/providers/UserInfoProvider';
 export default function useGetPicturesFromSaved() {
   const user = useUserInfo();
 
-  const picturesFromSaved = [...user.collections].sort(
-    (a, b) => Number(a.id) - Number(b.id)
-  )[0];
-
-  return picturesFromSaved;
+  return [...user.collections].sort((a, b) => a.id - b.id)[0];
 }

@@ -50,7 +50,7 @@ export default function CreateConversationDialog({ onClose }: Props) {
     const response = await createThread({
       variables: {
         createThreadInput: {
-          userIds: [Number(user.id), Number(recipientId)],
+          userIds: [user.id, recipientId],
         },
       },
     });
@@ -63,7 +63,7 @@ export default function CreateConversationDialog({ onClose }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
-      <DialogContent showClose={false} className="p-0 gap-0 flex flex-col">
+      <DialogContent className="p-0 gap-0 flex flex-col">
         <div className="flex border-b border-separator px-4 justify-center py-3.5">
           <h3 className="font-bold">New message</h3>
         </div>

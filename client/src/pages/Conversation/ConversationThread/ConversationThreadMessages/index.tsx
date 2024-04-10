@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 type Props = {
   messages: ThreadMessageFragment[];
-  threadId: string;
+  threadId: number;
   recipientUser: ThreadUserFragment;
 };
 
@@ -40,7 +40,7 @@ export default function ConversationThreadMessages({
 }: Props) {
   const { data } = useMessageAddedSubscription({
     variables: {
-      threadId: Number(threadId),
+      threadId: threadId,
     },
   });
 

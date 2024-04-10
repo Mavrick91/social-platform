@@ -25,10 +25,7 @@ export const AddPicturesStep = ({
   const { handleSubmit } = useFormContext<FormData>();
 
   return (
-    <DialogContent
-      className="p-0 rounded-lg max-w-[400px] overflow-hidden min-h-[691px] gap-0 flex flex-col"
-      showClose={false}
-    >
+    <DialogContent className="p-0 rounded-lg max-w-[400px] overflow-hidden min-h-[691px] gap-0 flex flex-col">
       <div className="flex justify-between bg-gray-100 py-2.5 px-3 items-center">
         {setCurrentStep && (
           <button onClick={() => setCurrentStep(0)}>

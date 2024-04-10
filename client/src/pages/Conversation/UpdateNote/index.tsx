@@ -74,7 +74,7 @@ export default function UpdateNote({ toggleUpdateNote }: Props) {
         variables: {
           createThoughtInput: {
             content: thought,
-            userId: Number(user.id),
+            userId: user.id,
             visibility: visibility as Visibility,
           },
         },

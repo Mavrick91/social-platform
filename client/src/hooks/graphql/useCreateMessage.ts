@@ -1,7 +1,7 @@
 import { useCreateMessageMutation } from '@/__generated__/graphql.ts';
 import { Reference } from '@apollo/client';
 
-function useCreateMessage(threadId: string) {
+function useCreateMessage(threadId: number) {
   return useCreateMessageMutation({
     update(cache, { data }) {
       if (!data?.createMessage) return;

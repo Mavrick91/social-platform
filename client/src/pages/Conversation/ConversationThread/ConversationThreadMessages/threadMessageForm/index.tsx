@@ -13,7 +13,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 type Props = {
-  threadId: string;
+  threadId: number;
 };
 export function ThreadMessageForm({ threadId }: Props) {
   const user = useUserInfo();
@@ -30,8 +30,8 @@ export function ThreadMessageForm({ threadId }: Props) {
       variables: {
         createMessageInput: {
           content: data.message,
-          threadId: Number(threadId),
-          userId: Number(user.id),
+          threadId,
+          userId: user.id,
         },
       },
     });

@@ -11,7 +11,7 @@ function ConversationList() {
   const user = useUserInfo();
   const { data, loading } = useGetThreadsByUserIdQuery({
     variables: {
-      userId: Number(user.id),
+      userId: user.id,
     },
   });
 

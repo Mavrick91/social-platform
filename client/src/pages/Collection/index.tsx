@@ -38,7 +38,7 @@ export default function Collection() {
         <h2 className="text-xl mb-3">{data.getCollection.name}</h2>
         {!data.getCollection.isDefault && (
           <CollectionAction
-            collectionId={Number(data.getCollection.id)}
+            collectionId={data.getCollection.id}
             collectionName={data.getCollection.name}
           >
             <Ellipsis />

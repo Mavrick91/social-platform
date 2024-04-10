@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Follow } from '../../follow/entities/follow.entity';
 import { Message } from '../../message/entities/message.entity';
 import { Picture } from '../../picture/entities/picture.entity';
@@ -23,7 +23,7 @@ class UserCount {
 
 @ObjectType()
 export class User {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number;
 
   @Field()

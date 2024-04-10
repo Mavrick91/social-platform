@@ -18,12 +18,13 @@ export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
   } = useFormContext<FormData>();
 
   return (
-    <DialogContent className="px-0 pt-5 pb-2 rounded-lg max-w-96">
+    <DialogContent className="rounded-lg max-w-96">
       <DialogHeader>
-        <h2 className="text-lg font-semibold">New collection</h2>
+        <h2 className="text-lg text-center w-full font-semibold">
+          New collection
+        </h2>
       </DialogHeader>
       <div className="flex flex-col">
-        <Separator className="mb-4" />
         <div className="px-6">
           <Input
             {...register('collectionName')}
@@ -32,7 +33,7 @@ export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
             error={errors.collectionName?.message}
           />
         </div>
-        <Separator className="mt-4 mb-2" />
+        <Separator className="mt-4" />
         <div className="flex justify-center">
           <Button
             type="button"

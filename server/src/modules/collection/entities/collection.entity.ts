@@ -1,10 +1,10 @@
-import { Field, ObjectType, ID, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/entities/user.entity';
 import { PictureOnCollection } from './picture-on-collection.entity';
 
 @ObjectType()
 export class Collection {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number;
 
   @Field()

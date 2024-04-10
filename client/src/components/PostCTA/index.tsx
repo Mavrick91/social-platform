@@ -40,7 +40,7 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
       await addPictureToCollection({
         variables: {
           pictureId: [picture.id],
-          collectionId: Number(user.collections[0].id),
+          collectionId: user.collections[0].id,
         },
       });
   };

@@ -1,10 +1,10 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Message } from '../../message/entities/message.entity';
 import { User } from '../../user/entities/user.entity';
 
 @ObjectType()
 export class Thread {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number;
 
   @Field(() => Date)

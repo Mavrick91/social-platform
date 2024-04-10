@@ -16,7 +16,7 @@ export default function ExitDialog({ onClose, handleDiscardChanges }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
-      <DialogContent showClose={false} className="p-0 max-w-96 gap-0">
+      <DialogContent className="p-0 max-w-96 gap-0">
         <div className="flex flex-col items-center p-8">
           <span className="text-xl">Discard post?</span>
           <span className="text-sm text-secondary mt-1">

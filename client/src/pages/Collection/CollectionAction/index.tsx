@@ -71,10 +71,7 @@ export default function CollectionAction({
         <DialogTrigger asChild>
           <button>{children}</button>
         </DialogTrigger>
-        <DialogContent
-          className="p-0 gap-0 rounded-lg max-w-sm"
-          showClose={false}
-        >
+        <DialogContent className="p-0 gap-0 rounded-lg max-w-sm">
           {actions.map((action, index) => (
             <Fragment key={index}>
               <button

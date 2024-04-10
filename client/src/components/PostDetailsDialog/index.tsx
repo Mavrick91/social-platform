@@ -43,7 +43,6 @@ function PostDetailsDialog({ children, picture }: Props) {
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent
-        showClose={false}
         className="p-0 rounded-sm overflow-hidden border-none h-auto w-max flex-col"
         style={{
           maxHeight: 'calc(100vh - 40px)',

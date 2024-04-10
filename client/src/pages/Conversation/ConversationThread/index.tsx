@@ -4,14 +4,14 @@ import QuerySpinner from '@/components/ui/QuerySpinner.tsx';
 import ConversationThreadMessages from '@/pages/Conversation/ConversationThread/ConversationThreadMessages';
 
 export type Props = {
-  threadId: string;
+  threadId: number;
 };
 
 export default function ConversationThread({ threadId }: Props) {
   const { data, loading, error } = useGetThreadQuery({
     fetchPolicy: 'network-only',
     variables: {
-      id: Number(threadId),
+      id: threadId,
     },
   });
 

@@ -8,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
+import useGetPicturesFromSaved from '@/hooks/useGetPicturesFromSaved.ts';
 
 const formSchema = z.object({
   selectedPictures: z.array(z.number()),
@@ -71,9 +72,7 @@ export const AddPictures: React.FC<Props> = ({
     methods.setValue('selectedPictures', newSelectedPictures);
   };
 
-  const picturesFromSaved = [...user.collections].sort(
-    (a, b) => Number(a.id) - Number(b.id)
-  )[0];
+  const picturesFromSaved = useGetPicturesFromSaved();
 
   return (
     <FormProvider {...methods}>

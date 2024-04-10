@@ -173,7 +173,6 @@ export default function UploadPostDialog({
     <>
       <Dialog open={isOpen} onOpenChange={handleCloseModal}>
         <DialogContent
-          showClose={false}
           className={cn('p-0 gap-0 flex flex-col', {
             'min-w-[755px]': !previewPicture,
             'max-w-[1095px]': previewPicture,

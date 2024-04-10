@@ -26,8 +26,7 @@ export default function useAddPictureCollection() {
 
         const nextUser = produce(currentUser, (draft: UserProfileFragment) => {
           const collectionIndex = draft.collections.findIndex(
-            (collection: { id: string | number }) =>
-              Number(collection.id) === variables.collectionId
+            (collection) => collection.id === variables.collectionId
           );
 
           if (collectionIndex !== -1) {

@@ -10,31 +10,38 @@ import {
   useParams,
 } from 'react-router-dom';
 import UserProfile from './UserProfile';
+import { useUserInfo } from '@/providers/UserInfoProvider.tsx';
 
 function Profile() {
   const { username } = useParams();
+  const user = useUserInfo();
   const location = useLocation();
   const navigate = useNavigate();
   const { data, error } = useGetUserProfileQuery({
     variables: { username: username! },
   });
 
-  const tabs = useMemo(
-    () => [
+  const tabs = useMemo(() => {
+    if (!data) return [];
+
+    const defaultTab = [
       { name: 'Posts', path: `/${username}`, icon: <Grid3X3 size={12} /> },
-      {
-        name: 'Saved',
-        path: `/${username}/saved`,
-        icon: <Bookmark size={12} />,
-      },
       {
         name: 'Tags',
         path: `/${username}/tagged`,
         icon: <SquareUser size={12} />,
       },
-    ],
-    [username]
-  );
+    ];
+
+    if (user.id === data.user?.id) {
+      defaultTab.splice(1, 0, {
+        name: 'Saved',
+        path: `/${username}/saved`,
+        icon: <Bookmark size={12} />,
+      });
+    }
+    return defaultTab;
+  }, [username]);
 
   const activeTab = tabs.find(
     (tab) =>
