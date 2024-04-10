@@ -22,6 +22,7 @@ import { ChevronDown, Users, X } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Visibility } from '@/__generated__/graphql.ts';
 
 type Props = {
   toggleUpdateNote: (value: boolean) => void;
@@ -64,7 +65,7 @@ export default function UpdateNote({ toggleUpdateNote }: Props) {
           updateThoughtInput: {
             id: user.thought.id,
             content: thought,
-            visibility,
+            visibility: visibility as Visibility,
           },
         },
       });
@@ -73,8 +74,8 @@ export default function UpdateNote({ toggleUpdateNote }: Props) {
         variables: {
           createThoughtInput: {
             content: thought,
-            userId: user.id,
-            visibility,
+            userId: Number(user.id),
+            visibility: visibility as Visibility,
           },
         },
       });
@@ -89,7 +90,7 @@ export default function UpdateNote({ toggleUpdateNote }: Props) {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="w-full flex flex-col"
       >
-        <header className="flex justify-between items-center p-4 py-5 w-full border-b border-separator">
+        <div className="flex justify-between items-center p-4 py-5 w-full border-b border-separator">
           <button onClick={() => toggleUpdateNote(false)}>
             <X />
           </button>
@@ -106,7 +107,7 @@ export default function UpdateNote({ toggleUpdateNote }: Props) {
           ) : (
             <div />
           )}
-        </header>
+        </div>
         <main className="grow flex flex-col justify-center items-center">
           <div className="relative">
             <BubbleThought

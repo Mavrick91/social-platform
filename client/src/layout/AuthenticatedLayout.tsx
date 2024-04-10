@@ -1,4 +1,3 @@
-import Footer from '@/components/Footer';
 import SideNav from '@/components/SideNav';
 import { clearStorage, getTokens, getUser } from '@/lib/storage';
 import { cn } from '@/lib/utils';
@@ -24,7 +23,6 @@ const MainContent = ({ children }: Props) => {
         })}
       >
         {children}
-        {/* <Footer /> */}
       </div>
     </div>
   );

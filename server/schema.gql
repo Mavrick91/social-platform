@@ -2,9 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type LoginResponse {
-  accessToken: String!
-  refreshToken: String!
+type Follow {
+  initiatorId: Float
+  targetUserId: Float
+  initiator: User
+  targetUser: User
+}
+
+type Thread {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  users: [User!]!
+  messages: [Message!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Message {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  content: String!
+  user: User!
+  thread: Thread!
 }
 
 type Comment {
@@ -24,11 +48,6 @@ type Comment {
   createdAt: DateTime
   updatedAt: DateTime
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Like {
   id: Float!
@@ -66,11 +85,70 @@ type Picture {
   updatedAt: DateTime!
 }
 
-type Follow {
-  initiatorId: Float
-  targetUserId: Float
-  initiator: User
-  targetUser: User
+type Thought {
+  """The unique identifier of the thought"""
+  id: Int!
+  content: String!
+  user: User!
+  visibility: Visibility!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum Visibility {
+  FOLLOWERS
+  CLOSE_FRIENDS
+}
+
+type Notification {
+  id: Int!
+  type: String!
+  sender: User!
+  senderId: Int!
+  receiver: User!
+  receiverId: Int!
+  picture: Picture
+  pictureId: Int
+  comment: Comment
+  commentId: Int
+  read: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UserCount {
+  pictures: Int!
+  initiatedFollows: Int!
+  receivedFollows: Int!
+}
+
+type User {
+  id: ID!
+  email: String!
+  username: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  _count: UserCount!
+  bio: String
+  avatar: String
+  avatarName: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  pictures: [Picture!]!
+  comments: [Comment!]!
+  isMock: Boolean!
+  initiatedFollows: [Follow!]!
+  receivedFollows: [Follow!]!
+  closeFriends: [User!]!
+  closeFriendsOf: [User!]!
+  likes: [Like!]!
+  collections: [Collection!]!
+  sentNotifications: [Notification!]!
+  receivedNotifications: [Notification!]!
+  thought: Thought
+  threads: [Thread!]!
+  messages: [Message!]!
 }
 
 type PictureOnCollection {
@@ -91,73 +169,16 @@ type Collection {
   pictures: [PictureOnCollection!]!
 }
 
-type Notification {
-  id: Int!
-  type: String!
-  sender: User!
-  senderId: Int!
-  receiver: User!
-  receiverId: Int!
-  picture: Picture
-  pictureId: Int
-  comment: Comment
-  commentId: Int
-  read: Boolean!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Thought {
-  """The unique identifier of the thought"""
-  id: Int!
-  content: String!
-  user: User!
-  visibility: Visibility!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum Visibility {
-  FOLLOWERS
-  CLOSE_FRIENDS
-}
-
-type UserCount {
-  pictures: Int!
-  initiatedFollows: Int!
-  receivedFollows: Int!
-}
-
-type User {
-  id: Int!
-  email: String!
-  password: String!
-  firstName: String!
-  lastName: String!
-  username: String!
-  bio: String
-  avatar: String
-  avatarName: String
-  pictures: [Picture!]!
-  _count: UserCount!
-  comments: [Comment!]!
-  isMocked: Boolean!
-  initiatedFollows: [Follow!]!
-  receivedFollows: [Follow!]!
-  likes: [Like!]
-  collections: [Collection!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  sentNotifications: [Notification!]!
-  receivedNotifications: [Notification!]!
-  thought: Thought
-}
-
 type PaginatedNotifications {
   notifications: [Notification!]!
   totalCount: Int!
   totalPages: Int!
   currentPage: Int!
+}
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 type Query {
@@ -173,6 +194,11 @@ type Query {
   commentsByPictureId(pictureId: Int!): [Comment!]!
   comments: [Comment!]!
   comment(id: Int!): Comment!
+  threads: [Thread!]!
+  threadsByUserId(userId: Float!): [Thread!]!
+  thread(id: Float!): Thread!
+  messages: [Message!]!
+  message(id: Float!): Message!
 }
 
 type Mutation {
@@ -199,6 +225,8 @@ type Mutation {
   removeComment(id: Int!): Comment!
   followUser(input: FollowDto!): Follow!
   unfollowUser(input: UnfollowDto!): Follow!
+  createThread(createThreadInput: CreateThreadInput!): Thread!
+  createMessage(createMessageInput: CreateMessageInput!): Message!
 }
 
 input CreateThoughtInput {
@@ -285,6 +313,17 @@ input UnfollowDto {
   followingId: Float!
 }
 
+input CreateThreadInput {
+  userIds: [Float!]!
+}
+
+input CreateMessageInput {
+  content: String!
+  userId: Float!
+  threadId: Float!
+}
+
 type Subscription {
   notificationAdded(userId: Int!): Notification!
+  messageAdded(threadId: Float!): Message!
 }

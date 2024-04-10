@@ -53,16 +53,12 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: '',
-        element: <UserPosts />,
-      },
-      {
         path: 'inbox',
-        element: <UserPosts />,
+        element: <Conversation />,
       },
       {
-        path: 'saved',
-        element: <UserCollections />,
+        path: 't/:threadId',
+        element: <Conversation />,
       },
     ],
   },

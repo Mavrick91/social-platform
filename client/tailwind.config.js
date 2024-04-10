@@ -50,7 +50,7 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         white: 'rgb(var(--web-always-white))',
-        black: 'rgb(var(--web-always-black))',
+        // black: 'rgb(var(--web-always-black))',
         separator: {
           DEFAULT: 'rgb(var(--separator))',
           post: 'rgb(var(--separator-post))',

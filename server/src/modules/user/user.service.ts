@@ -68,7 +68,7 @@ export class UserService {
   }
 
   async findOne(username: string): Promise<User> {
-    return await this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { username },
       include: {
         _count: {

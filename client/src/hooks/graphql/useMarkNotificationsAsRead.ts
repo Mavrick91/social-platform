@@ -25,7 +25,7 @@ export default function useMarkNotificationsAsRead(
                 (notificationRef: any) => {
                   const notificationId = readField('id', notificationRef);
 
-                  if (notificationIds.has(notificationId)) {
+                  if (notificationIds.has(notificationId as number)) {
                     const updatedNotification = cache.writeFragment({
                       id: cache.identify(notificationRef),
                       fragment: NOTIFICATION_FRAGMENT,

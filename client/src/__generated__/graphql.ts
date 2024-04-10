@@ -55,6 +55,12 @@ export type CreateCommentInput = {
   userId: Scalars['Int']['input'];
 };
 
+export type CreateMessageInput = {
+  content: Scalars['String']['input'];
+  threadId: Scalars['Float']['input'];
+  userId: Scalars['Float']['input'];
+};
+
 export type CreatePictureInput = {
   altText?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -68,6 +74,10 @@ export type CreateThoughtInput = {
   content: Scalars['String']['input'];
   userId: Scalars['Float']['input'];
   visibility: Visibility;
+};
+
+export type CreateThreadInput = {
+  userIds: Array<Scalars['Float']['input']>;
 };
 
 export type CreateUserDto = {
@@ -106,13 +116,25 @@ export type LoginResponse = {
   refreshToken: Scalars['String']['output'];
 };
 
+export type Message = {
+  __typename?: 'Message';
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  thread: Thread;
+  updatedAt: Scalars['DateTime']['output'];
+  user: User;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addPictureToCollection: Array<PictureOnCollection>;
   createCollection: Collection;
   createComment: Comment;
+  createMessage: Message;
   createPicture: Picture;
   createThought: Thought;
+  createThread: Thread;
   createUser: User;
   deleteAllCollectionsForUser: Collection;
   deleteCollection: Collection;
@@ -150,6 +172,11 @@ export type MutationCreateCommentArgs = {
 };
 
 
+export type MutationCreateMessageArgs = {
+  createMessageInput: CreateMessageInput;
+};
+
+
 export type MutationCreatePictureArgs = {
   input: CreatePictureInput;
 };
@@ -157,6 +184,11 @@ export type MutationCreatePictureArgs = {
 
 export type MutationCreateThoughtArgs = {
   createThoughtInput: CreateThoughtInput;
+};
+
+
+export type MutationCreateThreadArgs = {
+  createThreadInput: CreateThreadInput;
 };
 
 
@@ -315,11 +347,16 @@ export type Query = {
   comments: Array<Comment>;
   commentsByPictureId: Array<Comment>;
   getCollection: Collection;
+  message: Message;
+  messages: Array<Message>;
   mockedUser: Array<User>;
   notifications: PaginatedNotifications;
   picturesByUsername: Array<Picture>;
   picturesFromFollowing: Array<Picture>;
   thoughts: Array<Thought>;
+  thread: Thread;
+  threads: Array<Thread>;
+  threadsByUserId: Array<Thread>;
   user: User;
   users: Array<User>;
   usersByUsername: Array<User>;
@@ -341,6 +378,11 @@ export type QueryGetCollectionArgs = {
 };
 
 
+export type QueryMessageArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
 export type QueryNotificationsArgs = {
   limit?: Scalars['Int']['input'];
   page?: Scalars['Int']['input'];
@@ -358,6 +400,16 @@ export type QueryPicturesFromFollowingArgs = {
 
 
 export type QueryThoughtsArgs = {
+  userId: Scalars['Float']['input'];
+};
+
+
+export type QueryThreadArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type QueryThreadsByUserIdArgs = {
   userId: Scalars['Float']['input'];
 };
 
@@ -388,7 +440,13 @@ export type SizeType = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  messageAdded: Message;
   notificationAdded: Notification;
+};
+
+
+export type SubscriptionMessageAddedArgs = {
+  threadId: Scalars['Float']['input'];
 };
 
 
@@ -405,6 +463,15 @@ export type Thought = {
   updatedAt: Scalars['DateTime']['output'];
   user: User;
   visibility: Visibility;
+};
+
+export type Thread = {
+  __typename?: 'Thread';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  messages: Array<Message>;
+  updatedAt: Scalars['DateTime']['output'];
+  users: Array<User>;
 };
 
 export type UnfollowDto = {
@@ -449,22 +516,26 @@ export type User = {
   avatar?: Maybe<Scalars['String']['output']>;
   avatarName?: Maybe<Scalars['String']['output']>;
   bio?: Maybe<Scalars['String']['output']>;
+  closeFriends: Array<User>;
+  closeFriendsOf: Array<User>;
   collections: Array<Collection>;
   comments: Array<Comment>;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
   initiatedFollows: Array<Follow>;
-  isMocked: Scalars['Boolean']['output'];
+  isMock: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
-  likes?: Maybe<Array<Like>>;
+  likes: Array<Like>;
+  messages: Array<Message>;
   password: Scalars['String']['output'];
   pictures: Array<Picture>;
   receivedFollows: Array<Follow>;
   receivedNotifications: Array<Notification>;
   sentNotifications: Array<Notification>;
   thought?: Maybe<Thought>;
+  threads: Array<Thread>;
   updatedAt: Scalars['DateTime']['output'];
   username: Scalars['String']['output'];
 };
@@ -544,14 +615,23 @@ export type LikePictureMutationVariables = Exact<{
 }>;
 
 
-export type LikePictureMutation = { __typename?: 'Mutation', likePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
+export type LikePictureMutation = { __typename?: 'Mutation', likePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: string, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
 
 export type UnlikePictureMutationVariables = Exact<{
   likeId: Scalars['Float']['input'];
 }>;
 
 
-export type UnlikePictureMutation = { __typename?: 'Mutation', unlikePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
+export type UnlikePictureMutation = { __typename?: 'Mutation', unlikePicture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: string, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } };
+
+export type ThreadMessageFragment = { __typename?: 'Message', id: string, content: string, createdAt: any, user: { __typename?: 'User', id: string } };
+
+export type CreateMessageMutationVariables = Exact<{
+  createMessageInput: CreateMessageInput;
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: string, content: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string }, thread: { __typename?: 'Thread', messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: any, user: { __typename?: 'User', id: string } }> } } };
 
 export type MarkNotificationsAsReadMutationVariables = Exact<{
   notificationIds: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
@@ -587,7 +667,7 @@ export type CreateThoughtMutationVariables = Exact<{
 }>;
 
 
-export type CreateThoughtMutation = { __typename?: 'Mutation', createThought: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any, user: { __typename?: 'User', id: number, username: string } } };
+export type CreateThoughtMutation = { __typename?: 'Mutation', createThought: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any, user: { __typename?: 'User', id: string, username: string } } };
 
 export type DeleteThoughtMutationVariables = Exact<{
   id: Scalars['Float']['input'];
@@ -603,12 +683,19 @@ export type UpdateThoughtMutationVariables = Exact<{
 
 export type UpdateThoughtMutation = { __typename?: 'Mutation', updateThought: { __typename?: 'Thought', id: number, content: string } };
 
+export type CreateThreadMutationVariables = Exact<{
+  createThreadInput: CreateThreadInput;
+}>;
+
+
+export type CreateThreadMutation = { __typename?: 'Mutation', createThread: { __typename?: 'Thread', id: string, createdAt: any, updatedAt: any, users: Array<{ __typename?: 'User', id: string, username: string }> } };
+
 export type RegisterUserMutationVariables = Exact<{
   createUserInput: CreateUserDto;
 }>;
 
 
-export type RegisterUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: number, email: string, firstName: string, lastName: string } };
+export type RegisterUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string } };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -624,23 +711,23 @@ export type UpdateUserProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } };
+export type UpdateUserProfileMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, avatar?: string | null, bio?: string | null } };
 
 export type GetCollectionQueryVariables = Exact<{
   collectionName: Scalars['String']['input'];
 }>;
 
 
-export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, isDefault: boolean, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
+export type GetCollectionQuery = { __typename?: 'Query', getCollection: { __typename?: 'Collection', id: string, name: string, isDefault: boolean, pictures: Array<{ __typename?: 'PictureOnCollection', picture: { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: string, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } } }> } };
 
 export type GetCommentsByPictureQueryVariables = Exact<{
   pictureId: Scalars['Int']['input'];
 }>;
 
 
-export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } }> };
+export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: string, firstName: string, lastName: string, avatar?: string | null } }> };
 
-export type NotificationFragmentFragment = { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null };
+export type NotificationFragmentFragment = { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: string, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null };
 
 export type GetNotificationsQueryVariables = Exact<{
   page: Scalars['Int']['input'];
@@ -648,65 +735,98 @@ export type GetNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'PaginatedNotifications', totalCount: number, totalPages: number, currentPage: number, notifications: Array<{ __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null }> } };
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'PaginatedNotifications', totalCount: number, totalPages: number, currentPage: number, notifications: Array<{ __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: string, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null }> } };
 
-export type PictureFragmentFragment = { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
+export type PictureFragmentFragment = { __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: string, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } };
 
 export type GetPictureByUsernameQueryVariables = Exact<{
   username?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPictureByUsernameQuery = { __typename?: 'Query', picturesByUsername: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
+export type GetPictureByUsernameQuery = { __typename?: 'Query', picturesByUsername: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: string, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
 
 export type GetPicturesFromFollowingQueryVariables = Exact<{
   userId: Array<Scalars['Float']['input']> | Scalars['Float']['input'];
 }>;
 
 
-export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFromFollowing: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: number, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
+export type GetPicturesFromFollowingQuery = { __typename?: 'Query', picturesFromFollowing: Array<{ __typename?: 'Picture', id: number, fileName: string, description?: string | null, createdAt: any, updatedAt: any, hideLikesAndViewCounts: boolean, disableComments: boolean, altText: string, sizes: { __typename?: 'SizeType', thumbnail: string, original: string, medium: string }, user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }, likes: Array<{ __typename?: 'Like', id: number, userId: number, pictureId: number, user: { __typename?: 'User', id: string, username: string } }>, _count: { __typename?: 'PictureCount', comments: number, likes: number } }> };
 
-export type UserFragmentFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
+export type ThreadUserFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, avatar?: string | null, username: string };
+
+export type GetThreadQueryVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+
+export type GetThreadQuery = { __typename?: 'Query', thread: { __typename?: 'Thread', id: string, createdAt: any, updatedAt: any, users: Array<{ __typename?: 'User', id: string, firstName: string, lastName: string, avatar?: string | null, username: string }>, messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: any, user: { __typename?: 'User', id: string } }> } };
+
+export type GetThreadsByUserIdQueryVariables = Exact<{
+  userId: Scalars['Float']['input'];
+}>;
+
+
+export type GetThreadsByUserIdQuery = { __typename?: 'Query', threadsByUserId: Array<{ __typename?: 'Thread', id: string, createdAt: any, updatedAt: any, users: Array<{ __typename?: 'User', id: string, firstName: string, lastName: string, avatar?: string | null, username: string }>, messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: any, user: { __typename?: 'User', id: string } }> }> };
+
+export type UserFragmentFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null };
 
 export type CollectionFragmentFragment = { __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> };
 
-export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
+export type InitiatedFollowsFragment = { __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
+export type ReceivedFollowsFragment = { __typename?: 'Follow', initiator?: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null };
 
-export type UserProfileFragment = { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, thought?: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any } | null, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
+export type UserProfileFragment = { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, thought?: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any } | null, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } };
 
 export type GetUserProfileQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, thought?: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any } | null, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null, initiatedFollows: Array<{ __typename?: 'Follow', targetUserId?: number | null, targetUser?: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, receivedFollows: Array<{ __typename?: 'Follow', initiator?: { __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null } | null }>, collections: Array<{ __typename?: 'Collection', id: string, name: string, nameId: string, pictures: Array<{ __typename?: 'PictureOnCollection', pictureId: number, picture: { __typename?: 'Picture', sizes: { __typename?: 'SizeType', small: string } } }> }>, thought?: { __typename?: 'Thought', id: number, content: string, visibility: Visibility, createdAt: any } | null, _count: { __typename?: 'UserCount', pictures: number, initiatedFollows: number, receivedFollows: number } } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
+export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
 
 export type GetUsersByUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUsersByUsernameQuery = { __typename?: 'Query', usersByUsername: Array<{ __typename?: 'User', id: number, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
+export type GetUsersByUsernameQuery = { __typename?: 'Query', usersByUsername: Array<{ __typename?: 'User', id: string, firstName: string, lastName: string, username: string, avatar?: string | null, bio?: string | null }> };
 
 export type GetMockedUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMockedUserQuery = { __typename?: 'Query', mockedUser: Array<{ __typename?: 'User', id: number, email: string }> };
+export type GetMockedUserQuery = { __typename?: 'Query', mockedUser: Array<{ __typename?: 'User', id: string, email: string }> };
+
+export type MessageAddedSubscriptionVariables = Exact<{
+  threadId: Scalars['Float']['input'];
+}>;
+
+
+export type MessageAddedSubscription = { __typename?: 'Subscription', messageAdded: { __typename?: 'Message', id: string, content: string, createdAt: any, user: { __typename?: 'User', id: string } } };
 
 export type NotificationAddedSubscriptionVariables = Exact<{
   userId: Scalars['Int']['input'];
 }>;
 
 
-export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null } };
+export type NotificationAddedSubscription = { __typename?: 'Subscription', notificationAdded: { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: string, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null } };
 
+export const ThreadMessageFragmentDoc = gql`
+    fragment ThreadMessage on Message {
+  id
+  content
+  createdAt
+  user {
+    id
+  }
+}
+    `;
 export const NotificationFragmentFragmentDoc = gql`
     fragment NotificationFragment on Notification {
   id
@@ -765,6 +885,15 @@ export const PictureFragmentFragmentDoc = gql`
     comments
     likes
   }
+}
+    `;
+export const ThreadUserFragmentDoc = gql`
+    fragment ThreadUser on User {
+  id
+  firstName
+  lastName
+  avatar
+  username
 }
     `;
 export const UserFragmentFragmentDoc = gql`
@@ -1181,6 +1310,50 @@ export function useUnlikePictureMutation(baseOptions?: Apollo.MutationHookOption
 export type UnlikePictureMutationHookResult = ReturnType<typeof useUnlikePictureMutation>;
 export type UnlikePictureMutationResult = Apollo.MutationResult<UnlikePictureMutation>;
 export type UnlikePictureMutationOptions = Apollo.BaseMutationOptions<UnlikePictureMutation, UnlikePictureMutationVariables>;
+export const CreateMessageDocument = gql`
+    mutation CreateMessage($createMessageInput: CreateMessageInput!) {
+  createMessage(createMessageInput: $createMessageInput) {
+    id
+    content
+    createdAt
+    updatedAt
+    user {
+      id
+    }
+    thread {
+      messages {
+        ...ThreadMessage
+      }
+    }
+  }
+}
+    ${ThreadMessageFragmentDoc}`;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      createMessageInput: // value for 'createMessageInput'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const MarkNotificationsAsReadDocument = gql`
     mutation MarkNotificationsAsRead($notificationIds: [Int!]!) {
   markNotificationsAsRead(notificationIds: $notificationIds) {
@@ -1426,6 +1599,45 @@ export function useUpdateThoughtMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateThoughtMutationHookResult = ReturnType<typeof useUpdateThoughtMutation>;
 export type UpdateThoughtMutationResult = Apollo.MutationResult<UpdateThoughtMutation>;
 export type UpdateThoughtMutationOptions = Apollo.BaseMutationOptions<UpdateThoughtMutation, UpdateThoughtMutationVariables>;
+export const CreateThreadDocument = gql`
+    mutation CreateThread($createThreadInput: CreateThreadInput!) {
+  createThread(createThreadInput: $createThreadInput) {
+    id
+    createdAt
+    updatedAt
+    users {
+      id
+      username
+    }
+  }
+}
+    `;
+export type CreateThreadMutationFn = Apollo.MutationFunction<CreateThreadMutation, CreateThreadMutationVariables>;
+
+/**
+ * __useCreateThreadMutation__
+ *
+ * To run a mutation, you first call `useCreateThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createThreadMutation, { data, loading, error }] = useCreateThreadMutation({
+ *   variables: {
+ *      createThreadInput: // value for 'createThreadInput'
+ *   },
+ * });
+ */
+export function useCreateThreadMutation(baseOptions?: Apollo.MutationHookOptions<CreateThreadMutation, CreateThreadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateThreadMutation, CreateThreadMutationVariables>(CreateThreadDocument, options);
+      }
+export type CreateThreadMutationHookResult = ReturnType<typeof useCreateThreadMutation>;
+export type CreateThreadMutationResult = Apollo.MutationResult<CreateThreadMutation>;
+export type CreateThreadMutationOptions = Apollo.BaseMutationOptions<CreateThreadMutation, CreateThreadMutationVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($createUserInput: CreateUserDto!) {
   createUser(createUserInput: $createUserInput) {
@@ -1758,6 +1970,107 @@ export type GetPicturesFromFollowingQueryHookResult = ReturnType<typeof useGetPi
 export type GetPicturesFromFollowingLazyQueryHookResult = ReturnType<typeof useGetPicturesFromFollowingLazyQuery>;
 export type GetPicturesFromFollowingSuspenseQueryHookResult = ReturnType<typeof useGetPicturesFromFollowingSuspenseQuery>;
 export type GetPicturesFromFollowingQueryResult = Apollo.QueryResult<GetPicturesFromFollowingQuery, GetPicturesFromFollowingQueryVariables>;
+export const GetThreadDocument = gql`
+    query GetThread($id: Float!) {
+  thread(id: $id) {
+    id
+    createdAt
+    updatedAt
+    users {
+      ...ThreadUser
+    }
+    messages {
+      ...ThreadMessage
+    }
+  }
+}
+    ${ThreadUserFragmentDoc}
+${ThreadMessageFragmentDoc}`;
+
+/**
+ * __useGetThreadQuery__
+ *
+ * To run a query within a React component, call `useGetThreadQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThreadQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThreadQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetThreadQuery(baseOptions: Apollo.QueryHookOptions<GetThreadQuery, GetThreadQueryVariables> & ({ variables: GetThreadQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetThreadQuery, GetThreadQueryVariables>(GetThreadDocument, options);
+      }
+export function useGetThreadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetThreadQuery, GetThreadQueryVariables>(GetThreadDocument, options);
+        }
+export function useGetThreadSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetThreadQuery, GetThreadQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetThreadQuery, GetThreadQueryVariables>(GetThreadDocument, options);
+        }
+export type GetThreadQueryHookResult = ReturnType<typeof useGetThreadQuery>;
+export type GetThreadLazyQueryHookResult = ReturnType<typeof useGetThreadLazyQuery>;
+export type GetThreadSuspenseQueryHookResult = ReturnType<typeof useGetThreadSuspenseQuery>;
+export type GetThreadQueryResult = Apollo.QueryResult<GetThreadQuery, GetThreadQueryVariables>;
+export const GetThreadsByUserIdDocument = gql`
+    query GetThreadsByUserId($userId: Float!) {
+  threadsByUserId(userId: $userId) {
+    id
+    createdAt
+    updatedAt
+    users {
+      id
+      firstName
+      lastName
+      avatar
+      username
+    }
+    messages {
+      ...ThreadMessage
+    }
+  }
+}
+    ${ThreadMessageFragmentDoc}`;
+
+/**
+ * __useGetThreadsByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetThreadsByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThreadsByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThreadsByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetThreadsByUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables> & ({ variables: GetThreadsByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables>(GetThreadsByUserIdDocument, options);
+      }
+export function useGetThreadsByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables>(GetThreadsByUserIdDocument, options);
+        }
+export function useGetThreadsByUserIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables>(GetThreadsByUserIdDocument, options);
+        }
+export type GetThreadsByUserIdQueryHookResult = ReturnType<typeof useGetThreadsByUserIdQuery>;
+export type GetThreadsByUserIdLazyQueryHookResult = ReturnType<typeof useGetThreadsByUserIdLazyQuery>;
+export type GetThreadsByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetThreadsByUserIdSuspenseQuery>;
+export type GetThreadsByUserIdQueryResult = Apollo.QueryResult<GetThreadsByUserIdQuery, GetThreadsByUserIdQueryVariables>;
 export const GetUserProfileDocument = gql`
     query GetUserProfile($username: String!) {
   user(username: $username) {
@@ -1917,6 +2230,41 @@ export type GetMockedUserQueryHookResult = ReturnType<typeof useGetMockedUserQue
 export type GetMockedUserLazyQueryHookResult = ReturnType<typeof useGetMockedUserLazyQuery>;
 export type GetMockedUserSuspenseQueryHookResult = ReturnType<typeof useGetMockedUserSuspenseQuery>;
 export type GetMockedUserQueryResult = Apollo.QueryResult<GetMockedUserQuery, GetMockedUserQueryVariables>;
+export const MessageAddedDocument = gql`
+    subscription MessageAdded($threadId: Float!) {
+  messageAdded(threadId: $threadId) {
+    id
+    content
+    createdAt
+    user {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useMessageAddedSubscription__
+ *
+ * To run a query within a React component, call `useMessageAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageAddedSubscription({
+ *   variables: {
+ *      threadId: // value for 'threadId'
+ *   },
+ * });
+ */
+export function useMessageAddedSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageAddedSubscription, MessageAddedSubscriptionVariables> & ({ variables: MessageAddedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MessageAddedSubscription, MessageAddedSubscriptionVariables>(MessageAddedDocument, options);
+      }
+export type MessageAddedSubscriptionHookResult = ReturnType<typeof useMessageAddedSubscription>;
+export type MessageAddedSubscriptionResult = Apollo.SubscriptionResult<MessageAddedSubscription>;
 export const NotificationAddedDocument = gql`
     subscription NotificationAdded($userId: Int!) {
   notificationAdded(userId: $userId) {

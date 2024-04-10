@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import SidebarConversation from './SidebarConversation';
 import UpdateNote from './UpdateNote';
+import { useParams } from 'react-router-dom';
+import ConversationThread from './ConversationThread';
 
 export default function Conversation() {
   const [showUpdateNote, setShowUpdateNote] = useState(false);
-  console.log('🚀 ~ showUpdateNote:', showUpdateNote);
+  const { threadId } = useParams();
 
   const toggleUpdateNote = (value: boolean) => {
     setShowUpdateNote(value);
@@ -17,6 +19,8 @@ export default function Conversation() {
       </div>
       {showUpdateNote ? (
         <UpdateNote toggleUpdateNote={toggleUpdateNote} />
+      ) : threadId ? (
+        <ConversationThread threadId={threadId} />
       ) : null}
     </div>
   );
