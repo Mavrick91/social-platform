@@ -45,6 +45,7 @@ export function ThreadMessageForm({ threadId }: Props) {
           {...register('message')}
           placeholder="Type a message"
           className="rounded-full"
+          autoComplete="off"
         />
         <Button
           variant="ghost"
