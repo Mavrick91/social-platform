@@ -7,7 +7,8 @@ import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 
 function ConversationList() {
-  const { threadId } = useParams();
+  const params = useParams();
+  const threadId = Number(params.threadId);
   const user = useUserInfo();
   const { data, loading } = useGetThreadsByUserIdQuery({
     variables: {

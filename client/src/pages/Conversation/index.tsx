@@ -6,7 +6,8 @@ import ConversationThread from './ConversationThread';
 
 export default function Conversation() {
   const [showUpdateNote, setShowUpdateNote] = useState(false);
-  const { threadId } = useParams();
+  const params = useParams();
+  const threadId = Number(params.threadId);
 
   const toggleUpdateNote = (value: boolean) => {
     setShowUpdateNote(value);
