@@ -25,7 +25,7 @@ export class CollectionService {
       (picId) => !existingPictureIds.includes(picId),
     );
 
-    const createdPictures = await Promise.all(
+    return await Promise.all(
       newPictureIds.map((pictureId) =>
         this.prisma.pictureOnCollection.create({
           data: {
@@ -38,8 +38,6 @@ export class CollectionService {
         }),
       ),
     );
-
-    return createdPictures;
   }
 
   async removePictureFromAllUserCollections(
@@ -69,10 +67,14 @@ export class CollectionService {
     return collections;
   }
 
-  async getCollection(collectionName: string): Promise<Collection> {
+  async getCollection(
+    collectionName: string,
+    userId: number,
+  ): Promise<Collection> {
     return this.prisma.collection.findFirst({
       where: {
         nameId: collectionName,
+        userId: userId,
       },
       include: {
         pictures: {

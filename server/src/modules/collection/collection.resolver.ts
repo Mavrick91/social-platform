@@ -48,8 +48,9 @@ export class CollectionResolver {
   @UseGuards(GqlAuthGuard)
   async getCollection(
     @Args('collectionName') collectionName: string,
+    @CurrentUser() user: User,
   ): Promise<Collection> {
-    return this.collectionService.getCollection(collectionName);
+    return this.collectionService.getCollection(collectionName, user.id);
   }
 
   @Mutation(() => CollectionResponse)
