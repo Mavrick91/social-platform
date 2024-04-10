@@ -22,8 +22,6 @@ function Profile() {
   });
 
   const tabs = useMemo(() => {
-    if (!data) return [];
-
     const defaultTab = [
       { name: 'Posts', path: `/${username}`, icon: <Grid3X3 size={12} /> },
       {
@@ -33,7 +31,7 @@ function Profile() {
       },
     ];
 
-    if (user.id === data.user?.id) {
+    if (user.id === data?.user?.id) {
       defaultTab.splice(1, 0, {
         name: 'Saved',
         path: `/${username}/saved`,
@@ -41,7 +39,7 @@ function Profile() {
       });
     }
     return defaultTab;
-  }, [username]);
+  }, [data?.user?.id, user.id, username]);
 
   const activeTab = tabs.find(
     (tab) =>
@@ -51,7 +49,7 @@ function Profile() {
           location.pathname === `/${username}/posts`))
   );
 
-  if (error || !data?.user || !activeTab) {
+  if (error) {
     return (
       <div className="flex flex-col gap-10 items-center mt-10">
         <h1 className="text-2xl font-semibold">Profile not found</h1>
@@ -70,21 +68,23 @@ function Profile() {
   return (
     <div className="flex flex-col max-w-lg-page mx-auto">
       <div className="px-5 pt-9">
-        <UserProfile currentProfile={data?.user} />
+        {data && <UserProfile currentProfile={data?.user} />}
         <div className="relative flex border-t cursor-pointer justify-center gap-14 border-separator">
-          {tabs.map((tab) => (
-            <Link
-              to={tab.path}
-              key={tab.name}
-              className={cn('py-4 flex gap-2 items-center', {
-                'text-black border-t border-black': activeTab.name === tab.name,
-                'text-secondary': activeTab.name !== tab.name,
-              })}
-            >
-              {tab.icon}
-              <div className="font-semibold text-sm">{tab.name}</div>
-            </Link>
-          ))}
+          {activeTab &&
+            tabs.map((tab) => (
+              <Link
+                to={tab.path}
+                key={tab.name}
+                className={cn('py-4 flex gap-2 items-center', {
+                  'text-black border-t border-black':
+                    activeTab.name === tab.name,
+                  'text-secondary': activeTab.name !== tab.name,
+                })}
+              >
+                {tab.icon}
+                <div className="font-semibold text-sm">{tab.name}</div>
+              </Link>
+            ))}
         </div>
 
         <Outlet />
