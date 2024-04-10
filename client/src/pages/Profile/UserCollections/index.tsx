@@ -1,11 +1,24 @@
 import NewCollectionDialog from '@/components/NewCollectionDialog';
 import useGetPicturesFromSaved from '@/hooks/useGetPicturesFromSaved';
 import { useUserInfo } from '@/providers/UserInfoProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function UserCollections() {
   const user = useUserInfo();
+  const { username } = useParams();
   const picturesFromSaved = useGetPicturesFromSaved();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.username !== username) {
+      navigate(`/${username}`);
+    }
+  }, [navigate, user.username, username]);
+
+  if (user.username !== username) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-3">
