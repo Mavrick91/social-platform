@@ -20,9 +20,7 @@ export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
   return (
     <DialogContent className="rounded-lg max-w-96">
       <DialogHeader>
-        <h2 className="text-lg text-center w-full font-semibold">
-          New collection
-        </h2>
+        <h2 className="text-center w-full font-semibold">New collection</h2>
       </DialogHeader>
       <div className="flex flex-col">
         <div className="px-6">
@@ -31,9 +29,10 @@ export const CreateCollectionStep = ({ onClickNext, labelSubmit }: Props) => {
             placeholder="Collection name"
             autoComplete="off"
             error={errors.collectionName?.message}
+            className="bg-secondary-background placeholder:text-secondary border-separator"
           />
         </div>
-        <Separator className="mt-4" />
+        <Separator className="mt-4" elevated />
         <div className="flex justify-center">
           <Button
             type="button"

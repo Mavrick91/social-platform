@@ -70,20 +70,15 @@ function PostCommentForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Separator />
+      <Separator elevated />
       <div className="flex items-center min-h-12 pr-4 pl-2 py-2">
         <TextareaAutosize
-          className="w-full p-2 placeholder:text-secondary text-sm focus:outline-none resize-none"
+          className="w-full p-2 placeholder:text-secondary-text text-primary-text bg-transparent text-sm focus:outline-none resize-none"
           placeholder="Add a comment..."
           {...register('content')}
           maxRows={4}
         />
-        <Button
-          className="size-12 flex justify-center items-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-          type="submit"
-          variant="ghost"
-          disabled={!content}
-        >
+        <Button type="submit" variant="ghost" disabled={!content}>
           Post
         </Button>
       </div>

@@ -34,7 +34,7 @@ export default function PostItem({ picture }: Props) {
           <PostAddComment pictureId={picture.id} />
         </>
       )}
-      <Separator className="mt-4 mb-5 last:border-red-500" />
+      <Separator className="mt-4 mb-5" elevated />
     </div>
   );
 }

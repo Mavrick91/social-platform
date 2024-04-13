@@ -5,6 +5,7 @@ import { AppRoutes } from './route';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import moment from 'moment';
+import { ThemeProvider } from '@/providers/ThemeProvider.tsx';
 
 if (process.env.NODE_ENV === 'development') {
   loadDevMessages();
@@ -35,17 +36,19 @@ moment.updateLocale('en', {
 function App() {
   return (
     <ApolloProvider client={client}>
-      <AppRoutes />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        pauseOnFocusLoss
-        pauseOnHover
-        theme="light"
-      />
+      <ThemeProvider>
+        <AppRoutes />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          pauseOnFocusLoss
+          pauseOnHover
+          theme="light"
+        />
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

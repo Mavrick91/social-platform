@@ -3,8 +3,8 @@
 /** @type {import('tailwindcss').Config} */
 
 const sidenavSizes = {
-  'small-sidenav': '77px',
-  'medium-sidenav': '244px',
+  'nav-narrow-width': 'var(--nav-narrow-width)',
+  'nav-medium-width': 'var(--nav-medium-width)',
 };
 
 module.exports = {
@@ -28,6 +28,9 @@ module.exports = {
       lg: '1264px',
     },
     extend: {
+      flexGrow: {
+        2: '2',
+      },
       boxShadow: {
         ig: '0 4px 12px rgba(var(--web-always-black),.15)',
       },
@@ -50,13 +53,25 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         white: 'rgb(var(--web-always-white))',
-        // black: 'rgb(var(--web-always-black))',
+        'hover-overlay': 'rgba(var(--hover-overlay))',
+        'banner-background': 'rgb(var(--banner-background))',
+        stroke: 'rgb(var(--stroke))',
+        'highlight-background': 'rgb(var(--highlight-background))',
+        'elevated-background': 'rgb(var(--elevated-background))',
+        'elevated-separator': 'rgb(var(--elevated-separator))',
+        'stroke-prism': 'rgb(var(--stroke-prism))',
+        'toggle-background-off-prism':
+          'rgb(var(--toggle-background-off-prism))',
+        'toggle-background-on-prism': 'rgb(var(--toggle-background-on-prism))',
+        'always-dark-overlay': 'rgba(var(--always-dark-overlay))',
+        'border-avatar': 'rgba(var(--web-always-black),.0975)',
         separator: {
           DEFAULT: 'rgb(var(--separator))',
           post: 'rgb(var(--separator-post))',
         },
         primary: {
           DEFAULT: 'rgb(var(--primary))',
+          background: 'rgb(var(--primary-background))',
           foreground: 'hsl(var(--primary-foreground))',
           text: 'rgb(var(--primary-text))',
           button: 'rgb(var(--primary-button))',
@@ -66,6 +81,7 @@ module.exports = {
         secondary: {
           DEFAULT: 'rgb(var(--secondary))',
           button: 'rgb(var(--secondary-button))',
+          text: 'rgb(var(--secondary-text))',
           background: 'rgb(var(--secondary-background))',
           foreground: 'hsl(var(--secondary-foreground))',
           'button-background': 'rgb(var(--secondary-button-background))',

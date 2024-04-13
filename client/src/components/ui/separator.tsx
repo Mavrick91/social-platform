@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 type SeparatorProps = React.ComponentPropsWithoutRef<
   typeof SeparatorPrimitive.Root
 > & {
-  isPost?: boolean;
+  elevated?: boolean;
 };
 
 const Separator = React.forwardRef<
@@ -17,7 +17,7 @@ const Separator = React.forwardRef<
     {
       className,
       orientation = 'horizontal',
-      isPost,
+      elevated,
       decorative = true,
       ...props
     },
@@ -32,8 +32,8 @@ const Separator = React.forwardRef<
         orientation === 'horizontal' ? 'h-[1px] w-full' : 'h-full w-[1px]',
         className,
         {
-          'bg-separator': !isPost,
-          'bg-separator-post': isPost,
+          'bg-separator': elevated,
+          'bg-elevated-separator': elevated,
         }
       )}
       {...props}

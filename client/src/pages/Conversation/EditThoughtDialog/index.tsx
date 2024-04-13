@@ -37,10 +37,7 @@ export default function EditThoughtDialog({
   return (
     <div
       ref={containerRef}
-      className="fixed top-24 left-52 z-50 rounded-2xl bg-white w-80"
-      style={{
-        boxShadow: '0 4px 12px rgba(0,0,0,.15)',
-      }}
+      className="fixed top-24 left-52 z-50 shadow-ig rounded-2xl bg-banner-background text-primary-text w-80"
     >
       <div className="flex-col flex">
         <div className="py-8 flex flex-col justify-center items-center">
@@ -50,7 +47,7 @@ export default function EditThoughtDialog({
               bubbleText={user.thought?.content}
               canEdit={false}
             />
-            <UserAvatar avatar={user.avatar} className="size-40" />
+            <UserAvatar avatar={user.avatar} size="size-40" />
           </div>
           <div className="text-xl text-center">
             {user.firstName} {user.lastName}

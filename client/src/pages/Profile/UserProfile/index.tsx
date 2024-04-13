@@ -20,16 +20,12 @@ function UserProfile({ currentProfile }: Props) {
   return (
     <div className="mb-11">
       <div className="flex">
-        <div className="w-48 mr-8">
-          <UserAvatar
-            alt="Profile picture"
-            avatar={currentProfile.avatar}
-            className="size-[150px]"
-          />
+        <div className="flex justify-center w-64 shrink-0 mx-auto">
+          <UserAvatar avatar={currentProfile.avatar} size="size-[150px]" />
         </div>
-        <div className="flex-1">
+        <section className="grow ml-12">
           <div className="flex items-center h-10">
-            <h1 className="text-xl">
+            <h1 className="text-xl text-primary-text">
               <span>{currentProfile.username}</span>
             </h1>
             <div className="flex items-center space-x-2 ml-5">
@@ -47,7 +43,7 @@ function UserProfile({ currentProfile }: Props) {
               )}
             </div>
           </div>
-          <div className="flex space-x-8 my-3">
+          <div className="flex space-x-8 my-3 text-primary-text">
             <span>
               <Pluralize
                 count={currentProfile._count.pictures}
@@ -73,15 +69,15 @@ function UserProfile({ currentProfile }: Props) {
               />
             </FollowersDialog>
           </div>
-          <div className="text-sm">
+          <div className="text-sm text-primary-text">
             <span className="font-semibold">
               {currentProfile.firstName} {currentProfile.lastName}
             </span>
             {currentProfile.bio && (
-              <p className="text-primary-text max-w-xl">{currentProfile.bio}</p>
+              <p className="text-primary-text">{currentProfile.bio}</p>
             )}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

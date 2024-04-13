@@ -11,8 +11,8 @@ export interface SideNavItem {
   onClick?: () => void;
   userAvatarProps?: {
     avatar?: string | null;
-    alt: string;
-    className: string;
+    username: string;
+    size: string;
   };
 }
 
@@ -61,8 +61,8 @@ export const getNavigationItems = (
     Icon: UserAvatar,
     userAvatarProps: {
       avatar: user.avatar,
-      alt: `${user.firstName} ${user.lastName}`,
-      className: 'w-6 h-6',
+      username: user.username,
+      size: 'size-6',
     },
     isActive: (path) =>
       !['/', '/explore', '/direct', '/notifications'].includes(path),

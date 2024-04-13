@@ -30,6 +30,7 @@ export function FriendsNote({
       <button
         className="flex flex-col items-center relative"
         onClick={handleClickThought}
+        data-testid="update-note-button"
       >
         {!showEditThought && (
           <BubbleThought
@@ -38,7 +39,7 @@ export function FriendsNote({
             canEdit={false}
           />
         )}
-        <UserAvatar avatar={userAvatar} className="size-[72px]" />
+        <UserAvatar avatar={userAvatar} size="size-[72px]" />
         <span className="text-secondary text-xs">Your note</span>
       </button>
 

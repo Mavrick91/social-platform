@@ -5,6 +5,7 @@ import UserAvatar from '@/components/UserAvatar';
 import { cn } from '@/lib/utils.ts';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
+import UserListItem from '@/components/UserListItem';
 
 function ConversationList() {
   const params = useParams();
@@ -28,20 +29,13 @@ function ConversationList() {
             <div
               key={thread.id}
               className={cn({
-                'bg-secondary-button-background': threadId === thread.id,
-                'hover:bg-gray-50': threadId !== thread.id,
+                'bg-highlight-background': threadId === thread.id,
+                'hover:bg-hover-overlay': threadId !== thread.id,
               })}
             >
-              <div className="px-6 py-2 flex">
-                <UserAvatar
-                  avatar={recipientUser?.avatar}
-                  className="size-14"
-                />
-                <div className="ml-3 flex flex-col justify-center grow">
-                  <span className="text-primary-text text-sm">
-                    {recipientUser?.username}
-                  </span>
-                  <span className="text-secondary flex gap-x-1 text-xs mt-1">
+              <UserListItem
+                subText={
+                  <>
                     <span>
                       {lastMessage?.user?.id === user.id ? 'You: ' : ''}
                     </span>
@@ -49,9 +43,14 @@ function ConversationList() {
                       {lastMessage.content}
                     </span>
                     <span> · {moment(lastMessage.createdAt).fromNow()}</span>
-                  </span>
-                </div>
-              </div>
+                  </>
+                }
+                firstName={recipientUser.firstName}
+                lastName={recipientUser.lastName}
+                avatar={recipientUser?.avatar}
+                size="size-14"
+                subTextSize="xs"
+              />
             </div>
           </Link>
         );

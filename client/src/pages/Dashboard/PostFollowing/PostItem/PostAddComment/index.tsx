@@ -44,7 +44,7 @@ export default function PostAddComment({ pictureId }: Props) {
       className="relative mt-2 flex items-center"
     >
       <TextareaAutosize
-        className="bg-transparent min-h-5 pr-12 resize-none max-h-52 w-full outline-none text-gray-800 text-sm placeholder:text-zinc-500"
+        className="bg-transparent min-h-5 pr-12 resize-none max-h-52 w-full outline-none text-primary-text text-sm placeholder:text-secondary"
         placeholder="Add a comment"
         {...register('comment')}
         maxRows={4}

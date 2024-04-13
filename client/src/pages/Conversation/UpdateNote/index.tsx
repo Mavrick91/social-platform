@@ -117,7 +117,7 @@ export default function UpdateNote({ toggleUpdateNote }: Props) {
               register={form.register}
               thoughtWatch={thoughtWatch}
             />
-            <UserAvatar avatar={user.avatar} className="size-40" />
+            <UserAvatar avatar={user.avatar} size="size-40" />
           </div>
           {thoughtWatch.length >= 55 && (
             <span className="text-destructive">{thoughtWatch.length} / 60</span>

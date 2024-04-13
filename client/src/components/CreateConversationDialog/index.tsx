@@ -8,6 +8,8 @@ import {
 import UserAvatar from '../UserAvatar';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { useNavigate } from 'react-router-dom';
+import { Separator } from '@/components/ui/separator.tsx';
+import UserListItem from '@/components/UserListItem';
 
 type Props = {
   onClose: () => void;
@@ -64,21 +66,23 @@ export default function CreateConversationDialog({ onClose }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
       <DialogContent className="p-0 gap-0 flex flex-col">
-        <div className="flex border-b border-separator px-4 justify-center py-3.5">
+        <div className="flex px-4 justify-center py-3.5">
           <h3 className="font-bold">New message</h3>
         </div>
-        <div className="border-b border-separator px-4 h-9 flex items-center">
+        <Separator elevated />
+        <div className="px-4 h-9 flex items-center">
           <span className="font-bold">To:</span>
           <div className="py-1 px-4">
             <input
               type="text"
               placeholder="Search..."
-              className="flex-grow focus:outline-none"
+              className="flex-grow focus:outline-none bg-transparent"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
           </div>
         </div>
+        <Separator elevated />
         <div className="py-3 h-96 overflow-y-auto">
           {!data ? (
             <div className="px-6 text-secondary text-sm">No account found.</div>
@@ -86,23 +90,16 @@ export default function CreateConversationDialog({ onClose }: Props) {
             data.usersByUsername.map((user) => (
               <button
                 key={user.id}
-                className="hover:bg-secondary-button-hover w-full"
+                className="hover:bg-hover-overlay w-full"
                 onClick={() => handleStartConversation(user.id)}
               >
-                <div className="flex px-6 items-center py-2">
-                  <UserAvatar
-                    avatar={user.avatar}
-                    className="size-11 rounded-full mr-3"
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-sm">
-                      {user.firstName} {user.lastName}
-                    </span>
-                    <span className="text-secondary text-left text-sm">
-                      {user.firstName}
-                    </span>
-                  </div>
-                </div>
+                <UserListItem
+                  subText={user.username}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  avatar={user.avatar}
+                  subTextSize="sm"
+                />
               </button>
             ))
           )}

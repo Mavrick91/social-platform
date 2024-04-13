@@ -8,6 +8,8 @@ import PostDetailsDialog from '../PostDetailsDialog';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Pluralize } from '../Pluralize';
 import useGetPicturesFromSaved from '@/hooks/useGetPicturesFromSaved';
+import { cn } from '@/lib/utils.ts';
+import { useState } from 'react';
 
 type Props = {
   picture: PictureFragmentFragment;
@@ -25,6 +27,8 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
   const [unlikePicture] = useUnLikePicture(likeId!);
   const [addPictureToCollection] = useAddPictureCollection();
   const [removePictureFromCollection] = useRemovePictureCollection();
+  const [selectedPicture, setSelectedPicture] =
+    useState<PictureFragmentFragment | null>(null);
 
   const handleClickLikePicture = async () => {
     if (likeId) await unlikePicture();
@@ -108,26 +112,37 @@ export default function PostCTA({ picture, showMessageIcon = true }: Props) {
             onClick={handleClickLikePicture}
           >
             <HeartIcon
-              fill={!likeId ? 'none' : '#ff3041'}
-              stroke={!likeId ? 'black' : '#ff3041'}
+              className={cn('text-primary-text', {
+                'text-destructive': likeId,
+                'hover:text-secondary': !likeId,
+              })}
+              fill={likeId ? 'currentColor' : 'none'}
             />
           </button>
           {showMessageIcon && (
-            <PostDetailsDialog picture={picture}>
-              <MessageCircle className="hover:text-secondary cursor-pointer" />
-            </PostDetailsDialog>
+            <button type="button" onClick={() => setSelectedPicture(picture)}>
+              <MessageCircle className="hover:text-secondary text-primary-text cursor-pointer" />
+            </button>
           )}
-          <SendIcon className="hover:text-secondary" />
+          <SendIcon className="hover:text-secondary text-primary-text" />
         </div>
         <button onClick={handleClickAddToCollection}>
           <BookmarkIcon
-            className="hover:text-secondary"
-            fill={!pictureInCollection ? 'none' : 'black'}
-            stroke={!pictureInCollection ? 'black' : 'none'}
+            className={cn('text-primary-text', {
+              'hover:text-secondary': !pictureInCollection,
+            })}
+            fill={pictureInCollection ? 'currentColor' : 'none'}
           />
         </button>
       </div>
-      {renderLikeCount()}
+      <div className="text-primary-text">{renderLikeCount()}</div>
+
+      {selectedPicture && (
+        <PostDetailsDialog
+          picture={selectedPicture}
+          onClose={() => setSelectedPicture(null)}
+        />
+      )}
     </>
   );
 }

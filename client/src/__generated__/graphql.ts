@@ -725,7 +725,7 @@ export type GetCommentsByPictureQueryVariables = Exact<{
 }>;
 
 
-export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null } }> };
+export type GetCommentsByPictureQuery = { __typename?: 'Query', commentsByPictureId: Array<{ __typename?: 'Comment', id: number, content: string, createdAt?: any | null, updatedAt?: any | null, user: { __typename?: 'User', id: number, firstName: string, lastName: string, avatar?: string | null, username: string } }> };
 
 export type NotificationFragmentFragment = { __typename?: 'Notification', id: number, type: string, read: boolean, createdAt: any, sender: { __typename?: 'User', id: number, username: string, avatar?: string | null }, picture?: { __typename?: 'Picture', altText: string, sizes: { __typename?: 'SizeType', small: string } } | null, comment?: { __typename?: 'Comment', content: string } | null };
 
@@ -1807,6 +1807,7 @@ export const GetCommentsByPictureDocument = gql`
       firstName
       lastName
       avatar
+      username
     }
   }
 }

@@ -68,20 +68,18 @@ export default function SideNavItem({
 
   const renderContent = () => (
     <div
-      className={cn('flex', {
+      className={cn('flex items-center', {
         'font-bold': isActiveItem,
-        'items-center': !isSmall,
       })}
     >
       <div className="relative">
         <Icon
           className={cn(
-            'w-6 h-6 transition-transform ease-out group-hover:scale-[1.1]',
+            'size-6 transition-transform ease-out group-hover:scale-[1.1] text-primary-text',
             {
               'scale-110': isActiveItem && sideNavOpen,
               'mx-auto': isSmall,
-            },
-            userAvatarProps?.className
+            }
           )}
           strokeWidth={
             (isActiveItem && !isSearchVisible && !isNotificationVisible) ||
@@ -101,7 +99,9 @@ export default function SideNavItem({
       </div>
       {!isSmall && (
         <motion.span
-          className={cn('transition-colors duration-200 ml-4 ease-out')}
+          className={cn(
+            'transition-colors text-primary-text duration-200 ml-4 ease-out'
+          )}
           initial={{ opacity: 0 }}
           animate={{ opacity: isSmall ? 0 : 1 }}
           transition={{ delay: 0.2 }}
@@ -114,7 +114,7 @@ export default function SideNavItem({
 
   const linkOrButtonProps: LinkOrButtonProps = {
     className: cn(
-      'flex items-center group my-1 p-3 rounded-md transition-colors duration-200 ease-out hover:bg-secondary-button-background',
+      'flex items-center group my-1 p-3 rounded-lg transition-colors duration-200 ease-out hover:bg-hover-overlay',
       {
         relative: onClick === toggleSearch,
       }

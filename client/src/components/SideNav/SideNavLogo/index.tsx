@@ -18,19 +18,19 @@ export default function SideNavLogo({ displaySmallNav }: Props) {
         animate={{ opacity: displaySmallNav ? 1 : 0 }}
         transition={{ delay: 0.2 }}
         className={cn({
-          'p-3 w-full text-black flex items-center hover:bg-secondary-button-background rounded-md hover:scale-[1.1] transition-all':
+          'p-3 w-full text-primary-text text-black flex items-center hover:bg-hover-overlay rounded-md hover:scale-[1.1] transition-all':
             displaySmallNav,
         })}
         exit={{ display: 'none' }}
       >
         {displaySmallNav && (
           <div>
-            <Instagram />
+            <Instagram className="text-primary-text" />
           </div>
         )}
       </motion.div>
       <motion.div
-        className="justify-center text-3xl pt-6 pb-4 h-20 font-semibold whitespace-nowrap"
+        className="justify-center text-primary-text text-3xl pt-6 pb-4 h-20 font-semibold whitespace-nowrap"
         style={{
           fontFamily: 'Dancing script',
         }}

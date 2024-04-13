@@ -14,7 +14,7 @@ export default function AccessibilityExpand({ previewPicture }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-separator">
+    <div className="border-b border-elevated-separator">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="px-3 py-4 w-full flex justify-between items-center"
@@ -49,7 +49,7 @@ export default function AccessibilityExpand({ previewPicture }: Props) {
                   <img className="size-11 object-cover" src={previewPicture} />
                   <Input
                     placeholder="Write alt text..."
-                    className="grow h-full"
+                    className="grow h-full bg-transparent placeholder:text-secondary"
                     {...register('altText')}
                   />
                 </div>

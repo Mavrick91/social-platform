@@ -61,10 +61,10 @@ export default function NotificationItem({ notification }: Props) {
   return (
     <button
       type="button"
-      className="flex w-full text-left items-center px-6 py-2 hover:bg-secondary-background"
+      className="flex w-full text-left items-center px-6 py-2 hover:bg-hover-overlay"
     >
       <div className="shrink-0 mr-3">
-        <UserAvatar avatar={notification.sender.avatar} className="size-11" />
+        <UserAvatar avatar={notification.sender.avatar} size="size-11" />
       </div>
       <div className="flex items-center shrink gap-7 justify-between w-full">
         <div className="text-sm">

@@ -75,11 +75,13 @@ function Profile() {
               <Link
                 to={tab.path}
                 key={tab.name}
-                className={cn('py-4 flex gap-2 items-center', {
-                  'text-black border-t border-black':
-                    activeTab.name === tab.name,
-                  'text-secondary': activeTab.name !== tab.name,
-                })}
+                className={cn(
+                  'py-4 flex text-primary-text gap-2 items-center',
+                  {
+                    'border-t border-primary-text': activeTab.name === tab.name,
+                    'text-secondary': activeTab.name !== tab.name,
+                  }
+                )}
               >
                 {tab.icon}
                 <div className="font-semibold text-sm">{tab.name}</div>

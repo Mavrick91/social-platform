@@ -24,27 +24,27 @@ export default function AddCaptionPost({ previewPicture, isEdit }: Props) {
         className="max-w-[755px] w-full aspect-square object-cover"
       />
       <motion.div
-        className="border-l border-separator"
+        className="border-l border-elevated-separator"
         initial={{ width: 0 }}
         animate={{ width: '507px' }}
         transition={{ duration: 0.5 }}
       >
         <div className="mt-4 mb-3 mx-4">
           <div className="flex gap-3 items-center">
-            <UserAvatar avatar={user.avatar} className="size-7" />
+            <UserAvatar avatar={user.avatar} size="size-7" />
             <div className="text-sm font-semibold">{user.username}</div>
           </div>
         </div>
         <div>
           <TextareaAutosize
-            className="w-full focus:outline-none resize-none px-4"
+            className="w-full focus:outline-none bg-transparent text-primary-text resize-none px-4"
             placeholder="Write a caption..."
             {...register('description')}
             minRows={7}
             maxRows={7}
           />
         </div>
-        <div className="text-xs justify-end h-11 border-b border-separator px-4 items-center flex">
+        <div className="text-xs justify-end h-11 border-b border-elevated-separator text-secondary px-4 items-center flex">
           {descriptionWatch.length}/2,200
         </div>
         <AccessibilityExpand previewPicture={previewPicture} />

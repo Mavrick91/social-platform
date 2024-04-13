@@ -1,33 +1,30 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
 import ErrorAlert from '@/components/AlertError';
 import PictureCommentList from '@/components/PostDetailsDialog/PostCommentList';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/components/ui/dialog.tsx';
+import { Dialog, DialogContent } from '@/components/ui/dialog.tsx';
 import useAspectRatio from '@/hooks/useAspectRatio';
 import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Ellipsis } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
 import { Separator } from '../ui/separator';
 import PostAction from './PostAction';
 
 type Props = {
-  children: ReactNode;
   picture: PictureFragmentFragment;
+  onClose: () => void;
 };
 
-function PostDetailsDialog({ children, picture }: Props) {
+function PostDetailsDialog({ onClose, picture }: Props) {
   const [errorMutation, setErrorMutation] = useState<string | null>(null);
   const user = useUserInfo();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleToggleDialog = (isOpen: boolean) => {
     setOpen(isOpen);
+    onClose();
   };
 
   const aspectRatio = useAspectRatio(picture.sizes.original);
@@ -40,8 +37,6 @@ function PostDetailsDialog({ children, picture }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={handleToggleDialog}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-
       <DialogContent
         className="p-0 rounded-sm overflow-hidden border-none h-auto w-max flex-col"
         style={{
@@ -62,14 +57,14 @@ function PostDetailsDialog({ children, picture }: Props) {
                 }}
               />
             </div>
-            <div className="w-[405px] shrink-0 max-w-[405px] flex border-l border-separator-post flex-col">
+            <div className="w-[405px] bg-primary-background shrink-0 max-w-[405px] flex border-l border-separator flex-col">
               <div className="flex pt-3 pl-3 flex-col">
                 <div className="flex items-center">
                   <Link className="shrink-0" to={`/${picture?.user.username}`}>
                     <UserAvatar
-                      avatar={picture?.user?.avatar}
-                      className="size-8"
-                      alt={`${picture?.user?.firstName} ${picture?.user?.lastName}`}
+                      avatar={picture.user.avatar}
+                      username={picture.user.username}
+                      size="size-8"
                     />
                   </Link>
                   <div className="flex flex-col w-full">
@@ -77,7 +72,7 @@ function PostDetailsDialog({ children, picture }: Props) {
                       <div>
                         <Link
                           to={`/${picture?.user.username}`}
-                          className="text-secondary-button text-sm font-semibold ml-4"
+                          className="text-primary-text text-sm font-semibold ml-4"
                         >
                           {picture?.user?.firstName} {picture?.user?.lastName}
                         </Link>
@@ -97,14 +92,14 @@ function PostDetailsDialog({ children, picture }: Props) {
                       </div>
                       {picture?.id && user.id === picture.user?.id && (
                         <PostAction picture={picture}>
-                          <Ellipsis color="gray" />
+                          <Ellipsis className="text-primary-text" />
                         </PostAction>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
-              <Separator className="mt-4" isPost />
+              <Separator className="mt-4" elevated />
 
               {picture && (
                 <PictureCommentList

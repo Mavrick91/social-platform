@@ -1,7 +1,7 @@
 import { useGetUsersByUsernameQuery } from '@/__generated__/graphql';
-import UserAvatar from '@/components/UserAvatar';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import UserListItem from '@/components/UserListItem';
 import { Link } from 'react-router-dom';
 
 const UsernameSearch: React.FC = () => {
@@ -30,7 +30,9 @@ const UsernameSearch: React.FC = () => {
 
   return (
     <>
-      <div className="text-2xl font-semibold pt-3 pl-6 pb-9">Search</div>
+      <div className="text-2xl text-primary-text font-semibold pt-3 pl-6 pb-9">
+        Search
+      </div>
       <div className="px-4 mb-6 relative">
         <input
           value={inputValue}
@@ -39,7 +41,7 @@ const UsernameSearch: React.FC = () => {
           }}
           placeholder="Search"
           autoFocus
-          className="bg-zinc-200/80 px-4 py-1 rounded-md w-full h-10 focus:outline-none"
+          className="bg-highlight-background px-4 py-1 text-primary-text rounded-md w-full h-10 focus:outline-none"
         />
         <button
           className="absolute top-1/2 transform right-8 -translate-y-1/2"
@@ -50,24 +52,28 @@ const UsernameSearch: React.FC = () => {
       </div>
       {(!data?.usersByUsername ||
         (data.usersByUsername && data.usersByUsername.length === 0)) && (
-        <div className="border-b border-[#DBDBDB]" />
+        <div className="border-b border-separator" />
       )}
 
-      {data?.usersByUsername.map((user) => (
-        <Link
-          to={`/${user.username}`}
-          key={user.id}
-          className="py-2 px-6 transition-colors flex gap-2 hover:bg-[#e3e3e3] items-center"
-        >
-          <UserAvatar className="size-11" avatar={user.avatar} />
-          <div>
-            <div className="font-semibold">{user.username}</div>
-            <div className="text-sm text-gray-500">
-              {user.firstName} {user.lastName}
+      <div className="overflow-y-auto grow">
+        {data?.usersByUsername.map((user) => (
+          <Link to={`/${user.username}`}>
+            <div className="hover:!bg-hover-overlay">
+              <UserListItem
+                avatar={user.avatar}
+                firstName={user.username}
+                subText={
+                  <div>
+                    {user.firstName} {user.lastName}
+                  </div>
+                }
+                subTextSize="sm"
+                username={user.username}
+              />
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))}
+      </div>
     </>
   );
 };

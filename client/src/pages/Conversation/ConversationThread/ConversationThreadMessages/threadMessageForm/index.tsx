@@ -41,12 +41,14 @@ export function ThreadMessageForm({ threadId }: Props) {
   return (
     <div className="m-4">
       <form className="relative" onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          {...register('message')}
-          placeholder="Type a message"
-          className="rounded-full"
-          autoComplete="off"
-        />
+        <div className="h-11 flex items-center">
+          <Input
+            {...register('message')}
+            placeholder="Message..."
+            className="rounded-full bg-primary-background h-full pl-6 text-[15px]"
+            autoComplete="off"
+          />
+        </div>
         <Button
           variant="ghost"
           type="submit"

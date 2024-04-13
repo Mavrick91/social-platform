@@ -137,7 +137,9 @@ const PostAction = ({ picture, children }: PostActionProps) => {
           {getActionButtons().map((button, index) => (
             <div key={index}>
               {button}
-              {index !== getActionButtons().length - 1 && <Separator />}
+              {index !== getActionButtons().length - 1 && (
+                <Separator elevated />
+              )}
             </div>
           ))}
         </DialogContent>

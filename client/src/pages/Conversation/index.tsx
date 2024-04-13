@@ -4,18 +4,18 @@ import UpdateNote from './UpdateNote';
 import { useParams } from 'react-router-dom';
 import ConversationThread from './ConversationThread';
 
-export default function Conversation() {
-  const [showUpdateNote, setShowUpdateNote] = useState(false);
-  const params = useParams();
+export default function Conversation(): JSX.Element {
+  const [showUpdateNote, setShowUpdateNote] = useState<boolean>(false);
+  const params = useParams<{ threadId: string }>();
   const threadId = Number(params.threadId);
 
-  const toggleUpdateNote = (value: boolean) => {
+  const toggleUpdateNote = (value: boolean): void => {
     setShowUpdateNote(value);
   };
 
   return (
     <div className="flex h-full">
-      <div className="bg-white overflow-hidden shrink-0 border w-[400px] h-full border-separator pt-9">
+      <div className="bg-primary-background overflow-hidden shrink-0 border-r w-[398px] h-full border-separator pt-9">
         <SidebarConversation toggleUpdateNote={toggleUpdateNote} />
       </div>
       {showUpdateNote ? (

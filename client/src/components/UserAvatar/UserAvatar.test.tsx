@@ -1,11 +1,6 @@
 import { render } from '@testing-library/react';
 import UserAvatar from './index';
 
-jest.mock(
-  '@/assets/placeholder-avatar.png',
-  () => '@/assets/placeholder-avatar.png'
-);
-
 describe('UserAvatar component', () => {
   it('displays the provided avatar correctly', () => {
     const avatarUrl = 'testAvatarUrl';

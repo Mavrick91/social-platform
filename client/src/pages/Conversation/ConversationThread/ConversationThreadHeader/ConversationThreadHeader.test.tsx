@@ -38,7 +38,7 @@ describe('ConversationThreadHeader component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByAltText('Profile picture')).toHaveAttribute(
+    expect(screen.getByAltText('User Avatar')).toHaveAttribute(
       'src',
       'testAvatar'
     );

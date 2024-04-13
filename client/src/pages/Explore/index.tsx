@@ -6,7 +6,7 @@ export default function Explore() {
 
   return (
     <div className="flex flex-col max-w-lg-page mx-auto">
-      <div className="px-5 pt-6">
+      <div className="px-5 py-6">
         <ThumbnailGrid loading={loading} pictures={data?.picturesByUsername} />
       </div>
     </div>

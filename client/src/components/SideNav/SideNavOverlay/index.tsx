@@ -14,14 +14,20 @@ export default function SideNavOverlay({ children, toggle }: Props) {
     toggle();
   });
 
+  const variants = {
+    open: { left: '71px' },
+    closed: { left: '-330px' },
+  };
+
   return (
     <motion.div
       ref={ref}
-      initial={{ left: '-400px' }}
-      animate={{ left: '77px' }}
-      exit={{ left: '-400px' }}
-      transition={{ duration: 0.5 }}
-      className="bg-white z-10 overflow-hidden shadow-2xl border absolute w-[400px] rounded-tr-2xl rounded-br-2xl h-full border-separator py-2"
+      initial="closed"
+      animate="open"
+      exit="closed"
+      variants={variants}
+      transition={{ duration: 0.3 }}
+      className="z-10 overflow-hidden shadow-ig border fixed w-[397px] bg-primary-background rounded-tr-2xl flex flex-col rounded-br-2xl h-full border-separator py-2"
     >
       {children}
     </motion.div>

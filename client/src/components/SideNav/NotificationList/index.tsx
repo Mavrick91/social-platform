@@ -78,7 +78,7 @@ export default function NotificationList({
         className="min-h-0 overflow-y-auto grow max-h-screen"
         onScroll={handleScroll}
       >
-        <div className="text-2xl font-semibold pt-3 pl-6 pb-6">
+        <div className="text-2xl font-semibold text-primary-text pt-3 pl-6 pb-6">
           Notifications
         </div>
         <div className="relative">
@@ -87,7 +87,9 @@ export default function NotificationList({
 
             return (
               <div key={label} className="border-b border-separator pb-4">
-                <div className="font-bold px-6 py-2">{label}</div>
+                <div className="font-bold px-6 py-2 text-primary-text">
+                  {label}
+                </div>
                 {items.map((notification) => (
                   <NotificationItem
                     key={notification.id}

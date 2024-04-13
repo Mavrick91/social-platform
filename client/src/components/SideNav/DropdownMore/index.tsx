@@ -19,12 +19,14 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Fragment } from 'react/jsx-runtime';
+import { useTheme } from '@/providers/ThemeProvider.tsx';
 
 type Props = {
   displaySmallNav: boolean;
 };
 
 export default function DropdownMore({ displaySmallNav }: Props) {
+  const { toggleTheme } = useTheme();
   const user = useUserInfo();
   const navigate = useNavigate();
 
@@ -48,6 +50,7 @@ export default function DropdownMore({ displaySmallNav }: Props) {
     },
     {
       name: 'Switch appearance',
+      onClick: toggleTheme,
       Icon: Sun,
     },
     {
@@ -68,7 +71,7 @@ export default function DropdownMore({ displaySmallNav }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center p-3">
+        <button className="flex items-center p-3 text-primary-text hover:bg-hover-overlay rounded-lg">
           <AlignJustify />
           <motion.span
             className={cn('ml-4', {
@@ -82,13 +85,13 @@ export default function DropdownMore({ displaySmallNav }: Props) {
           </motion.span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[266px] ml-5 shadow-lg rounded-lg">
+      <DropdownMenuContent className="w-[266px] ml-5 rounded-2xl">
         {dropdownItems.map(({ name, Icon, onClick }) => {
           return (
             <Fragment key={name}>
               {name === 'Log out' && <DropdownMenuSeparator />}
               <DropdownMenuItem
-                className="p-4 cursor-pointer"
+                className="p-4 cursor-pointer hover:bg-hover-overlay rounded-lg"
                 onClick={onClick}
               >
                 <div className="flex items-center gap-2">

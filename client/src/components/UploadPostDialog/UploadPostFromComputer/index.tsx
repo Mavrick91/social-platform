@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { ChangeEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-export default function UploadPictureFromComputer() {
+export default function UploadPostFromComputer() {
   const { setValue, register } = useFormContext();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {

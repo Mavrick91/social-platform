@@ -25,7 +25,7 @@ export default function SidebarConversation({ toggleUpdateNote }: Props) {
             {user.username}
           </span>
           <button onClick={() => setShowCreateConversation(true)}>
-            <SquarePen />
+            <SquarePen className="text-primary-text" />
           </button>
         </div>
 
@@ -36,7 +36,7 @@ export default function SidebarConversation({ toggleUpdateNote }: Props) {
           showUpdateNote={showUpdateNote}
         />
 
-        <div className="py-4 px-6 font-bold">Messages</div>
+        <div className="py-4 px-6 font-bold text-primary-text">Messages</div>
 
         <ConversationList />
       </div>

@@ -74,21 +74,21 @@ export default function SideNav() {
   };
 
   return (
-    <header className="z-50 bg-white shrink-0 h-screen flex-col flex">
+    <header className="z-50 bg-white shrink-0 h-screen flex-col flex relative">
       <nav
         className={cn(
-          `bg-white h-full z-20 absolute py-2.5 transition-all px-3 border-r border-separator`,
+          `bg-primary-background h-full z-20 absolute py-2.5 transition-all px-3 border-r border-separator`,
           {
-            'w-small-sidenav': displaySmallNav,
-            'w-medium-sidenav': !displaySmallNav,
+            'w-nav-narrow-width': displaySmallNav,
+            'w-nav-medium-width': !displaySmallNav,
           }
         )}
       >
-        <div className="flex flex-col h-full justify-between mx-auto max-w-screen-xl">
+        <div className="flex flex-col h-full justify-between">
           <SideNavLogo displaySmallNav={displaySmallNav} />
 
           <div className="flex flex-col grow justify-between h-full">
-            <ul className="flex flex-col w-full">
+            <ul className="flex flex-col">
               {navigationItems.map((item) => (
                 <SideNavItem
                   key={item.name}
@@ -108,12 +108,12 @@ export default function SideNav() {
 
       <AnimatePresence>
         {isSearchVisible && (
-          <SideNavOverlay toggle={toggleSearch}>
+          <SideNavOverlay key="search" toggle={toggleSearch}>
             <UsernameSearch />
           </SideNavOverlay>
         )}
         {isNotificationVisible && (
-          <SideNavOverlay toggle={handleToggleNotification}>
+          <SideNavOverlay key="notification" toggle={handleToggleNotification}>
             <NotificationList
               notifications={notifications}
               hasNextPage={hasNextPage}

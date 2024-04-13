@@ -18,7 +18,7 @@ export default function ConversationThread({ threadId }: Props) {
   if (loading) return <QuerySpinner className="mt-10" />;
   if (error || !data) return <div>Error</div>;
 
-  const recipientUser = data.thread.users[1];
+  const recipientUser = data.thread.users[0];
 
   return (
     <div className="w-full flex flex-col">

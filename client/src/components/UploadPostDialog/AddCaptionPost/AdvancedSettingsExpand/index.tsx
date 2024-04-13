@@ -11,7 +11,7 @@ export default function AdvancedSettingsExpand() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-separator">
+    <div className="border-b border-elevated-separator">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -47,9 +47,6 @@ export default function AdvancedSettingsExpand() {
                         {...field}
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className={cn({
-                          '!bg-black': field.value,
-                        })}
                       />
                     </FormControl>
                   )}

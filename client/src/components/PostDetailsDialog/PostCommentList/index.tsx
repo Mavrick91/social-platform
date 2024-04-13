@@ -39,7 +39,7 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
 
     if (!hasComments || picture.disableComments) {
       return (
-        <div className="flex flex-col items-center justify-center grow h-full">
+        <div className="flex flex-col items-center justify-center grow h-full text-primary-text">
           <span className="font-bold text-2xl">No comments yet.</span>
           <span className="text-sm mt-2">Start the conversation.</span>
         </div>
@@ -55,6 +55,7 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
             createdAt={picture.createdAt}
             firstName={picture.user.firstName}
             lastName={picture.user.lastName}
+            username={picture.user.username}
           />
         )}
         {data?.commentsByPictureId.map((comment) => (
@@ -62,6 +63,7 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
             key={comment.id}
             avatar={comment.user.avatar}
             content={comment.content}
+            username={comment.user.username}
             createdAt={comment.createdAt}
             firstName={comment.user.firstName}
             lastName={comment.user.lastName}
@@ -74,12 +76,12 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
   return (
     <div className="flex flex-col grow">
       <div
-        className="space-y-2 pr-6 p-3 h-0 grow overflow-y-auto"
+        className="space-y-2 pr-6 p-3 h-0 grow overflow-y-auto text-primary-text"
         ref={commentListRef}
       >
         {renderComments()}
       </div>
-      <div className="border-t border-separator-post p-3 pt-1.5">
+      <div className="border-t border-separator p-3 pt-1.5">
         <PostCTA picture={picture} showMessageIcon={false} />
         <span className="text-secondary text-xs">
           {moment(picture?.createdAt).format('D MMMM YYYY')}

@@ -1,6 +1,5 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 import { Form } from '@/components/ui/form';
 import { useUpdatePicture } from '@/hooks/graphql/useUpdatePicture';
 import { useUploadPicture } from '@/hooks/graphql/useUploadPicture';
@@ -15,7 +14,8 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import ExitDialog from '../ExitDialog';
 import AddCaptionPost from './AddCaptionPost';
-import UploadPictureFromComputer from './UploadPictureFromComputer';
+import UploadPostFromComputer from './UploadPostFromComputer';
+import { UploadPostHeader } from '@/components/UploadPostDialog/UploadPostHeader';
 
 const schema = z.object({
   picture: z.any(),
@@ -173,44 +173,29 @@ export default function UploadPostDialog({
     <>
       <Dialog open={isOpen} onOpenChange={handleCloseModal}>
         <DialogContent
-          className={cn('p-0 gap-0 flex flex-col', {
-            'min-w-[755px]': !previewPicture,
-            'max-w-[1095px]': previewPicture,
-          })}
+          className={cn(
+            'p-0 gap-0 flex flex-col bg-elevated-background text-primary-text',
+            {
+              'min-w-[755px]': !previewPicture,
+              'max-w-[1095px]': previewPicture,
+            }
+          )}
         >
           <Form {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
-              <div
-                className={cn(
-                  'flex border-b border-separator px-4 text-center py-2.5',
-                  {
-                    'justify-between': currentStep === 1,
-                    'justify-center': currentStep === 0,
-                  }
-                )}
-              >
-                {currentStep === 1 && (
-                  <button
-                    type="button"
-                    className="text-sm"
-                    onClick={handleClickArrowLeft}
-                  >
-                    {backButton}
-                  </button>
-                )}
-                <h3 className="font-bold">{title}</h3>
-                {currentStep === 1 && (
-                  <Button
-                    variant="ghost"
-                    type="submit"
-                    className="font-semibold"
-                    loading={uploadStatus || uploadLoading || updateLoading}
-                  >
-                    {buttonSubmitText}
-                  </Button>
-                )}
-              </div>
-              {!previewPicture && <UploadPictureFromComputer />}
+              <DialogHeader>
+                <UploadPostHeader
+                  currentStep={currentStep}
+                  onClick={handleClickArrowLeft}
+                  backButton={backButton}
+                  title={title}
+                  uploadStatus={uploadStatus}
+                  uploadLoading={uploadLoading}
+                  updateLoading={updateLoading}
+                  buttonSubmitText={buttonSubmitText}
+                />
+              </DialogHeader>
+              {!previewPicture && <UploadPostFromComputer />}
               {previewPicture && (
                 <AddCaptionPost
                   previewPicture={previewPicture}

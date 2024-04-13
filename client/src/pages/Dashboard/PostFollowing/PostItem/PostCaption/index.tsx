@@ -32,7 +32,7 @@ export default function PostCaption({ username, description }: Props) {
   }
 
   return (
-    <div className="mt-2 text-sm">
+    <div className="mt-2 text-sm text-primary-text">
       <div className="font-semibold whitespace-nowrap float-left mr-1">
         <Link to={`/${username}`}>{username}</Link>
       </div>
@@ -46,7 +46,7 @@ export default function PostCaption({ username, description }: Props) {
       </p>
       {canExpand && (
         <button
-          className="text-zinc-500 text-sm"
+          className="text-secondary text-sm"
           onClick={() => {
             setIsExpanded(!isExpanded);
             setCanExpand(false);

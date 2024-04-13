@@ -64,6 +64,8 @@ export default function ConversationThreadMessages({
     }
   }, [displayedMessages]);
 
+  console.log('😀😀', { recipientUser });
+
   return (
     <>
       <div
@@ -71,8 +73,8 @@ export default function ConversationThreadMessages({
         ref={messagesEndRef}
       >
         <div className="py-6 flex flex-col justify-center items-center self-stretch">
-          <UserAvatar avatar={recipientUser.avatar} className="size-24" />
-          <div className="text-xl font-bold my-4">
+          <UserAvatar avatar={recipientUser.avatar} size="size-24" />
+          <div className="text-xl font-bold my-4 text-primary-text">
             {recipientUser.firstName} {recipientUser.lastName}
           </div>
           <Button variant="gray" size="xs">
