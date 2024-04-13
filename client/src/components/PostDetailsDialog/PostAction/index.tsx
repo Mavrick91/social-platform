@@ -1,12 +1,14 @@
 import { ReactNode, useState } from 'react';
-import { PictureFragmentFragment } from '@/__generated__/graphql';
+import {
+  PictureFragmentFragment,
+  useUpdatePictureMutation,
+} from '@/__generated__/graphql';
 import UploadPostDialog from '@/components/UploadPostDialog';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { useDeletePicture } from '@/hooks/graphql/useDeletePicture';
 import useUnFollow from '@/hooks/graphql/useUnFollow';
-import { useUpdatePicture } from '@/hooks/graphql/useUpdatePicture';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 
 type PostActionProps = {
@@ -17,47 +19,28 @@ type PostActionProps = {
 const PostAction = ({ picture, children }: PostActionProps) => {
   const user = useUserInfo();
   const [deletePicture, { loading: isDeleting }] = useDeletePicture();
-  const [updatePicture] = useUpdatePicture();
+  const [updatePicture] = useUpdatePictureMutation();
   const [unfollow] = useUnFollow();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditPostDialogOpen, setIsEditPostDialogOpen] = useState(false);
 
-  const handleDeletePicture = async () => {
-    await deletePicture({ variables: { id: picture.id } });
-    setIsDialogOpen(false);
-  };
-
-  const handleUnfollow = async () => {
-    await unfollow({
-      variables: {
-        input: { userId: user.id, followingId: picture.user.id },
-      },
-    });
-    setIsDialogOpen(false);
-  };
-
-  const handleToggleLikeCount = async () => {
+  const handleUpdatePicture = async (
+    field: 'hideLikesAndViewCounts' | 'disableComments'
+  ) => {
     await updatePicture({
       variables: {
         id: picture.id,
         input: {
-          hideLikesAndViewCounts: !picture.hideLikesAndViewCounts,
+          [field]: !picture[field],
         },
       },
     });
     setIsDialogOpen(false);
   };
 
-  const handleToggleComments = async () => {
-    await updatePicture({
-      variables: {
-        id: picture.id,
-        input: {
-          disableComments: !picture.disableComments,
-        },
-      },
-    });
+  const handleCloseDialog = () => {
     setIsDialogOpen(false);
+    setIsEditPostDialogOpen(false);
   };
 
   const getActionButtons = () => {
@@ -77,7 +60,10 @@ const PostAction = ({ picture, children }: PostActionProps) => {
               'Delete'
             )
           }
-          onClick={handleDeletePicture}
+          onClick={async () => {
+            await deletePicture({ variables: { id: picture.id } });
+            handleCloseDialog();
+          }}
           className="text-red-500 font-bold"
         />,
         <ActionButton
@@ -92,7 +78,7 @@ const PostAction = ({ picture, children }: PostActionProps) => {
               ? 'Unhide like count to others'
               : 'Hide like count to others'
           }
-          onClick={handleToggleLikeCount}
+          onClick={() => handleUpdatePicture('hideLikesAndViewCounts')}
         />,
         <ActionButton
           key="toggle-comments"
@@ -101,7 +87,7 @@ const PostAction = ({ picture, children }: PostActionProps) => {
               ? 'Turn on commenting'
               : 'Turn off commenting'
           }
-          onClick={handleToggleComments}
+          onClick={() => handleUpdatePicture('disableComments')}
         />
       );
     } else {
@@ -109,18 +95,21 @@ const PostAction = ({ picture, children }: PostActionProps) => {
         <ActionButton
           key="unfollow"
           label="Unfollow"
-          onClick={handleUnfollow}
+          onClick={async () => {
+            await unfollow({
+              variables: {
+                input: { userId: user.id, followingId: picture.user.id },
+              },
+            });
+            handleCloseDialog();
+          }}
           className="text-red-500 font-bold"
         />
       );
     }
 
     actionButtons.push(
-      <ActionButton
-        key="cancel"
-        label="Cancel"
-        onClick={() => setIsDialogOpen(false)}
-      />
+      <ActionButton key="cancel" label="Cancel" onClick={handleCloseDialog} />
     );
 
     return actionButtons;
@@ -147,7 +136,7 @@ const PostAction = ({ picture, children }: PostActionProps) => {
 
       {isEditPostDialogOpen && (
         <UploadPostDialog
-          onClose={() => setIsEditPostDialogOpen(false)}
+          onClose={handleCloseDialog}
           picture={picture}
           title="Edit info"
           buttonSubmitText="Done"

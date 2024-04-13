@@ -7,7 +7,6 @@ export default function UserPosts() {
 
   const { data, loading } = useGetPictureByUsernameQuery({
     variables: { username },
-    fetchPolicy: 'network-only',
   });
 
   return (
