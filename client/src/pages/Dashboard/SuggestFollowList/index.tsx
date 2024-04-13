@@ -1,8 +1,8 @@
 import { useGetAllUsersQuery } from '@/__generated__/graphql';
-import UserAvatar from '@/components/UserAvatar';
 import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Link } from 'react-router-dom';
+import UserListItem from '@/components/UserListItem';
 
 export default function SuggestFollowList() {
   const user = useUserInfo();
@@ -13,8 +13,8 @@ export default function SuggestFollowList() {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-[600px] w-full">
-        <h3 className="font-semibold mb-5">Suggested for you</h3>
+      <div className="max-w-[600px] w-full mb-5">
+        <h3 className="font-semibold">Suggested for you</h3>
         {data?.users.map((suggestUser) => {
           const isFollowing = user.initiatedFollows.some(
             (following) => following.targetUserId === suggestUser.id
@@ -23,25 +23,21 @@ export default function SuggestFollowList() {
           return (
             <div
               key={suggestUser.id}
-              className="flex py-2 px-4 items-center justify-between"
+              className="flex items-center justify-between"
             >
               <div className="flex items-center">
                 <Link to={`/${suggestUser.username}`}>
-                  <UserAvatar className="size-11" avatar={suggestUser.avatar} />
+                  <UserListItem
+                    avatar={suggestUser.avatar}
+                    firstName={suggestUser.username}
+                    subText={
+                      <p className="text-sm font text-zinc-500">
+                        {suggestUser.firstName} {suggestUser.lastName}
+                      </p>
+                    }
+                    subTextSize="sm"
+                  />
                 </Link>
-                <div className="ml-2">
-                  <Link to={`/${suggestUser.username}`}>
-                    <p className="text-sm font-semibold">
-                      {suggestUser.username}
-                    </p>
-                  </Link>
-                  <p className="text-sm font text-zinc-500">
-                    {suggestUser.firstName} {suggestUser.lastName}
-                  </p>
-                  <p className="text-xs font text-zinc-500">
-                    Suggested for you
-                  </p>
-                </div>
               </div>
               <ButtonFollow
                 isFollowing={isFollowing}
