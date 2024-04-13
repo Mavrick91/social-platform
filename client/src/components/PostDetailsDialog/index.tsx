@@ -1,8 +1,6 @@
 import { PictureFragmentFragment } from '@/__generated__/graphql';
-import ErrorAlert from '@/components/AlertError';
 import PictureCommentList from '@/components/PostDetailsDialog/PostCommentList';
 import { Dialog, DialogContent } from '@/components/ui/dialog.tsx';
-import useAspectRatio from '@/hooks/useAspectRatio';
 import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Ellipsis } from 'lucide-react';
@@ -18,7 +16,6 @@ type Props = {
 };
 
 function PostDetailsDialog({ onClose, picture }: Props) {
-  const [errorMutation, setErrorMutation] = useState<string | null>(null);
   const user = useUserInfo();
   const [open, setOpen] = useState(true);
 
@@ -27,13 +24,9 @@ function PostDetailsDialog({ onClose, picture }: Props) {
     onClose();
   };
 
-  const aspectRatio = useAspectRatio(picture.sizes.original);
-
   const isFollowingCurrentProfile = user.initiatedFollows.some(
     (follow) => follow.targetUserId === picture.user.id
   );
-
-  if (!aspectRatio) return null;
 
   return (
     <Dialog open={open} onOpenChange={handleToggleDialog}>
@@ -44,7 +37,6 @@ function PostDetailsDialog({ onClose, picture }: Props) {
           maxWidth: 'calc(100% - 64px - 64px)',
         }}
       >
-        {errorMutation && <ErrorAlert className="mb-4" error={errorMutation} />}
         <div className="flex">
           <div className="flex">
             <div className="items-center flex justify-center min-h-[500px]">
@@ -101,12 +93,7 @@ function PostDetailsDialog({ onClose, picture }: Props) {
               </div>
               <Separator className="mt-4" elevated />
 
-              {picture && (
-                <PictureCommentList
-                  picture={picture}
-                  setErrorMutation={setErrorMutation}
-                />
-              )}
+              {picture && <PictureCommentList picture={picture} />}
             </div>
           </div>
         </div>

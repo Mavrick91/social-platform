@@ -6,25 +6,18 @@ import PostCTA from '@/components/PostCTA';
 import PictureCommentForm from '@/components/PostDetailsDialog/PostCommentForm';
 import QuerySpinner from '@/components/ui/QuerySpinner';
 import moment from 'moment';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import PostCommentItem from '../PostCommentItem';
 
 type Props = {
   picture: PictureFragmentFragment;
-  setErrorMutation: (value: string | null) => void;
 };
 
-const PostCommentList = ({ picture, setErrorMutation }: Props) => {
+const PostCommentList = ({ picture }: Props) => {
   const commentListRef = useRef<HTMLDivElement>(null);
-  const { data, loading, refetch, error } = useGetCommentsByPictureQuery({
+  const { data, loading, refetch } = useGetCommentsByPictureQuery({
     variables: { pictureId: picture.id },
   });
-
-  useEffect(() => {
-    if (error) {
-      setErrorMutation(error.message);
-    }
-  }, [error, setErrorMutation]);
 
   const hasComments = useMemo(() => {
     if (!data) return false;
@@ -92,7 +85,6 @@ const PostCommentList = ({ picture, setErrorMutation }: Props) => {
           pictureId={picture.id}
           refetchCommentList={refetch}
           commentListRef={commentListRef}
-          setErrorMutation={setErrorMutation}
         />
       )}
     </div>

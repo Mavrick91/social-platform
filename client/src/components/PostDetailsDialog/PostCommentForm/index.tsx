@@ -3,7 +3,7 @@ import { Separator } from '@/components/ui/separator';
 import { useCreateComment } from '@/hooks/graphql/useCreateComment';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RefObject, useEffect } from 'react';
+import { RefObject } from 'react';
 import { useForm } from 'react-hook-form';
 import TextareaAutosize from 'react-textarea-autosize';
 import * as z from 'zod';
@@ -21,30 +21,22 @@ type Props = {
   pictureId: number;
   refetchCommentList: () => void;
   commentListRef: RefObject<HTMLDivElement>;
-  setErrorMutation: (value: string | null) => void;
 };
 
 function PostCommentForm({
   pictureId,
   refetchCommentList,
   commentListRef,
-  setErrorMutation,
 }: Props) {
   const user = useUserInfo();
 
-  const [commentPicture, { error: commentPictureError }] = useCreateComment();
+  const [commentPicture] = useCreateComment();
 
   const { register, handleSubmit, reset, watch } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
   });
 
   const content = watch('content');
-
-  useEffect(() => {
-    if (commentPictureError) {
-      setErrorMutation(commentPictureError.message);
-    }
-  }, [commentPictureError, setErrorMutation]);
 
   const onSubmit = async (data: CommentFormData) => {
     try {
