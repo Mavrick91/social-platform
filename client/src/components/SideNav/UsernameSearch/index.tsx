@@ -58,7 +58,7 @@ const UsernameSearch: React.FC = () => {
       <div className="overflow-y-auto grow">
         {data?.usersByUsername.map((user) => (
           <Link to={`/${user.username}`}>
-            <div className="hover:!bg-hover-overlay">
+            <div className="hover:!bg-hover-overlay w-full overflow-hidden">
               <UserListItem
                 avatar={user.avatar}
                 firstName={user.username}

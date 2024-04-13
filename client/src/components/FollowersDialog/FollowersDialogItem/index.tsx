@@ -1,8 +1,8 @@
 import { UserFragmentFragment } from '@/__generated__/graphql';
-import UserAvatar from '@/components/UserAvatar';
 import ButtonFollow from '@/pages/Profile/UserProfile/ButtonFollow';
 import { useUserInfo } from '@/providers/UserInfoProvider';
 import { Fragment, useState } from 'react';
+import UserListItem from '@/components/UserListItem';
 
 type Props = {
   follower: UserFragmentFragment;
@@ -18,11 +18,17 @@ export default function FollowersDialogItem({ follower }: Props) {
 
   return (
     <Fragment>
-      <div className="flex px-4 py-2 justify-between items-center">
-        <div className="flex items-center">
-          <UserAvatar avatar={follower.avatar} />
-          <b className="ml-3 text-sm font-semibold">{follower.username}</b>
-        </div>
+      <div className="flex gap-3 pr-4 -ml-2 justify-between items-center">
+        <UserListItem
+          avatar={follower.avatar}
+          firstName={follower.username}
+          subText={
+            <>
+              {follower.firstName} {follower.lastName}
+            </>
+          }
+          subTextSize="sm"
+        />
         {user.id !== follower.id && (
           <ButtonFollow
             buttonProps={{

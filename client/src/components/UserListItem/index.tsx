@@ -22,18 +22,21 @@ function UserListItem({
   size = 'size-11',
 }: Props) {
   return (
-    <div className="flex px-6 items-center py-2">
+    <div className="overflow-hidden flex px-6 items-center py-2 w-full">
       <UserAvatar avatar={avatar} size={size} username={username} />
-      <div className="flex flex-col items-start ml-3">
-        <span className="text-sm text-primary-text">
+      <div className="ml-3 flex flex-col items-start overflow-hidden">
+        <span className="text-sm truncate w-full text-primary-text">
           {firstName} {lastName}
         </span>
         {subText && (
           <span
-            className={cn('text-secondary-text text-left', {
-              'text-sm': subTextSize === 'sm',
-              'text-xs mt-1': subTextSize === 'xs',
-            })}
+            className={cn(
+              'w-full truncate text-left text-sm text-secondary-text',
+              {
+                'text-sm': subTextSize === 'sm',
+                'text-xs mt-1': subTextSize === 'xs',
+              }
+            )}
           >
             {subText}
           </span>

@@ -32,7 +32,7 @@ export default function FollowersDialog({
           maxWidth: 'calc(100vw - 88px)',
         }}
       >
-        <DialogHeader className="justify-center">
+        <DialogHeader className="flex justify-center">
           <h3 className="font-bold">
             {isFollowers ? 'Followers' : 'Followings'}
           </h3>
@@ -54,7 +54,7 @@ export default function FollowersDialog({
               return <FollowersDialogItem follower={user} key={user.id} />;
             })
           ) : (
-            <p className="text-center pt-6 text-secondary">
+            <p className="text-center pt-6 text-sm text-secondary-text">
               {isFollowers ? 'No followers' : 'No followings'}
             </p>
           )}
